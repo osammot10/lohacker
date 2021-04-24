@@ -1,0 +1,12 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='mystyle.css') }}">
+        <title>Home page</title>
+    </head>
+    <body>
+        <br>
+        <h1 id="header">Welcome in LoHacker!</h1>
+        {% block body %}
+        {% endblock %}
+    </body>
+</html>

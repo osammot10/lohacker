@@ -1,0 +1,18 @@
+#header{
+    text-align: center;
+    color: coral;
+}
+
+#rcorners {
+    border-radius: 25px;
+    border: 2px solid #6921ad;
+    padding: 20px;
+    width: auto;
+    height: auto;
+    text-align: center;
+}
+
+ul {
+    text-align: center;
+    list-style: inside;
+}

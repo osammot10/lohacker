@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <div id="rcorners">
+        Sign in <br/>        
+        <br>
+        <form action="/register/send" method="POST">
+            <label><b>First name</b></label>
+            <input name="first_name" type="text">    <!-- TODO email confirmation-->
+            <br>
+            <br>
+            <label><b>Surname</b></label>
+            <input name="surname" type="text">
+            <br>
+            <br>
+            <label><b>Email</b></label>
+            <input name="email" type="text">
+            <br>
+            <br>
+            <label><b>Password</b></label>
+            <input name="password" type="text">
+            <br>
+            <br>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+{% endblock %}

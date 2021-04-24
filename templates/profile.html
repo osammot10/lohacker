@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <br>
+    <div id="rcorners">
+        <p> My profile {{ current_user.first_name }}</p>        
+        <form action="/template" method="POST">
+            <button type="submit">New template</button>
+        </form>
+        <form action="/form" method="POST">
+            <button type="submit">New form</button>
+        </form>
+        <form action="/answer" method="POST">
+            <button type="submit">Answer to a form</button>
+        </form>
+        <form action="/logout" method="POST">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+{% endblock %}
