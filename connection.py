@@ -11,6 +11,9 @@ app = Flask(__name__)
 Base = declarative_base()
 Base.metadata.schema = 'form'
 
+# postgresql(nome del server, non cambiare)://username:password@hostname/db_name
+# username e password sono le credenziali con le quali si accede al db
+# hostname è l'hostname o l'ip di dove si trova il server
 engine = create_engine('postgresql://postgres:postgres@localhost/lohacker')
 metadata = MetaData()
 
