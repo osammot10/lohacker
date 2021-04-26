@@ -41,6 +41,6 @@ def show_register_page():
 @login_bp.route('/register/send', methods = ['GET', 'POST'])
 def register():
     user = Utenti(email = request.form['email'], password = request.form['password'], first_name = request.form['first_name'], surname = request.form['surname'])
-    session.add_all(user)
+    session.add(user)
     session.commit()
     return redirect(url_for('login_bp.show_login_page'))
