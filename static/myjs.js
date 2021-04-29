@@ -1,10 +1,13 @@
 var counter = 0;
 var checkcounter = 0;
+var n_question = 0;
 var createButton;
+var b;
 
 function createOpenQuestion(idA){
-	if(counter == 0){
-  	createButton = cloneBG();
+	if(n_question == 0){
+  	b = cloneBG();
+    createButton = createQButton();
     removeBG();
     firstOpen();
   }
@@ -14,18 +17,18 @@ function createOpenQuestion(idA){
 }
 
 function deleteQuestion(idBtn){    
-    if(counter){
+    if(n_question){
         var divToDelete = document.getElementById(idBtn).parentElement.parentElement.parentElement;
         divToDelete.remove();
-        counter--;
+        n_question--;
     }
-    if(!counter){
-        var newButton = createButton.cloneNode(true);
-        newButton.setAttribute("id","createButton");
-        var span = document.createElement("span");
-        span.setAttribute("class","caret");
-        newButton.childNodes[1].innerHTML = "Create new question " ;
-        newButton.childNodes[1].appendChild(span);
+    if(!n_question){
+        var newButton = b.cloneNode(true);
+        //newButton.setAttribute("id","createButton");
+        //var span = document.createElement("span");
+        //span.setAttribute("class","caret");
+        //newButton.childNodes[1].innerHTML = "Create new question " ;
+        //newButton.childNodes[1].appendChild(span);
 
         var div = document.getElementById("rcorners");
         var form = div.childNodes[6];
@@ -34,8 +37,9 @@ function deleteQuestion(idBtn){
 }
 
 function createCheckboxQuestion(idA){
-	if(counter == 0){
-  	createButton = cloneBG();
+	if(n_question == 0){
+    b = cloneBG();
+  	createButton = createQButton();
     removeBG();
     firstCheckbox();
   }
@@ -49,6 +53,8 @@ function addcheck(n){
   checkcounter++;
 
 	var container = document.getElementById('addCheck'+n).parentElement.parentElement.parentElement;
+
+  var id = container.id.charAt(9);
   
   var row = container.childNodes[0];
   
@@ -66,6 +72,7 @@ function addcheck(n){
   var check = document.createElement("input");
   check.setAttribute("type", "checkbox");
   check.setAttribute("id", "check"+checkcounter);
+  check.setAttribute("name", id+" checkbox "+checkcounter);
   row.childNodes[0].appendChild(check);
 
   row.childNodes[0].appendChild(getSpace());
@@ -73,6 +80,7 @@ function addcheck(n){
   var input = document.createElement("input");
   input.setAttribute('type', 'text');
   input.setAttribute('id', 'chechtext'+checkcounter);
+  input.setAttribute("name", id+" checkboxtext "+checkcounter);
   row.childNodes[0].appendChild(input);
 
   row.childNodes[0].appendChild(getSpace());
@@ -121,11 +129,54 @@ function removeBG(){
 }
 
 function cloneBG(){
-	var b = document.getElementById("createButton");
-    b.childNodes[1].innerHTML = " + ";
-    b.childNodes[1].setAttribute("class","btn btn-primary");
+	  var b = document.getElementById("createButton");
     var cln = b.cloneNode(true);
     return cln;
+}
+
+function createQButton(){
+
+    var div = document.createElement("div");
+    div.setAttribute("class", "btn-group");
+    
+    var btn = document.createElement("button");
+    btn.setAttribute("type", "button");
+    btn.setAttribute("class", "btn btn-primary dropdown-toggle");
+    btn.setAttribute("data-toggle", "dropdown");
+    btn.innerHTML=" + ";
+    div.appendChild(btn);
+
+    var ul = document.createElement("ul");
+    ul.setAttribute("class", "dropdown-menu");
+    ul.setAttribute("role", "menu");
+    ul.setAttribute("id", "list");
+    div.appendChild(ul);
+
+    var li1 = document.createElement("li");
+    var a1 = document.createElement("a");
+    a1.setAttribute("onclick", "createOpenQuestion(this.id)");
+    a1.setAttribute("href", "#");
+    a1.innerHTML=" Open ";
+    li1.appendChild(a1);
+    ul.appendChild(li1);
+
+    var li2 = document.createElement("li");
+    var a2 = document.createElement("a");
+    a2.setAttribute("onclick", "createCheckboxQuestion(this.id)");
+    a2.setAttribute("href", "#");
+    a2.innerHTML=" Checkbox ";
+    li2.appendChild(a2);
+    ul.appendChild(li2);
+
+    var li3 = document.createElement("li");
+    var a3 = document.createElement("a");
+    a3.setAttribute("onclick", "createRadioQuestion(this.id)");
+    a3.setAttribute("href", "#");
+    a3.innerHTML=" Radio button ";
+    li3.appendChild(a3);
+    ul.appendChild(li3);
+    
+    return div;
 }
 
 function createDiv(idDiv){
@@ -175,6 +226,7 @@ function getSpace(){
 
 function firstOpen(){
     counter++;
+    n_question++;
 
     var parent = document.getElementById("parentDiv");
     
@@ -203,20 +255,19 @@ function firstOpen(){
     title.innerHTML="Domanda " + counter;
     row.childNodes[0].appendChild(title);
 
-    //addLine(container);
     row.childNodes[0].appendChild(getSpace());
 
     var input = document.createElement("input");
     input.setAttribute('type', 'text');
-    input.setAttribute('name', 'open');
+    input.setAttribute('name', counter+' open');
     row.childNodes[0].appendChild(input);
 
 
     var newButton = createButton.cloneNode(true);
     newButton.setAttribute("id","createButton"+counter);
-    newButton.childNodes[4].childNodes[1].childNodes[0].setAttribute("id","open_btn"+counter);
-    newButton.childNodes[4].childNodes[3].childNodes[0].setAttribute("id","check_btn"+counter);
-    newButton.childNodes[4].childNodes[5].childNodes[0].setAttribute("id","radio_btn"+counter);
+    newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
+    newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
+    newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
     row.childNodes[1].appendChild(newButton);
 
     row.childNodes[1].appendChild(getSpace());
@@ -237,6 +288,7 @@ function firstOpen(){
 function firstCheckbox(){
 		counter++;
     checkcounter++;
+    n_question++;
     
     var parent = document.getElementById("parentDiv");
     var container = document.createElement("div");
@@ -270,7 +322,7 @@ function firstCheckbox(){
     
     var text = document.createElement("input");
 		text.setAttribute('type', 'text');
-    text.setAttribute('name', 'open');
+    text.setAttribute('name', counter+' checkbox');
     row.childNodes[0].appendChild(text);
 
     addLine(row.childNodes[0]);
@@ -278,14 +330,16 @@ function firstCheckbox(){
     
     var check = document.createElement("input");
   	check.setAttribute("type", "checkbox");
-    check.setAttribute("id", "check"+counter);
+    check.setAttribute("id", "check"+checkcounter);
+    check.setAttribute("name",counter+" checkbox "+checkcounter)
  	 	row.childNodes[0].appendChild(check);
 
     row.childNodes[0].appendChild(getSpace());
     
   	var input = document.createElement("input");
 		input.setAttribute('type', 'text');
-    input.setAttribute('id', 'chechtext'+counter);
+    input.setAttribute('id', 'chechtext'+checkcounter);
+    input.setAttribute("name",counter+" checkboxtext "+checkcounter)
 		row.childNodes[0].appendChild(input);
 
     row.childNodes[0].appendChild(getSpace());
@@ -313,9 +367,9 @@ function firstCheckbox(){
     
     var newButton = createButton.cloneNode(true);
     newButton.setAttribute("id","createButton"+counter);
-    newButton.childNodes[4].childNodes[1].childNodes[0].setAttribute("id","open_btn"+counter);
-    newButton.childNodes[4].childNodes[3].childNodes[0].setAttribute("id","check_btn"+counter);
-    newButton.childNodes[4].childNodes[5].childNodes[0].setAttribute("id","radio_btn"+counter);
+    newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
+    newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
+    newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
     row.childNodes[1].appendChild(newButton);
 
     row.childNodes[1].appendChild(getSpace());
@@ -334,7 +388,8 @@ function firstCheckbox(){
 }
 
 function openAfter(idA){
-  counter++;  
+  counter++;
+  n_question++;
   
   var div = getDivId(idA);
   var container = createDiv(div);
@@ -348,15 +403,15 @@ function openAfter(idA){
 
   var input = document.createElement("input");
   input.setAttribute('type', 'text');
-  input.setAttribute('name', 'open');
+  input.setAttribute('name', counter+' open');
   row.childNodes[0].appendChild(input);
   
 
   var newButton = createButton.cloneNode(true);
   newButton.setAttribute("id","createButton"+counter);
-  newButton.childNodes[4].childNodes[1].childNodes[0].setAttribute("id","open_btn"+counter);
-  newButton.childNodes[4].childNodes[3].childNodes[0].setAttribute("id","check_btn"+counter);
-  newButton.childNodes[4].childNodes[5].childNodes[0].setAttribute("id","radio_btn"+counter);
+  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
+  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
+  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
   row.childNodes[1].appendChild(newButton);
 
   row.childNodes[1].appendChild(getSpace());
@@ -377,6 +432,7 @@ function openAfter(idA){
 function checkboxAfter(idA){
 		counter++;
     checkcounter++;
+    n_question++;
     
     var div = getDivId(idA);
   	var container = createDiv(div);
@@ -390,7 +446,7 @@ function checkboxAfter(idA){
 
     var text = document.createElement("input");
 		text.setAttribute('type', 'text');
-    text.setAttribute('name', 'open');
+    text.setAttribute('name', counter+' checkbox');
     row.childNodes[0].appendChild(text);
 
     addLine(row.childNodes[0]);
@@ -398,14 +454,16 @@ function checkboxAfter(idA){
     
     var check = document.createElement("input");
   	check.setAttribute("type", "checkbox");
-    check.setAttribute("id", "check"+counter);
+    check.setAttribute("id", "check"+checkcounter);
+    check.setAttribute("name",counter+" checkbox "+checkcounter);
  	 	row.childNodes[0].appendChild(check);
 
     row.childNodes[0].appendChild(getSpace());
     
   	var input = document.createElement("input");
 		input.setAttribute('type', 'text');
-    input.setAttribute('id', 'chechtext'+counter);
+    input.setAttribute('id', 'chechtext'+checkcounter);
+    input.setAttribute("name", counter+" checkboxtext "+checkcounter);
 		row.childNodes[0].appendChild(input);
 
     row.childNodes[0].appendChild(getSpace());
@@ -414,7 +472,7 @@ function checkboxAfter(idA){
     
     var addButton = document.createElement("button");
     addButton.setAttribute('type', 'button');
-    addButton.setAttribute("class","btn btn-primary");
+    addButton.setAttribute("class","btn btn-secondary");
     addButton.setAttribute("onclick","addcheck("+checkcounter+")");
     addButton.setAttribute("id", "addCheck"+checkcounter);
     addButton.innerHTML=" + ";
@@ -424,18 +482,18 @@ function checkboxAfter(idA){
 
     var deleteCheck = document.createElement("button");
     deleteCheck.setAttribute('type', 'button');
-    deleteCheck.setAttribute("class","btn btn-primary");
+    deleteCheck.setAttribute("class","btn btn-secondary");
     deleteCheck.setAttribute("onclick","deleteCheck("+checkcounter+")");
     deleteCheck.setAttribute("id", "deleteCheck"+checkcounter);
     deleteCheck.innerHTML=" X ";
-    deleteCheck.style.display = "none";
+    deleteCheck.style.visibility = "hidden";
     row.childNodes[0].appendChild(deleteCheck);
     
     var newButton = createButton.cloneNode(true);
     newButton.setAttribute("id","createButton"+counter);
-    newButton.childNodes[4].childNodes[1].childNodes[0].setAttribute("id","open_btn"+counter);
-    newButton.childNodes[4].childNodes[3].childNodes[0].setAttribute("id","check_btn"+counter);
-    newButton.childNodes[4].childNodes[5].childNodes[0].setAttribute("id","radio_btn"+counter);
+    newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
+    newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
+    newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
     row.childNodes[1].appendChild(newButton);
 
     row.childNodes[1].appendChild(getSpace());
@@ -451,4 +509,19 @@ function checkboxAfter(idA){
     var divider = document.createElement("hr");
     divider.setAttribute("class","solid");
     container.appendChild(divider);
+}
+
+function copy(){
+    /* Get the text field */
+    var copyText = document.getElementById("linkInput");
+  
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /* For mobile devices */
+  
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
+  
+    /* Alert the copied text */
+    //alert("Copied the text: " + copyText.value);
 }

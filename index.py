@@ -2,10 +2,12 @@ from connection import *
 from login import login_bp
 from logout import logout_bp
 from form import form_bp
+from response import response_bp
 
 app.register_blueprint(login_bp)
 app.register_blueprint(logout_bp)
 app.register_blueprint(form_bp)
+app.register_blueprint(response_bp)
 
 @app.route('/')
 def home():

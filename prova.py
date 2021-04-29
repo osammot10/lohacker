@@ -1,6 +1,8 @@
 from flask import *
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
 
+from datetime import date
+
 import sqlalchemy
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
@@ -26,25 +28,11 @@ app.config['SECRET_KEY'] = 'ubersecret'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-# Classe per il mapping con flask_login
-# Permette di tener traccia di un utente all'interno di una sessione 
-class User ( UserMixin ):   #TODO estendere User con l'attributo Role
-# costruttore di classe
-    def __init__ (self , id , email , password, first_name, surname ):
-        self.id = id
-        self.email = email
-        self.password = password
-        self.first_name = first_name
-        self.surname = surname
-
-    def get_email(self):
-        return self.email
-
 # Classe per il mapping con la tabella "User" del db 
 class Utenti(Base):
     __tablename__ = 'User'                   # obbligatorio
 
-    id = Column(Integer, primary_key=True, autoincrement=True)    # almeno un attributo deve fare parte della primary key
+    id = Column(Integer, primary_key=True)    # almeno un attributo deve fare parte della primary key
     email = Column(String)
     password = Column(String)
     first_name = Column(String)
@@ -59,7 +47,7 @@ class Survey(Base):
     date = Column(Date)
     template = Column(Boolean)
 
-    def toString(self):
+    def __repr__(self):
         return "id: {0}, maker_id: {1}, name: {2}, date: {3}".format(self.id, self.maker, self.name, self.date)
 
 class Question(Base):
@@ -70,7 +58,7 @@ class Question(Base):
     text = Column(String)
     type = Column(String)
 
-    def toString(self):
+    def __repr__(self):
         return "id: {0}, text: {1}, type: {2}".format(self.id, self.text, self.type)
 
 class CheckboxQuestion(Base):
@@ -80,38 +68,28 @@ class CheckboxQuestion(Base):
     number = Column(Integer, primary_key=True)
     text = Column(String)
 
-class OpenAnswer(Base):
-    __tablename__ = "OpenAnswer"
+    def __repr__(self):
+        return "number: {0}, text: {1}".format(self.number, self.text)
 
-    question = Column(Integer, ForeignKey(Question.id), primary_key=True, autoincrement=True)
-    text = Column(String)
-    user = Column(Integer, ForeignKey(Utenti.id), primary_key=True)
+print("Survey:")
+s = session.query(Survey).filter(Survey.id==7).first()
+print(s)
+print("\n")
 
-class CheckboxAnswer(Base):
-    __tablename__ = "CheckboxAnswer"
-
-    question = Column(Integer, ForeignKey(CheckboxQuestion.id), primary_key=True, autoincrement=True)
-    number = Column(Integer, ForeignKey(CheckboxQuestion.number), primary_key=True, autoincrement=True)
-    user = Column(Integer, ForeignKey(Utenti.id), primary_key=True)
-
-
-
-@login_manager.user_loader # attenzione a questo !
-def load_user ( user_id ):
-    rs = session.query(Utenti).filter(Utenti.id == user_id)
-    user = rs.first()
-
-    return User(user.id, user.email, user.password, user.first_name, user.surname)
-
-def get_user_by_email(email):
-    rs = session.query(Utenti).filter(Utenti.email == email)
-    user = rs.first()
-    return User(user.id, user.email, user.password, user.first_name, user.surname)
-
-def get_key(val, dict):
-    for key, value in dict.items():
-         if val == value:
-             return key
+print("Questions:")
+q = session.query(Question).filter(Question.survey==s.id).all()
+print(type(q))
+for r in q:
+    print(r)
+    if r.type == "checkbox":
+        print("Checkbox option:")
+        o = session.query(CheckboxQuestion).filter(CheckboxQuestion.id==r.id).all()
+        for u in o:
+            print(u)
+    print("\n")
+#print(u[0].id)
+#for u in session.query(Utenti):
+#    print(u)
 
 
 
