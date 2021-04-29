@@ -2,6 +2,8 @@ from connection import *
 
 response_bp = Blueprint('response_bp',__name__)
 
+#Un utente può rispondere ad un questionario creato da lui stesso?
+
 @response_bp.route('/getsurvey/<id>')
 def show_survey(id):
     survey = session.query(Survey).filter(Survey.id==id).first()
@@ -20,7 +22,7 @@ def show_survey(id):
 
 @response_bp.route('/getresponse', methods=['GET', 'POST'])
 def send_response():
-    for k,v in request.form.items():
+    for k,v in request.form.items():    #TODO controllare se l'utente ha già risposto
         idQuestion = k.split()[0]
         type = k.split()[1]
         if type == "open":
@@ -33,5 +35,17 @@ def send_response():
             session.add(c)
             session.commit()
 
-    return "Risposta inviata"
-    
+    return render_template("confirmation.html")
+
+
+@response_bp.route('/answer', methods=['GET', 'POST'])      
+def show_answer_page():
+    return render_template("answer.html")
+
+@response_bp.route('/redirect', methods=['GET', 'POST'])
+def redirect_to_answer_page():
+    if request.form['link'] == "":
+        return redirect(url_for('response_bp.show_survey', id = request.form['id']))
+    else:
+        idS = request.form['link'].split("/")[2]
+        return redirect(url_for('response_bp.show_survey', id = idS))

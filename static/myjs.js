@@ -23,16 +23,10 @@ function deleteQuestion(idBtn){
         n_question--;
     }
     if(!n_question){
-        var newButton = b.cloneNode(true);
-        //newButton.setAttribute("id","createButton");
-        //var span = document.createElement("span");
-        //span.setAttribute("class","caret");
-        //newButton.childNodes[1].innerHTML = "Create new question " ;
-        //newButton.childNodes[1].appendChild(span);
-
         var div = document.getElementById("rcorners");
-        var form = div.childNodes[6];
-        div.insertBefore(newButton,form);
+        var form = div.childNodes[1];
+        var divBtn = form.childNodes[11];
+        form.insertBefore(b,divBtn);
     }
 }
 
@@ -130,6 +124,8 @@ function removeBG(){
 
 function cloneBG(){
 	  var b = document.getElementById("createButton");
+    var br1 = document.createElement("br");
+    var br2 = document.createElement("br");
     var cln = b.cloneNode(true);
     return cln;
 }
@@ -511,9 +507,9 @@ function checkboxAfter(idA){
     container.appendChild(divider);
 }
 
-function copy(){
+function copy(id){
     /* Get the text field */
-    var copyText = document.getElementById("linkInput");
+    var copyText = document.getElementById(id).previousSibling.previousSibling;
   
     /* Select the text field */
     copyText.select();

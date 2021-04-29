@@ -9,7 +9,7 @@ app.register_blueprint(logout_bp)
 app.register_blueprint(form_bp)
 app.register_blueprint(response_bp)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():
     if current_user.is_authenticated:
         return redirect(url_for('login_bp.private'))

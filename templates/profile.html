@@ -3,18 +3,24 @@
 {% block body %}
     <br>
     <div id="rcorners">
-        <p> My profile {{ current_user.first_name }}</p>        
-        <form action="/template" method="POST">
-            <button type="submit">New template</button>
-        </form>
+        <p> My account</p>
         <form action="/form" method="POST">
-            <button type="submit">New form</button>
+            <button type="submit"> Create form </button>
+        </form>
+        <form action="/myform" method="POST">
+            <button type="submit"> My form </button>
+        </form>    
+        <form action="/template" method="POST">
+            <button type="submit"> Create template </button>
         </form>
         <form action="/answer" method="POST">
-            <button type="submit">Answer to a form</button>
+            <button type="submit"> Answer to a form </button>
+        </form>
+        <form action="/showAnswer" method="POST">
+            <button type="submit"> Show answer </button>
         </form>
         <form action="/logout" method="POST">
-            <button type="submit">Logout</button>
+            <button type="submit"> Logout </button>
         </form>
     </div>
 {% endblock %}
