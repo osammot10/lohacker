@@ -5,6 +5,7 @@ response_bp = Blueprint('response_bp',__name__)
 #Un utente può rispondere ad un questionario creato da lui stesso?
 
 @response_bp.route('/getsurvey/<id>')
+@login_required
 def show_survey(id):
     survey = session.query(Survey).filter(Survey.id==id).first()
 
@@ -13,7 +14,6 @@ def show_survey(id):
     q = session.query(Question).filter(Question.survey==survey.id).all()
     for r in q:
         if r.type == "checkbox":
-            #print("Checkbox option:")
             o = session.query(CheckboxQuestion).filter(CheckboxQuestion.id==r.id).all()
             checkboxList += o
     
@@ -21,6 +21,7 @@ def show_survey(id):
 
 
 @response_bp.route('/getresponse', methods=['GET', 'POST'])
+@login_required
 def send_response():
     for k,v in request.form.items():    #TODO controllare se l'utente ha già risposto
         idQuestion = k.split()[0]
@@ -38,11 +39,13 @@ def send_response():
     return render_template("confirmation.html")
 
 
-@response_bp.route('/answer', methods=['GET', 'POST'])      
+@response_bp.route('/answer', methods=['GET', 'POST']) 
+@login_required     
 def show_answer_page():
     return render_template("answer.html")
 
 @response_bp.route('/redirect', methods=['GET', 'POST'])
+@login_required
 def redirect_to_answer_page():
     if request.form['link'] == "":
         return redirect(url_for('response_bp.show_survey', id = request.form['id']))

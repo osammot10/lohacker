@@ -33,6 +33,7 @@ def create_survey():
                     session.commit()
                     id_check = q.id
                     j = j + 1
+                    i = 1
                 elif k == 'checkboxtext':
                     q = CheckboxQuestion(id = str(id_check), number = i, text = v)
                     session.add(q)
@@ -47,4 +48,8 @@ def show_survey_link():
     url = "localhost:5000/getsurvey/"+id
     return render_template("link.html", link = url, idSurvey=id)
 
-        
+@form_bp.route('/myform', methods=['GET', 'POST'])
+@login_required
+def show_my_form():
+    s = session.query(Survey).filter(Survey.maker == current_user.get_id()).all()
+    return render_template("myform.html", surveys = s)        
