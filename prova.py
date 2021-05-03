@@ -6,7 +6,8 @@ from datetime import date
 import sqlalchemy
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.orm import sessionmaker, relationship, contains_eager, joinedload, with_loader_criteria
+from sqlalchemy.sql.expression import and_
 
 app = Flask(__name__)
 
@@ -47,7 +48,7 @@ class Survey(Base):
     date = Column(Date)
     template = Column(Boolean)
 
-    def __repr__(self):
+    def toString(self):
         return "id: {0}, maker_id: {1}, name: {2}, date: {3}".format(self.id, self.maker, self.name, self.date)
 
 class Question(Base):
@@ -58,7 +59,7 @@ class Question(Base):
     text = Column(String)
     type = Column(String)
 
-    def __repr__(self):
+    def toString(self):
         return "id: {0}, text: {1}, type: {2}".format(self.id, self.text, self.type)
 
 class CheckboxQuestion(Base):
@@ -68,29 +69,95 @@ class CheckboxQuestion(Base):
     number = Column(Integer, primary_key=True)
     text = Column(String)
 
-    def __repr__(self):
-        return "number: {0}, text: {1}".format(self.number, self.text)
+    def toString(self):
+        return "id: {0}, number: {1}, text: {2}".format(self.id, self.number, self.text)
 
-print("Survey:")
-s = session.query(Survey).filter(Survey.id==7).first()
-print(s)
-print("\n")
+class OpenAnswer(Base):
+    __tablename__ = "OpenAnswer"
 
-print("Questions:")
-q = session.query(Question).filter(Question.survey==s.id).all()
-print(type(q))
-for r in q:
+    question = Column(Integer, ForeignKey(Question.id), primary_key=True, autoincrement=True)
+    text = Column(String)
+    user = Column(Integer, ForeignKey(Utenti.id), primary_key=True)
+
+    def toString(self):
+        return "question: {0}, text: {1}, user: {2}".format(self.question, self.text, self.user)
+
+class CheckboxAnswer(Base):
+    __tablename__ = "CheckboxAnswer"
+
+    question = Column(Integer, ForeignKey(CheckboxQuestion.id), primary_key=True, autoincrement=True)
+    number = Column(Integer, ForeignKey(CheckboxQuestion.number), primary_key=True, autoincrement=True)
+    user = Column(Integer, ForeignKey(Utenti.id), primary_key=True)
+
+    def toString(self):
+        return "question: {0}, number: {1}, user: {2}".format(self.question, self.number, self.user)
+
+
+#s = session.query(Survey.id, Survey.name, Question.id, Question.text, Question.type, CheckboxQuestion.number, CheckboxQuestion.text, OpenAnswer.user, OpenAnswer.text, CheckboxAnswer.user, CheckboxAnswer.number).join(Question.survey == Survey.id, CheckboxQuestion.id == Question.id, OpenAnswer.question == Question.id, CheckboxAnswer.question == CheckboxQuestion.id).filter(Survey.id==17).all()
+#print(s)
+
+# Dati del questionario
+print("Questionario\n")
+s = session.query(Survey).filter(Survey.id == 18).first()
+print(s.toString() + '\n')
+
+checkbox = []
+answerOpen = []
+answerCheck = []
+
+# Domande
+print("Lista\n") 
+question = session.query(Question.id, Question.text, Question.type).filter(Question.survey == 18).all()
+
+for r in question:
+    if r.type == 'open':
+        a = session.query(OpenAnswer.question, OpenAnswer.text, OpenAnswer.user).filter(OpenAnswer.question == r.id).all()
+        answerOpen += a
+    elif r.type == 'checkbox':
+        c = session.query(CheckboxQuestion.id, CheckboxQuestion.number, CheckboxQuestion.text).filter(CheckboxQuestion.id == r.id).all()
+        checkbox += c
+
+        u = session.query(CheckboxQuestion.id, CheckboxQuestion.number, func.count(CheckboxAnswer.number)).outerjoin(CheckboxAnswer, (CheckboxAnswer.question == CheckboxQuestion.id) & (CheckboxAnswer.number == CheckboxQuestion.number)).filter(CheckboxQuestion.id == 19).group_by(CheckboxQuestion.id, CheckboxQuestion.number).all()
+        answerCheck += u
+
+for r in question:
     print(r)
-    if r.type == "checkbox":
-        print("Checkbox option:")
-        o = session.query(CheckboxQuestion).filter(CheckboxQuestion.id==r.id).all()
-        for u in o:
-            print(u)
-    print("\n")
-#print(u[0].id)
-#for u in session.query(Utenti):
-#    print(u)
+
+print('\n')
+
+for r in answerOpen:
+    print(r)
+
+print('\n')
+
+#l = zip(checkbox, answerCheck)
+
+for r in checkbox:
+    print(r)
+
+print('\n')
+
+for r in answerCheck:
+    print(r)
 
 
+#    l = []
 
-  
+#    s = session.query(Survey).filter(Survey.id == id).first()
+
+#    question = session.query(Question.id, Question.text, Question.type).filter(Question.survey == id).all()
+
+#    for r in question:
+#        l.append(r)
+#        if r.type == 'open':
+#            a = session.query(OpenAnswer.question, OpenAnswer.text, OpenAnswer.user).filter(OpenAnswer.question == r.id).all()
+#            for i in a:
+#                l.append(i)
+#        elif r.type == 'checkbox':
+#            c = session.query(CheckboxQuestion.id, CheckboxQuestion.number, CheckboxQuestion.text).filter(CheckboxQuestion.id == r.id).all()
+#            for i in c:
+#                l.append(i) 
+
+#            u = session.query(CheckboxQuestion.id, CheckboxQuestion.number, func.count(CheckboxAnswer.number)).outerjoin(CheckboxAnswer, (CheckboxAnswer.question == CheckboxQuestion.id) & (CheckboxAnswer.number == CheckboxQuestion.number)).filter(CheckboxQuestion.id == 19).group_by(CheckboxQuestion.id, CheckboxQuestion.number).all()
+#            for i in u:
+#                l.append(i)

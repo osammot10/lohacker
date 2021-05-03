@@ -9,5 +9,8 @@
         <li><p><a href="myform/{{ s.id }}">{{ s.name }}</a> created {{ s.date }}</p></li>
     {% endfor %}
     </ul>
+    <form action="/" method="POST">
+        <button type="submit" class="btn btn-secondary"> Home page </button>
+      </form>
 </div>
 {% endblock %}
