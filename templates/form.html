@@ -8,22 +8,65 @@
         <br>
         <br>
         <br>
-        <div class="btn-group" id="createButton">
-          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Create new question <span class="caret"></span></button>
-          <ul class="dropdown-menu" role="menu" id="list">
-            <li><a id="open_btn" onclick="createOpenQuestion(this.id)" href="#">Open</a></li>
-            <li><a id="check_btn" onclick="createCheckboxQuestion(this.id)" href="#">Checkbox</a></li>
-            <li><a onclick="myfun('radio')" href="#">Radio button</a></li>
-          </ul>
-        </div>
-        <div id="parentDiv">
-  
-        </div>
+        {% if templates != false %}
+          <div class="btn-group" id="createButton">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Create new question <span class="caret"></span></button>
+            <ul class="dropdown-menu" role="menu" id="list">
+              <li><a id="open_btn" onclick="createOpenQuestion(this.id)" href="#">Open</a></li>
+              <li><a id="check_btn" onclick="createCheckboxQuestion(this.id)" href="#">Checkbox</a></li>
+              <li><a onclick="myfun('radio')" href="#">Radio button</a></li>
+            </ul>
+          </div>
+          <div id="parentDiv">
+    
+          </div>
+        {% else %}
+          <div id="parentDiv">
+            {% set i = 1 %}
+            {% for r in questionTemplate %}
+              <div class="container" id="container{{loop.index}}">
+                <div class="row">
+                  {% if r.type == 'open' %}
+                  <div class="col-sm-8" id="centralDiv">
+                    <label>Domanda {{loop.index}}</label> <span>&nbsp;&nbsp;</span> <input type="text" name="{{loop.index}} open" value="{{r.text}}">
+                  </div>
+                  {% elif r.type == 'checkbox' %}
+                    <div class="col-sm-8" id="centralDiv">
+                      <label>Domanda {{loop.index}}</label> <span>&nbsp;&nbsp;</span> <input type="text" name="{{loop.index}} checkbox" value="{{r.text}}">
+                      <br>
+                      <br>
+                      {% for c in checkboxTemplate if c.id == r.id %}
+                        <input type="checkbox" id="check{{c.number}}" name="{{loop.index}} checkbox {{c.number}}">
+                        <span>&nbsp;&nbsp;</span>
+                        <input type="text" id="checktext{{c.number}}" name="{{loop.index}} checkboxtext {{c.number}}" value="{{c.text}}">
+                        <br>
+                        <br>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                  <div class="col-sm-4" id="centralDiv">
+                    <div class="btn-group" id="createButton{{loop.index}}">
+                      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> + </button>
+                      <ul class="dropdown-menu" role="menu" id="list">
+                        <li><a onclick="createOpenQuestion(this.id)" href="#" id="open_btn{{loop.index}}"> Open </a></li>
+                        <li><a onclick="createCheckboxQuestion(this.id)" href="#" id="check_btn{{loop.index}}"> Checkbox </a></li>
+                        <li><a onclick="createOpenQuestion(this.id)" href="#" id="open_btn{{loop.index}}"> Radio button </a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <hr class="solid">
+              </div>           
+              {% set i = loop.index %}
+            {% endfor %}
+          </div>
+        {% endif %}
         <br>
-          <button type="submit" class="btn btn-primary"> Send </button>
+        <button type="submit" class="btn btn-primary"> Send </button>
       </form>
       <form action="/" method="POST">
         <button type="submit" class="btn btn-secondary"> Home page </button>
       </form>
   </div>
+  <meta id="n" data-name="{{number}}">
 {% endblock %}

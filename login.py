@@ -31,8 +31,8 @@ def login():
 @login_bp.route('/private')
 @login_required
 def private():
-    resp = make_response(render_template("profile.html"))
-    return resp
+    t = session.query(Survey).filter(Survey.maker == current_user.get_id()).filter(Survey.template == True).all()
+    return render_template("profile.html", templates = t)
 
 @login_bp.route('/register', methods = ['GET', 'POST'])
 def show_register_page():

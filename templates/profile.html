@@ -5,8 +5,11 @@
     <div id="rcorners">
         <p> My account</p>
         <form action="/form" method="POST">
-            <button type="submit"> Create form </button>
+            <button type="submit" name="formButton" value="normal"> Create form </button>
         </form>
+        <form action="/form" method="POST">
+            <button type="button" data-toggle="modal" data-target="#exampleModalCenter"> Create form by template </button>
+        </form> 
         <form action="/myform" method="POST">
             <button type="submit"> My form </button>
         </form>    
@@ -19,5 +22,32 @@
         <form action="/logout" method="POST">
             <button type="submit"> Logout </button>
         </form>
+    </div>
+
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h4 class="modal-title" id="exampleModalLongTitle">Template</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            {% if templates != false %}                
+                <lu>
+                {% for r in templates %}
+                    <li><span><form action="/form" method='POST'> {{ r.name }} <button type="submit" name="formButton" value="{{ r.id }}"> Import {{r.name}}</button></form></span></li> 
+                {% endfor %}
+                </lu>
+            {% else %}
+                <p>Create a template before using it!</p>
+            {% endif %}
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        </div>
     </div>
 {% endblock %}
