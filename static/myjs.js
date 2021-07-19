@@ -5,13 +5,18 @@ var createButton;
 var b;
 
 function createOpenQuestion(idA){
-	if(n_question == 0){
+  createButton = createQButton();
+	if(idA == 'open_btn'){
   	b = cloneBG();
-    createButton = createQButton();
     removeBG();
     firstOpen();
   }
   else{
+    var t = $('#n').data().name;
+    if(counter == 0)
+      counter = t;
+    if(n_question == 0)
+      n_question = t;
   	openAfter(idA);
   }
 }
@@ -31,7 +36,7 @@ function deleteQuestion(idBtn){
 }
 
 function createCheckboxQuestion(idA){
-	if(n_question == 0){
+	if(idA == 'check_btn'){
     b = cloneBG();
   	createButton = createQButton();
     removeBG();
@@ -198,10 +203,14 @@ function createDiv(idDiv){
   
   var actualDiv = document.getElementById(idDiv);
   var nextDiv = actualDiv.nextSibling;
+  if(nextDiv != null && nextDiv.nodeName == '#text'){
+    //console.log("prova");
+    nextDiv = nextDiv.nextSibling;
+    //console.log(nextDiv);
+  }
   
   parent.insertBefore(container,nextDiv);
   
-  //parent.appendChild(container);
   return container;
 }
 
@@ -402,7 +411,6 @@ function openAfter(idA){
   input.setAttribute('name', counter+' open');
   row.childNodes[0].appendChild(input);
   
-
   var newButton = createButton.cloneNode(true);
   newButton.setAttribute("id","createButton"+counter);
   newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);

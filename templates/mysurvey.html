@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div id="rcorners">
+    <h1>{{ survey.name }}</h1>
+    <br>
+    {% for q in questions %}
+        <h5>{{ q.text }}</h5>
+        {% if q.type == 'open' %}
+            <br>
+            {% for a in openAnswers if a.question == q.id %}
+                <input type="text" value="{{ a.text }}" style="text-align:center;" readonly></input>
+                <br>
+            {% endfor %}
+        {% else %}
+            {% for c,a in checkboxs if c.id == q.id%}
+                <span> <input type="checkbox" disabled> <input type = "text" value = "{{c.text}}" style="text-align:center;" readonly> {{ a[2] }} </span>
+                <br>
+                <br>
+            {% endfor %}
+        {% endif %}
+        <br>
+    {% endfor %}
+    <form action="/" method="POST">
+        <button type="submit" class="btn btn-secondary"> Home page </button>
+      </form>
+    <form action="/myform" method="POST">
+        <button type="submit" class="btn btn-secondary"> Back </button>
+    </form>
+</div>
+{% endblock %}

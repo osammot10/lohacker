@@ -6,7 +6,17 @@ form_bp = Blueprint('form_bp',__name__)
 @form_bp.route('/form', methods = ['GET', 'POST'])
 @login_required
 def show_form_create_page():
-    return render_template("form.html")
+    if request.form['formButton'] == 'normal':
+        return render_template("form.html", templates = True)
+    else:
+        checkbox = []
+        idTemplate = request.form['formButton']
+        q = session.query(Question).filter(Question.survey == idTemplate).all()
+        n = len(q)
+        for r in q:
+            if r.type == 'checkbox':
+                checkbox += session.query(CheckboxQuestion).filter(CheckboxQuestion.id == r.id).all()
+        return render_template("form.html",templates = False ,questionTemplate = q, checkboxTemplate = checkbox, number = n)
 
 @form_bp.route('/form/create', methods = ['GET', 'POST'])
 @login_required
