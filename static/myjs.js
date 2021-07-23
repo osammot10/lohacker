@@ -267,6 +267,13 @@ function firstOpen(){
     input.setAttribute('name', counter+' open');
     row.childNodes[0].appendChild(input);
 
+    var switchToggle = document.createElement("input");
+    switchToggle.setAttribute('type', 'checkbox');
+    switchToggle.setAttribute('data-toggle', 'toggle');
+    switchToggle.setAttribute('data-on', 'Required');
+    switchToggle.setAttribute('data-off', 'Not required');
+    row.childNodes[0].appendChild(switchToggle);
+
 
     var newButton = createButton.cloneNode(true);
     newButton.setAttribute("id","createButton"+counter);
@@ -333,6 +340,7 @@ function firstCheckbox(){
     addLine(row.childNodes[0]);
     addLine(row.childNodes[0]);
     
+    row.childNodes[0].required = true;
     var check = document.createElement("input");
   	check.setAttribute("type", "checkbox");
     check.setAttribute("id", "check"+checkcounter);
