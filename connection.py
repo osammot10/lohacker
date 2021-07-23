@@ -112,6 +112,9 @@ def get_key(val, dict):
     for key, value in dict.items():
          if val == value:
              return key
+    print("prova")
+
+
 
 
 
