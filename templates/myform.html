@@ -1,12 +1,16 @@
 {% extends "base.html" %}
 
 {% block body %}
+
+<!--TODO: sostituire con DataTable-->
+
 <div id="rcorners">
     <h3>Hello {{ current_user.first_name }}, your forms are:</h3>
     <br>
     <ul>
     {% for s in surveys %}
-        <li><p><a href="myform/{{ s.id }}">{{ s.name }}</a> created {{ s.date }}</p></li>
+        <li><a href="myform/{{ s.id }}">{{ s.name }}</a> created {{ s.date }}</li>
+        <br>
     {% endfor %}
     </ul>
     <form action="/" method="POST">

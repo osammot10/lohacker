@@ -16,3 +16,8 @@ ul {
     text-align: center;
     list-style: inside;
 }
+
+#nospaceform { 
+    vertical-align:middle; 
+    height:35px; 
+}

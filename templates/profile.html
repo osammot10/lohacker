@@ -2,25 +2,26 @@
 
 {% block body %}
     <br>
-    <div id="rcorners">
-        <p> My account</p>
-        <form action="/form" method="POST">
-            <button type="submit" name="formButton" value="normal"> Create form </button>
+    <!--TODO: vedere se si può sostituire con una card-->
+    <div id="rcorners" style="padding-left: 40%; padding-right: 40%;">
+        <h5> My account </h5>
+        <form id="nospaceform" action="/form" method="POST">
+            <button class="btn btn-primary w-100 p-3" type="submit" name="formButton" value="normal"> Create form </button>
         </form>
-        <form action="/form" method="POST">
-            <button type="button" data-toggle="modal" data-target="#exampleModalCenter"> Create form by template </button>
+        <form id="nospaceform" action="/form" method="POST">
+            <button class="btn btn-primary w-100 p-3" type="button" data-toggle="modal" data-target="#exampleModalCenter"> Create form by template </button>
         </form> 
-        <form action="/myform" method="POST">
-            <button type="submit"> My form </button>
+        <form id="nospaceform" action="/myform" method="POST">
+            <button class="btn btn-primary w-100 p-3" type="submit"> My form </button>
         </form>    
-        <form action="/template" method="POST">
-            <button type="submit"> Create template </button>
+        <form id="nospaceform" action="/template" method="POST">
+            <button class="btn btn-primary w-100 p-3" type="submit"> Create template </button>
         </form>
-        <form action="/answer" method="POST">
-            <button type="submit"> Answer to a form </button>
+        <form id="nospaceform" action="/answer" method="POST">
+            <button class="btn btn-primary w-100 p-3" type="submit"> Answer to a form </button>
         </form>
-        <form action="/logout" method="POST">
-            <button type="submit"> Logout </button>
+        <form id="nospace" action="/logout" method="POST">
+            <button class="btn btn-primary w-100 p-3"type="submit"> Logout </button>
         </form>
     </div>
 
