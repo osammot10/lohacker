@@ -6,49 +6,50 @@
     <div id="rcorners" style="padding-left: 40%; padding-right: 40%;">
         <h5> My account </h5>
         <form id="nospaceform" action="/form" method="POST">
-            <button class="btn btn-primary w-100 p-3" type="submit" name="formButton" value="normal"> Create form </button>
+            <button class="btn btn-primary w-100 p-3 rounded-0" type="submit" name="formButton" value="normal"> Create form </button>
         </form>
         <form id="nospaceform" action="/form" method="POST">
-            <button class="btn btn-primary w-100 p-3" type="button" data-toggle="modal" data-target="#exampleModalCenter"> Create form by template </button>
+            <button class="btn btn-primary w-100 p-3 rounded-0" type="button" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"> Create form by template </button>
         </form> 
         <form id="nospaceform" action="/myform" method="POST">
-            <button class="btn btn-primary w-100 p-3" type="submit"> My form </button>
+            <button class="btn btn-primary w-100 p-3 rounded-0" type="submit"> My form </button>
         </form>    
         <form id="nospaceform" action="/template" method="POST">
-            <button class="btn btn-primary w-100 p-3" type="submit"> Create template </button>
+            <button class="btn btn-primary w-100 p-3 rounded-0" type="submit"> Create template </button>
         </form>
         <form id="nospaceform" action="/answer" method="POST">
-            <button class="btn btn-primary w-100 p-3" type="submit"> Answer to a form </button>
+            <button class="btn btn-primary w-100 p-3 rounded-0" type="submit"> Answer to a form </button>
         </form>
         <form id="nospace" action="/logout" method="POST">
-            <button class="btn btn-primary w-100 p-3"type="submit"> Logout </button>
+            <button class="btn btn-primary w-100 p-3 rounded-0" type="submit"> Logout </button>
         </form>
     </div>
 
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h4 class="modal-title" id="exampleModalLongTitle">Template</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabel">Template</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                {% if templates != false %}            
+                    <lu>
+                        <form action="/form" method='POST'>
+                        {% for r in templates %}
+                            <li> {{ r.name }} <button class="btn btn-secondary" type="submit" name="formButton" value="{{ r.id }}"> Import</button></li>
+                            <br>
+                        {% endfor %}
+                        </form>
+                    </lu>
+                {% else %}
+                    <p>Create a template before using it!</p>
+                {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
-            <div class="modal-body">
-            {% if templates != false %}                
-                <lu>
-                {% for r in templates %}
-                    <li><span><form action="/form" method='POST'> {{ r.name }} <button type="submit" name="formButton" value="{{ r.id }}"> Import {{r.name}}</button></form></span></li> 
-                {% endfor %}
-                </lu>
-            {% else %}
-                <p>Create a template before using it!</p>
-            {% endif %}
-            </div>
-            <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
         </div>
     </div>
 {% endblock %}

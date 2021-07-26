@@ -92,6 +92,9 @@ class CheckboxAnswer(Base):
     def toString(self):
         return "question: {0}, number: {1}, user: {2}".format(self.question, self.number, self.user)
 
-t = session.query(Survey).filter(Survey.maker == 1).filter(Survey.template == True).all()
-for r in t:
-    print(r.toString())
+t1 = session.query(OpenAnswer).join(Question).filter(Question.survey == 17).filter(OpenAnswer.user == 6).all()
+t2 = session.query(CheckboxAnswer).join(CheckboxQuestion).filter(Question.survey == 17).filter(OpenAnswer.user == 6).all()
+if not t:
+    print("vuota")
+for i in t:
+    print(i.text)

@@ -7,17 +7,25 @@ response_bp = Blueprint('response_bp',__name__)
 @response_bp.route('/getsurvey/<id>')
 @login_required
 def show_survey(id):
-    survey = session.query(Survey).filter(Survey.id==id).first()
+    survey = session.query(Survey).filter(Survey.id==id).filter(Survey.template == False).filter(Survey.deleted == False).first()
 
-    checkboxList = []
-    
-    q = session.query(Question).filter(Question.survey==survey.id).all()
-    for r in q:
-        if r.type == "checkbox":
-            o = session.query(CheckboxQuestion).filter(CheckboxQuestion.id==r.id).all()
-            checkboxList += o
-    
-    return render_template("response.html", survey =survey, question=q, checkbox=checkboxList)
+    if survey is not None:
+
+        if survey.active == True:
+            checkboxList = []
+            
+            q = session.query(Question).filter(Question.survey==survey.id).all()
+            for r in q:
+                if r.type == "checkbox":
+                    o = session.query(CheckboxQuestion).filter(CheckboxQuestion.id==r.id).all()
+                    checkboxList += o
+            
+            return render_template("response.html", survey =survey, question=q, checkbox=checkboxList)
+        
+        else:
+            return render_template("surveydisabled.html")
+    else:
+        return render_template("surveynotexisting.html")
 
 
 @response_bp.route('/getresponse', methods=['GET', 'POST'])

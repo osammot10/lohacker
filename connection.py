@@ -58,6 +58,8 @@ class Survey(Base):
     name = Column(String)
     date = Column(Date)
     template = Column(Boolean)
+    active = Column(Boolean)
+    deleted = Column(Boolean)
 
     def toString(self):
         return "id: {0}, maker_id: {1}, name: {2}, date: {3}".format(self.id, self.maker, self.name, self.date)

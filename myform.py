@@ -10,7 +10,7 @@ def show_my_survey(id):
     answerOpen = []
     answerCheck = []
 
-    s = session.query(Survey).filter(Survey.id == id).first()
+    s = session.query(Survey).filter(Survey.id == id).filter(Survey.template == False).filter(Survey.deleted == False).first()
  
     question = session.query(Question.id, Question.text, Question.type).filter(Question.survey == id).all()
 
@@ -28,3 +28,22 @@ def show_my_survey(id):
     checkbox = zip(checkbox, answerCheck)
 
     return render_template("mysurvey.html", survey = s, questions = question, checkboxs = checkbox, openAnswers = answerOpen)
+
+@myform_bp.route('/disable', methods = ['GET', 'POST'])
+@login_required
+def disable_survey():
+    button = request.form['action']
+    action = button.split()[0]
+    id = button.split()[1]
+
+    survey = session.query(Survey).filter(Survey.id == id).filter(Survey.template == False).filter(Survey.deleted == False).first()
+    
+    if action == 'active':
+        survey.active = False
+    elif action == 'disabled':
+        survey.active = True
+    else:
+        survey.deleted = True
+    session.commit()
+    
+    return redirect(url_for('form_bp.show_my_form'))

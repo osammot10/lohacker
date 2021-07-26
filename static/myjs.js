@@ -143,7 +143,8 @@ function createQButton(){
     var btn = document.createElement("button");
     btn.setAttribute("type", "button");
     btn.setAttribute("class", "btn btn-primary dropdown-toggle");
-    btn.setAttribute("data-toggle", "dropdown");
+    btn.setAttribute("data-bs-toggle", "dropdown");
+    btn.setAttribute("aria-expanded", "false");
     btn.innerHTML=" + ";
     div.appendChild(btn);
 
@@ -155,6 +156,7 @@ function createQButton(){
 
     var li1 = document.createElement("li");
     var a1 = document.createElement("a");
+    a1.setAttribute("class", "dropdown-item");
     a1.setAttribute("onclick", "createOpenQuestion(this.id)");
     a1.setAttribute("href", "#");
     a1.innerHTML=" Open ";
@@ -163,6 +165,7 @@ function createQButton(){
 
     var li2 = document.createElement("li");
     var a2 = document.createElement("a");
+    a2.setAttribute("class", "dropdown-item");
     a2.setAttribute("onclick", "createCheckboxQuestion(this.id)");
     a2.setAttribute("href", "#");
     a2.innerHTML=" Checkbox ";
@@ -171,6 +174,7 @@ function createQButton(){
 
     var li3 = document.createElement("li");
     var a3 = document.createElement("a");
+    a3.setAttribute("class", "dropdown-item");
     a3.setAttribute("onclick", "createRadioQuestion(this.id)");
     a3.setAttribute("href", "#");
     a3.innerHTML=" Radio button ";

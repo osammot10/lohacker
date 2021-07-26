@@ -1,20 +1,46 @@
 {% extends "base.html" %}
 
 {% block body %}
-
-<!--TODO: sostituire con DataTable-->
-
 <div id="rcorners">
     <h3>Hello {{ current_user.first_name }}, your forms are:</h3>
     <br>
-    <ul>
-    {% for s in surveys %}
-        <li><a href="myform/{{ s.id }}">{{ s.name }}</a> created {{ s.date }}</li>
-        <br>
-    {% endfor %}
-    </ul>
+    <form action="/disable" method="POST">
+        <table id="example" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date of creation</th>
+                    <th>Disable</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in surveys %}
+                    <tr>
+                        <td> <a href="myform/{{ s.id }}"> {{s.name}} </a></td>
+                        <td> {{s.date}} </td>
+                        <td>
+                            {% if s.active == true %}
+                                <button type="submit" class="btn btn-success btn-sm" name="action" value="active {{ s.id }}"> Active </button>
+                            {% else %}
+                                <button type="submit" class="btn btn-danger btn-sm" name="action" value="disabled {{ s.id }}"> Disabled </button>
+                            {% endif %}
+                        </td>
+                        <td><button type="submit" class="btn btn-primary btn-sm" name = "action" value = "delete {{ s.id }}"> Delete </button></td>
+                        <!--TODO: creare un modal per quando viene cliccato il bottone di eliminazione -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
     <form action="/" method="POST">
         <button type="submit" class="btn btn-secondary"> Home page </button>
-      </form>
+    </form>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $('#example').DataTable();
+    } );
+</script>
 {% endblock %}

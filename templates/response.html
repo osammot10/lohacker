@@ -4,7 +4,6 @@
     <div id="rcorners">
         <form action="/getresponse" method="POST">
             <h1>{{survey.name}}</h1>
-            <!--input type="hidden" name="surveyId" value="{{survey.id}}"-->
             {% for u in question %}
                 {% if u.type == "open" %}
                     <label>{{u.text}}</label>
