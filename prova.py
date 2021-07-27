@@ -33,7 +33,7 @@ login_manager.init_app(app)
 class Utenti(Base):
     __tablename__ = 'User'                   # obbligatorio
 
-    id = Column(Integer, primary_key=True)    # almeno un attributo deve fare parte della primary key
+    id = Column(Integer, primary_key=True, autoincrement=True)    # almeno un attributo deve fare parte della primary key
     email = Column(String)
     password = Column(String)
     first_name = Column(String)
@@ -47,6 +47,8 @@ class Survey(Base):
     name = Column(String)
     date = Column(Date)
     template = Column(Boolean)
+    active = Column(Boolean)
+    deleted = Column(Boolean)
 
     def toString(self):
         return "id: {0}, maker_id: {1}, name: {2}, date: {3}".format(self.id, self.maker, self.name, self.date)
@@ -56,11 +58,16 @@ class Question(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     survey = Column(Integer, ForeignKey(Survey.id), primary_key=True)
-    text = Column(String)
     type = Column(String)
 
     def toString(self):
         return "id: {0}, text: {1}, type: {2}".format(self.id, self.text, self.type)
+
+class OpenQuestion(Base):
+    __tablename__ = "OpenQuestion"
+
+    id = Column(Integer, ForeignKey(Question.id), primary_key = True, autoincrement = True)
+    text = Column(String)
 
 class CheckboxQuestion(Base):
     __tablename__ = "CheckboxQuestion"
@@ -69,32 +76,26 @@ class CheckboxQuestion(Base):
     number = Column(Integer, primary_key=True)
     text = Column(String)
 
-    def toString(self):
-        return "id: {0}, number: {1}, text: {2}".format(self.id, self.number, self.text)
+class Answer(Base):
+    __tablename__ = "Answer"
+
+    id = Column(Integer, primary_key = True, autoincrement = True)
+    survey = Column(Integer, ForeignKey(Survey.id), primary_key = True, autoincrement = True)
+    maker = Column(Integer, ForeignKey(Utenti.id), primary_key = True, autoincrement = True)
+    date = Column(Date)
 
 class OpenAnswer(Base):
     __tablename__ = "OpenAnswer"
 
-    question = Column(Integer, ForeignKey(Question.id), primary_key=True, autoincrement=True)
+    question = Column(Integer, ForeignKey(OpenQuestion.id), primary_key=True, autoincrement=True)
     text = Column(String)
-    user = Column(Integer, ForeignKey(Utenti.id), primary_key=True)
-
-    def toString(self):
-        return "question: {0}, text: {1}, user: {2}".format(self.question, self.text, self.user)
+    id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
 
 class CheckboxAnswer(Base):
     __tablename__ = "CheckboxAnswer"
 
     question = Column(Integer, ForeignKey(CheckboxQuestion.id), primary_key=True, autoincrement=True)
     number = Column(Integer, ForeignKey(CheckboxQuestion.number), primary_key=True, autoincrement=True)
-    user = Column(Integer, ForeignKey(Utenti.id), primary_key=True)
+    id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
 
-    def toString(self):
-        return "question: {0}, number: {1}, user: {2}".format(self.question, self.number, self.user)
-
-t1 = session.query(OpenAnswer).join(Question).filter(Question.survey == 17).filter(OpenAnswer.user == 6).all()
-t2 = session.query(CheckboxAnswer).join(CheckboxQuestion).filter(Question.survey == 17).filter(OpenAnswer.user == 6).all()
-if not t:
-    print("vuota")
-for i in t:
-    print(i.text)
+q = Question(Survey)

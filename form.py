@@ -22,9 +22,9 @@ def show_form_create_page():
 @login_required
 def create_survey():
     if request.method == 'POST':
-        title = request.form['titleInput']
-        s = Survey(maker = current_user.get_id(), name = title, date = date.today(), template = False, active = True, deleted = False)
-        session.add(s)
+        questionTitle = request.form['titleInput']
+        newSurvey = Survey(maker = current_user.get_id(), name = questionTitle, date = date.today(), template = False, active = True, deleted = False)
+        session.add(newSurvey)
         session.commit()
         id_check = -1
         i = 1
@@ -33,21 +33,29 @@ def create_survey():
             if k != "titleInput":
                 k = k.split()[1]
                 if k == 'open':
-                    q = Question(survey = str(s.id), text = v, type = "open")
-                    session.add(q)
+                    #id è autoincrement, si può omettere
+                    newQuestion = Question(survey = str(newSurvey.id), type = "open")
+                    session.add(newQuestion)
+                    session.commit()
+                    newOpenQuestion = OpenQuestion(id = str(newQuestion.id), text = v)
+                    session.add(newOpenQuestion)
                     j = j + 1
                 elif k == 'checkbox':
-                    q = Question(survey = str(s.id), text= v, type = "checkbox")
-                    session.add(q)
-                    id_check = q.id
+                    #id è autoincrement, si può omettere
+                    newQuestion = Question(survey = str(newSurvey.id), type = "checkbox")
+                    session.add(newQuestion)
+                    session.commit()
+                    newCheckboxQuestion = CheckboxQuestion(id = str(newQuestion.id), text= v)
+                    session.add(newCheckboxQuestion)
+                    id_check = newCheckboxQuestion.id
                     j = j + 1
                     i = 1
                 elif k == 'checkboxtext':
-                    q = CheckboxQuestion(id = str(id_check), number = i, text = v)
-                    session.add(q)
+                    newCheckboxOption = CheckboxOption(id = str(id_check), number = i, text = v)
+                    session.add(newCheckboxOption)
                     i = i + 1
                 session.commit()         
-        return redirect(url_for('form_bp.show_survey_link', id = str(s.id)))
+        return redirect(url_for('form_bp.show_survey_link', id = str(newSurvey.id)))
 
 @form_bp.route('/surveylink')
 @login_required

@@ -17,7 +17,6 @@ Base.metadata.schema = 'form'
 engine = create_engine('postgresql://postgres:postgres@localhost/lohacker')
 metadata = MetaData()
 
-# Da inserire in ogni route
 Session = sessionmaker(bind=engine)       # creazione della factory
 session = Session()
 
@@ -69,32 +68,51 @@ class Question(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     survey = Column(Integer, ForeignKey(Survey.id), primary_key=True)
-    text = Column(String)
     type = Column(String)
 
     def toString(self):
         return "id: {0}, text: {1}, type: {2}".format(self.id, self.text, self.type)
 
+class OpenQuestion(Base):
+    __tablename__ = "OpenQuestion"
+
+    id = Column(Integer, ForeignKey(Question.id), primary_key = True, autoincrement = True)
+    text = Column(String)
+
 class CheckboxQuestion(Base):
     __tablename__ = "CheckboxQuestion"
 
     id = Column(Integer,ForeignKey(Question.id), primary_key=True, autoincrement=True)
-    number = Column(Integer, primary_key=True)
     text = Column(String)
+
+class CheckboxOption(Base):
+    __tablename__ = "CheckboxOption"
+
+    id = Column(Integer, ForeignKey(CheckboxQuestion.id), primary_key = True, autoincrement = True)
+    number = Column(Integer, primary_key = True)
+    text = Column(String)
+
+class Answer(Base):
+    __tablename__ = "Answer"
+
+    id = Column(Integer, primary_key = True, autoincrement = True)
+    survey = Column(Integer, ForeignKey(Survey.id), primary_key = True, autoincrement = True)
+    maker = Column(Integer, ForeignKey(Utenti.id), primary_key = True, autoincrement = True)
+    date = Column(Date)
 
 class OpenAnswer(Base):
     __tablename__ = "OpenAnswer"
 
-    question = Column(Integer, ForeignKey(Question.id), primary_key=True, autoincrement=True)
+    question = Column(Integer, ForeignKey(OpenQuestion.id), primary_key=True, autoincrement=True)
     text = Column(String)
-    user = Column(Integer, ForeignKey(Utenti.id), primary_key=True)
+    id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
 
 class CheckboxAnswer(Base):
     __tablename__ = "CheckboxAnswer"
 
-    question = Column(Integer, ForeignKey(CheckboxQuestion.id), primary_key=True, autoincrement=True)
-    number = Column(Integer, ForeignKey(CheckboxQuestion.number), primary_key=True, autoincrement=True)
-    user = Column(Integer, ForeignKey(Utenti.id), primary_key=True)
+    question = Column(Integer, ForeignKey(CheckboxOption.id), primary_key=True, autoincrement=True)
+    number = Column(Integer, ForeignKey(CheckboxOption.number), primary_key=True, autoincrement=True)
+    id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
 
 
 

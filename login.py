@@ -10,7 +10,7 @@ def show_login_page():
 def login():
     if request.method == 'POST':
         e = request.form['email']
-        if e is not "":
+        if e != "":
             rs = session.query(Utenti.password).filter(Utenti.email==e)
             if rs.first() is not None:
                 real_pwd = rs.first()[0]
@@ -31,7 +31,7 @@ def login():
 @login_bp.route('/private')
 @login_required
 def private():
-    t = session.query(Survey).filter(Survey.maker == current_user.get_id()).filter(Survey.template == True).all()
+    t = session.query(Survey).filter(Survey.maker == current_user.get_id()).filter(Survey.template == True).filter(Survey.deleted == False).all()
     return render_template("profile.html", templates = t)
 
 @login_bp.route('/register', methods = ['GET', 'POST'])

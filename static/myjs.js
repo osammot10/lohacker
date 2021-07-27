@@ -271,13 +271,20 @@ function firstOpen(){
     input.setAttribute('name', counter+' open');
     row.childNodes[0].appendChild(input);
 
+    row.childNodes[0].appendChild(getSpace());
+    row.childNodes[0].appendChild(getSpace());
+
     var switchToggle = document.createElement("input");
+    switchToggle.setAttribute('class','form-check-input');
     switchToggle.setAttribute('type', 'checkbox');
-    switchToggle.setAttribute('data-toggle', 'toggle');
-    switchToggle.setAttribute('data-on', 'Required');
-    switchToggle.setAttribute('data-off', 'Not required');
+    switchToggle.setAttribute('id', 'flexCheckDefault');
     row.childNodes[0].appendChild(switchToggle);
 
+    var requiredLabel = document.createElement("label");
+    requiredLabel.setAttribute('class', 'form-check-label');
+    requiredLabel.setAttribute('for', 'flexCheckDefault');
+    requiredLabel.innerHTML = '&nbsp; Required';
+    row.childNodes[0].appendChild(requiredLabel);
 
     var newButton = createButton.cloneNode(true);
     newButton.setAttribute("id","createButton"+counter);
@@ -422,6 +429,21 @@ function openAfter(idA){
   input.setAttribute('type', 'text');
   input.setAttribute('name', counter+' open');
   row.childNodes[0].appendChild(input);
+
+  row.childNodes[0].appendChild(getSpace());
+  row.childNodes[0].appendChild(getSpace());
+
+  var switchToggle = document.createElement("input");
+  switchToggle.setAttribute('class','form-check-input');
+  switchToggle.setAttribute('type', 'checkbox');
+  switchToggle.setAttribute('id', 'flexCheckDefault');
+  row.childNodes[0].appendChild(switchToggle);
+
+  var requiredLabel = document.createElement("label");
+  requiredLabel.setAttribute('class', 'form-check-label');
+  requiredLabel.setAttribute('for', 'flexCheckDefault');
+  requiredLabel.innerHTML = '&nbsp; Required';
+  row.childNodes[0].appendChild(requiredLabel);
   
   var newButton = createButton.cloneNode(true);
   newButton.setAttribute("id","createButton"+counter);
