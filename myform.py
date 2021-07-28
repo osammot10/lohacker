@@ -7,27 +7,31 @@ myform_bp = Blueprint('myform_bp',__name__)
 def show_my_survey(id):
 
     checkbox = []
-    answerOpen = []
-    answerCheck = []
+    openAnswer = []
+    checkboxAnswer = []
+    questionSet = []
 
-    s = session.query(Survey).filter(Survey.id == id).filter(Survey.template == False).filter(Survey.deleted == False).first()
+    selectedSurvey = session.query(Survey).filter(Survey.id == id).filter(Survey.template == False).filter(Survey.deleted == False).first()
  
-    question = session.query(Question.id, Question.text, Question.type).filter(Question.survey == id).all()
+    question = session.query(Question).filter(Question.survey == id).all()
 
-    for r in question:
-        if r.type == 'open':
-            a = session.query(OpenAnswer.question, OpenAnswer.text, OpenAnswer.user).filter(OpenAnswer.question == r.id).all()
-            answerOpen += a
-        elif r.type == 'checkbox':
-            c = session.query(CheckboxQuestion.id, CheckboxQuestion.number, CheckboxQuestion.text).filter(CheckboxQuestion.id == r.id).all()
-            checkbox += c
+    for entry in question:
+        if entry.type == 'open':
+            questionSet += session.query(Question.type, OpenQuestion.id, OpenQuestion.text).join(OpenQuestion).filter(Question.id == entry.id).all()
+            
+            newOpenAnswer = session.query(OpenAnswer.id, OpenAnswer.question, OpenAnswer.text, Answer.maker).join(Answer).filter(OpenAnswer.question == entry.id).all()
+            
+            openAnswer += newOpenAnswer
+        elif entry.type == 'checkbox':
+            questionSet += session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text).join(CheckboxQuestion).filter(Question.id == entry.id).all()
 
-            u = session.query(CheckboxQuestion.id, CheckboxQuestion.number, func.count(CheckboxAnswer.number)).outerjoin(CheckboxAnswer, (CheckboxAnswer.question == CheckboxQuestion.id) & (CheckboxAnswer.number == CheckboxQuestion.number)).filter(CheckboxQuestion.id == 19).group_by(CheckboxQuestion.id, CheckboxQuestion.number).all()
-            answerCheck += u
+            checkboxQuestionText = session.query(CheckboxQuestion.id, CheckboxQuestion.text, CheckboxOption.id.label('optionNumber'), CheckboxOption.text.label('option')).join(CheckboxOption).filter(CheckboxQuestion.id == entry.id).all()
+            checkbox += checkboxQuestionText
 
-    checkbox = zip(checkbox, answerCheck)
-
-    return render_template("mysurvey.html", survey = s, questions = question, checkboxs = checkbox, openAnswers = answerOpen)
+            checkboxOption = session.query(CheckboxOption.id, CheckboxOption.number, func.count(CheckboxAnswer.number).label('counter')).outerjoin(CheckboxAnswer, (CheckboxAnswer.question == CheckboxOption.id) & (CheckboxAnswer.number == CheckboxOption.number)).filter(CheckboxOption.id == entry.id).group_by(CheckboxOption.id, CheckboxOption.number).all()
+            checkboxAnswer += checkboxOption
+      
+    return render_template("mysurvey.html", survey = selectedSurvey, questions = questionSet, checkboxs = checkbox, openAnswers = openAnswer, checkboxoption = checkboxAnswer)
 
 @myform_bp.route('/disable', methods = ['GET', 'POST'])
 @login_required

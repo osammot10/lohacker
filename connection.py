@@ -96,8 +96,8 @@ class Answer(Base):
     __tablename__ = "Answer"
 
     id = Column(Integer, primary_key = True, autoincrement = True)
-    survey = Column(Integer, ForeignKey(Survey.id), primary_key = True, autoincrement = True)
-    maker = Column(Integer, ForeignKey(Utenti.id), primary_key = True, autoincrement = True)
+    survey = Column(Integer, ForeignKey(Survey.id), primary_key = True)
+    maker = Column(Integer, ForeignKey(Utenti.id), primary_key = True)
     date = Column(Date)
 
 class OpenAnswer(Base):

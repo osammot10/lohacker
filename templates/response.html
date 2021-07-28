@@ -2,30 +2,40 @@
 
 {% block body %}
     <div id="rcorners">
-        <form action="/getresponse" method="POST">
-            <h1>{{survey.name}}</h1>
-            {% for u in question %}
-                {% if u.type == "open" %}
-                    <label>{{u.text}}</label>
-                    <br>
-                    <input type="text" name="{{u.id}} open" required>
-                {% else %}
-                    <label>{{u.text}}</label>
-                    <br>
-                    {% for c in checkbox if c.id == u.id%}
-                        <input type="checkbox" name="{{u.id}} checkbox {{c.number}}">
-                        <input type="text" value="{{c.text}}" readonly>
+        <div class="row">
+            <div class = "col"></div>
+            <div class="col-6">
+                <form action="/getresponse/{{survey.id}}" method="POST">
+                    <h1>{{ survey.name }}</h1>
+                    {% for u in question %}
+                        {% if u.type == "open" %}
+                            <label class="form-label">{{ u.text }}</label>
+                            <br>
+                            <input class="form-control" type="text" name="{{u.id}} open" required>
+                        {% else %}
+                            <label class="form-label">{{ u.text }}</label>
+                            <br>
+                            {% for c in checkbox if c.id == u.id%}
+                                <div class="input-group mb-3">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input" name="{{u.id}} checkbox {{c.number}}">
+                                    </div>
+                                    <input type="text" class="form-control" aria-label="Text input with checkbox" value=" {{ c.text }}" readonly>
+                                </div>
+                                <!--input type="checkbox" name="{{u.id}} checkbox {{c.number}}">
+                                <input class="form-control" type="text" value="{{c.text}}" readonly-->
+                            {% endfor %}
+                        {% endif %}
                         <br>
                         <br>
                     {% endfor %}
-                {% endif %}
-                <br>
-                <br>
-            {% endfor %}
-            <button type="submit" class="btn btn-primary"> Send </button>
-        </form>
-        <form action="/" method="POST">
-            <button type="submit" class="btn btn-secondary"> Home page </button>
-          </form>
+                    <button type="submit" class="btn btn-primary"> Send </button>
+                </form>
+                <form action="/" method="POST">
+                    <button type="submit" class="btn btn-secondary"> Home page </button>
+                </form>
+            </div>
+            <div class="col"></div>
+        </div>
     </div>
 {% endblock %}

@@ -5,6 +5,7 @@
     <h1>{{ survey.name }}</h1>
     <br>
     {% for q in questions %}
+        {{ q.id }}
         <h5>{{ q.text }}</h5>
         {% if q.type == 'open' %}
             <br>
@@ -12,11 +13,14 @@
                 <input type="text" value="{{ a.text }}" style="text-align:center;" readonly></input>
                 <br>
             {% endfor %}
-        {% else %}
-            {% for c,a in checkboxs if c.id == q.id%}
-                <span> <input type="checkbox" disabled> <input type = "text" value = "{{c.text}}" style="text-align:center;" readonly> {{ a[2] }} </span>
-                <br>
-                <br>
+        {% elif q.type == 'checkbox' %}
+            {% for c in checkboxs %}
+                {% if c.id == q.id %}
+                    {% set item_1 = checkboxoption[loop.index-1].counter %}
+                    <span> <input type="checkbox" disabled> <input type = "text" value = "{{c.option}}" style="text-align:center;" readonly> {{ item_1 }} </span>
+                    <br>
+                    <br>
+                {% endif %}
             {% endfor %}
         {% endif %}
         <br>

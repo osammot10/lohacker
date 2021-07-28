@@ -1,4 +1,5 @@
 from connection import *
+from datetime import date
 
 response_bp = Blueprint('response_bp',__name__)
 
@@ -12,15 +13,21 @@ def show_survey(id):
     if survey is not None:
 
         if survey.active == True:
-            checkboxList = []
+            checkboxOptionList = []
+            questionSet = []
             
-            q = session.query(Question).filter(Question.survey==survey.id).all()
-            for r in q:
-                if r.type == "checkbox":
-                    o = session.query(CheckboxQuestion).filter(CheckboxQuestion.id==r.id).all()
-                    checkboxList += o
+            question = session.query(Question).filter(Question.survey==survey.id).all()
+
+            for entry in question:
+                if entry.type == "open":
+                    questionSet += session.query(Question.type, OpenQuestion.id, OpenQuestion.text).join(OpenQuestion).filter(OpenQuestion.id == entry.id)
+                elif entry.type == "checkbox":
+                    questionSet += session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text).join(CheckboxQuestion).filter(CheckboxQuestion.id == entry.id)
+                    
+                    checkboxOption = session.query(CheckboxOption).filter(CheckboxOption.id == entry.id).all()
+                    checkboxOptionList += checkboxOption
             
-            return render_template("response.html", survey =survey, question=q, checkbox=checkboxList)
+            return render_template("response.html", survey = survey, question = questionSet, checkbox = checkboxOptionList)
         
         else:
             return render_template("surveydisabled.html")
@@ -28,21 +35,24 @@ def show_survey(id):
         return render_template("surveynotexisting.html")
 
 
-@response_bp.route('/getresponse', methods=['GET', 'POST'])
+@response_bp.route('/getresponse/<id>', methods=['GET', 'POST'])
 @login_required
-def send_response():
+def send_response(id):
+    newAnswer = Answer(survey = id, maker = current_user.get_id(), date = date.today())
+    session.add(newAnswer)
+    session.commit()
+    print(newAnswer)
     for k,v in request.form.items():    #TODO controllare se l'utente ha già risposto
         idQuestion = k.split()[0]
         type = k.split()[1]
         if type == "open":
-            o = OpenAnswer(question = idQuestion, text = v, user = current_user.get_id())
-            session.add(o)
-            session.commit()
+            newOpenAnswer = OpenAnswer(question = idQuestion, text = v, id = str(newAnswer.id))
+            session.add(newOpenAnswer)
         elif type == "checkbox":
-            nSelected = k.split()[2]
-            c = CheckboxAnswer(question = idQuestion, number = nSelected, user = current_user.get_id())
-            session.add(c)
-            session.commit()
+            optionSelected = k.split()[2]
+            newCheckboxAnswer = CheckboxAnswer(question = idQuestion, number = optionSelected, id = str(newAnswer.id))
+            session.add(newCheckboxAnswer)
+    session.commit()
 
     return render_template("confirmation.html")
 

@@ -73,7 +73,13 @@ class CheckboxQuestion(Base):
     __tablename__ = "CheckboxQuestion"
 
     id = Column(Integer,ForeignKey(Question.id), primary_key=True, autoincrement=True)
-    number = Column(Integer, primary_key=True)
+    text = Column(String)
+
+class CheckboxOption(Base):
+    __tablename__ = "CheckboxOption"
+
+    id = Column(Integer, ForeignKey(CheckboxQuestion.id), primary_key = True, autoincrement = True)
+    number = Column(Integer, primary_key = True)
     text = Column(String)
 
 class Answer(Base):
@@ -94,8 +100,20 @@ class OpenAnswer(Base):
 class CheckboxAnswer(Base):
     __tablename__ = "CheckboxAnswer"
 
-    question = Column(Integer, ForeignKey(CheckboxQuestion.id), primary_key=True, autoincrement=True)
-    number = Column(Integer, ForeignKey(CheckboxQuestion.number), primary_key=True, autoincrement=True)
+    question = Column(Integer, ForeignKey(CheckboxOption.id), primary_key=True, autoincrement=True)
+    number = Column(Integer, ForeignKey(CheckboxOption.number), primary_key=True, autoincrement=True)
     id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
 
-q = Question(Survey)
+#c = session.query(CheckboxQuestion.id, CheckboxQuestion.text.label('question'), CheckboxOption.text.label('option')).join(CheckboxOption).filter(CheckboxQuestion.id == 33).all()
+#for r in c:
+#    print(r.id, r.question, r.option)
+
+#u = session.query(CheckboxAnswer.question, CheckboxAnswer.number, func.count(CheckboxAnswer.number)).outerjoin(CheckboxAnswer, (CheckboxAnswer.question == CheckboxQuestion.id) & (CheckboxAnswer.number == CheckboxQuestion.number)).filter(CheckboxQuestion.id == r.id).group_by(CheckboxQuestion.id, CheckboxQuestion.number).all()
+#u = session.query(CheckboxOption.id, CheckboxOption.number, func.count(CheckboxAnswer.number).label('n')).outerjoin(CheckboxAnswer, (CheckboxAnswer.question == CheckboxOption.id) & (CheckboxAnswer.number == CheckboxOption.number)).filter(CheckboxOption.id == 33).group_by(CheckboxOption.id, CheckboxOption.number).all()
+#u = session.query(CheckboxAnswer.question, CheckboxAnswer.number, func.count(CheckboxAnswer.number).label('n')).filter(CheckboxAnswer.question == 32).group_by(CheckboxAnswer.question, CheckboxAnswer.number).all()
+#for r in u:
+#    print(r.id, r.number, r.n)
+
+newOpenAnswer = session.query(OpenAnswer.id, OpenAnswer.question, OpenAnswer.text, Answer.maker).join(Answer).filter(OpenAnswer.question == 30).all()
+for r in newOpenAnswer:
+    print(r.text)

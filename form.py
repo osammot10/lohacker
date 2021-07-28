@@ -9,14 +9,21 @@ def show_form_create_page():
     if request.form['formButton'] == 'normal':
         return render_template("form.html", templates = True)
     else:
-        checkbox = []
+        checkboxOption = []
+        templateQuestions = []
         idTemplate = request.form['formButton']
-        q = session.query(Question).filter(Question.survey == idTemplate).all()
-        n = len(q)
-        for r in q:
-            if r.type == 'checkbox':
-                checkbox += session.query(CheckboxQuestion).filter(CheckboxQuestion.id == r.id).all()
-        return render_template("form.html",templates = False ,questionTemplate = q, checkboxTemplate = checkbox, number = n)
+        question = session.query(Question).filter(Question.survey == idTemplate).all()
+        n = len(templateQuestions)
+        for entry in question:
+            if entry.type == 'open':
+                templateQuestions += session.query(Question.type, OpenQuestion.id, OpenQuestion.text).join(OpenQuestion).filter(OpenQuestion.id == entry.id).all()
+            elif entry.type == 'checkbox':
+                templateQuestions += session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text).join(CheckboxQuestion).filter(CheckboxQuestion.id == entry.id).all()
+                checkboxOption += session.query(CheckboxOption).filter(CheckboxOption.id == entry.id).all()
+
+        for r in templateQuestions:
+            print(r.text)
+        return render_template("form.html", templates = False, questionTemplate = templateQuestions, checkboxTemplate = checkboxOption, number = n)
 
 @form_bp.route('/form/create', methods = ['GET', 'POST'])
 @login_required
