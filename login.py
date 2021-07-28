@@ -40,7 +40,7 @@ def show_register_page():
 
 @login_bp.route('/register/send', methods = ['GET', 'POST'])
 def register():
-    if request.form['email'] is not None and request.form['email'] is not "" and request.form['password'] is not None and request.form['password'] is not "" and request.form['first_name'] is not None and request.form['first_name'] is not "" and request.form['surname'] is not None and request.form['surname'] is not "":
+    if request.form['email'] is not None and request.form['email'] != "" and request.form['password'] is not None and request.form['password'] != "" and request.form['first_name'] is not None and request.form['first_name'] != "" and request.form['surname'] is not None and request.form['surname'] != "":
         user = Utenti(email = request.form['email'], password = request.form['password'], first_name = request.form['first_name'], surname = request.form['surname'])
         session.add(user)
         session.commit()

@@ -10,29 +10,33 @@ response_bp = Blueprint('response_bp',__name__)
 def show_survey(id):
     survey = session.query(Survey).filter(Survey.id==id).filter(Survey.template == False).filter(Survey.deleted == False).first()
 
-    if survey is not None:
+    existingAnswer = session.query(Answer).filter(Answer.maker == current_user.get_id()).filter(Answer.survey == id).all()
+    if existingAnswer is None:
+        if survey is not None:
 
-        if survey.active == True:
-            checkboxOptionList = []
-            questionSet = []
-            
-            question = session.query(Question).filter(Question.survey==survey.id).all()
+            if survey.active == True:
+                checkboxOptionList = []
+                questionSet = []
+                
+                question = session.query(Question).filter(Question.survey==survey.id).all()
 
-            for entry in question:
-                if entry.type == "open":
-                    questionSet += session.query(Question.type, OpenQuestion.id, OpenQuestion.text).join(OpenQuestion).filter(OpenQuestion.id == entry.id)
-                elif entry.type == "checkbox":
-                    questionSet += session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text).join(CheckboxQuestion).filter(CheckboxQuestion.id == entry.id)
-                    
-                    checkboxOption = session.query(CheckboxOption).filter(CheckboxOption.id == entry.id).all()
-                    checkboxOptionList += checkboxOption
+                for entry in question:
+                    if entry.type == "open":
+                        questionSet += session.query(Question.type, OpenQuestion.id, OpenQuestion.text).join(OpenQuestion).filter(OpenQuestion.id == entry.id)
+                    elif entry.type == "checkbox":
+                        questionSet += session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text).join(CheckboxQuestion).filter(CheckboxQuestion.id == entry.id)
+                        
+                        checkboxOption = session.query(CheckboxOption).filter(CheckboxOption.id == entry.id).all()
+                        checkboxOptionList += checkboxOption
+                
+                return render_template("response.html", survey = survey, question = questionSet, checkbox = checkboxOptionList)
             
-            return render_template("response.html", survey = survey, question = questionSet, checkbox = checkboxOptionList)
-        
+            else:
+                return render_template("surveydisabled.html")
         else:
-            return render_template("surveydisabled.html")
+            return render_template("surveynotexisting.html")
     else:
-        return render_template("surveynotexisting.html")
+        return render_template("alreadyanswered.html")
 
 
 @response_bp.route('/getresponse/<id>', methods=['GET', 'POST'])
@@ -42,7 +46,7 @@ def send_response(id):
     session.add(newAnswer)
     session.commit()
     print(newAnswer)
-    for k,v in request.form.items():    #TODO controllare se l'utente ha già risposto
+    for k,v in request.form.items():
         idQuestion = k.split()[0]
         type = k.split()[1]
         if type == "open":
