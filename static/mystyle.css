@@ -21,3 +21,8 @@ ul {
     vertical-align:middle; 
     height:35px; 
 }
+
+.required-field::after {
+    content : "*";
+    color: red;
+}

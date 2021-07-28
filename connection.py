@@ -69,6 +69,7 @@ class Question(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     survey = Column(Integer, ForeignKey(Survey.id), primary_key=True)
     type = Column(String)
+    required = Column(Boolean)
 
     def toString(self):
         return "id: {0}, text: {1}, type: {2}".format(self.id, self.text, self.type)

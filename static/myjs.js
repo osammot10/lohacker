@@ -278,12 +278,13 @@ function firstOpen(){
     switchToggle.setAttribute('class','form-check-input');
     switchToggle.setAttribute('type', 'checkbox');
     switchToggle.setAttribute('id', 'flexCheckDefault');
+    switchToggle.setAttribute('name', counter + ' required');
     row.childNodes[0].appendChild(switchToggle);
 
     var requiredLabel = document.createElement("label");
     requiredLabel.setAttribute('class', 'form-check-label');
     requiredLabel.setAttribute('for', 'flexCheckDefault');
-    requiredLabel.innerHTML = '&nbsp; Required';
+    requiredLabel.innerHTML = 'Required';
     row.childNodes[0].appendChild(requiredLabel);
 
     var newButton = createButton.cloneNode(true);
@@ -351,7 +352,6 @@ function firstCheckbox(){
     addLine(row.childNodes[0]);
     addLine(row.childNodes[0]);
     
-    row.childNodes[0].required = true;
     var check = document.createElement("input");
   	check.setAttribute("type", "checkbox");
     check.setAttribute("id", "check"+checkcounter);

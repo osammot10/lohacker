@@ -9,9 +9,15 @@
                     <h1>{{ survey.name }}</h1>
                     {% for u in question %}
                         {% if u.type == "open" %}
-                            <label class="form-label">{{ u.text }}</label>
-                            <br>
-                            <input class="form-control" type="text" name="{{u.id}} open" required>
+                            {% if u.required == true %}
+                                <label class="form-label required-field">{{ u.text }}</label>
+                                <br>
+                                <input class="form-control" type="text" name="{{u.id}} open" required>
+                            {% else %}
+                                <label class="form-label ">{{ u.text }}</label>
+                                <br>
+                                <input class="form-control" type="text" name="{{u.id}} open">
+                            {% endif %}
                         {% else %}
                             <label class="form-label">{{ u.text }}</label>
                             <br>

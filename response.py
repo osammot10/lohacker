@@ -10,8 +10,10 @@ response_bp = Blueprint('response_bp',__name__)
 def show_survey(id):
     survey = session.query(Survey).filter(Survey.id==id).filter(Survey.template == False).filter(Survey.deleted == False).first()
 
-    existingAnswer = session.query(Answer).filter(Answer.maker == current_user.get_id()).filter(Answer.survey == id).all()
-    if existingAnswer is None:
+    existingAnswer = session.query(Answer).filter(Answer.maker == str(current_user.get_id()) and Answer.survey == id).all()
+
+    if not existingAnswer:
+        
         if survey is not None:
 
             if survey.active == True:
@@ -22,9 +24,9 @@ def show_survey(id):
 
                 for entry in question:
                     if entry.type == "open":
-                        questionSet += session.query(Question.type, OpenQuestion.id, OpenQuestion.text).join(OpenQuestion).filter(OpenQuestion.id == entry.id)
+                        questionSet += session.query(Question.type, OpenQuestion.id, OpenQuestion.text, Question.required).join(OpenQuestion).filter(OpenQuestion.id == entry.id)
                     elif entry.type == "checkbox":
-                        questionSet += session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text).join(CheckboxQuestion).filter(CheckboxQuestion.id == entry.id)
+                        questionSet += session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text, Question.required).join(CheckboxQuestion).filter(CheckboxQuestion.id == entry.id)
                         
                         checkboxOption = session.query(CheckboxOption).filter(CheckboxOption.id == entry.id).all()
                         checkboxOptionList += checkboxOption

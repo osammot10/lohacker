@@ -34,6 +34,7 @@ def create_survey():
         session.add(newSurvey)
         session.commit()
         id_check = -1
+        id_openQuestion = 0
         i = 1
         j = 1
         for k,v in request.form.items():
@@ -41,15 +42,16 @@ def create_survey():
                 k = k.split()[1]
                 if k == 'open':
                     #id è autoincrement, si può omettere
-                    newQuestion = Question(survey = str(newSurvey.id), type = "open")
+                    newQuestion = Question(survey = str(newSurvey.id), type = "open", required = False)
                     session.add(newQuestion)
                     session.commit()
                     newOpenQuestion = OpenQuestion(id = str(newQuestion.id), text = v)
                     session.add(newOpenQuestion)
+                    id_openQuestion = newQuestion.id
                     j = j + 1
                 elif k == 'checkbox':
                     #id è autoincrement, si può omettere
-                    newQuestion = Question(survey = str(newSurvey.id), type = "checkbox")
+                    newQuestion = Question(survey = str(newSurvey.id), type = "checkbox", required = False)
                     session.add(newQuestion)
                     session.commit()
                     newCheckboxQuestion = CheckboxQuestion(id = str(newQuestion.id), text= v)
@@ -61,6 +63,10 @@ def create_survey():
                     newCheckboxOption = CheckboxOption(id = str(id_check), number = i, text = v)
                     session.add(newCheckboxOption)
                     i = i + 1
+                elif k == "required":
+                    requiredQuestion = session.query(Question).filter(Question.id == id_openQuestion).first()
+                    requiredQuestion.required = True
+                    session.commit()
                 session.commit()         
         return redirect(url_for('form_bp.show_survey_link', id = str(newSurvey.id)))
 
