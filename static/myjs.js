@@ -7,6 +7,7 @@ var b;
 function createOpenQuestion(idA){
   createButton = createQButton();
 	if(idA == 'open_btn'){
+    createSendButton();
   	b = cloneBG();
     removeBG();
     firstOpen();
@@ -28,6 +29,7 @@ function deleteQuestion(idBtn){
         n_question--;
     }
     if(!n_question){
+        document.getElementById("sendButton").remove();
         var div = document.getElementById("rcorners");
         var form = div.childNodes[1];
         var divBtn = form.childNodes[11];
@@ -37,6 +39,7 @@ function deleteQuestion(idBtn){
 
 function createCheckboxQuestion(idA){
 	if(idA == 'check_btn'){
+    createSendButton();
     b = cloneBG();
   	createButton = createQButton();
     removeBG();
@@ -72,6 +75,7 @@ function addcheck(n){
   check.setAttribute("type", "checkbox");
   check.setAttribute("id", "check"+checkcounter);
   check.setAttribute("name", id+" checkbox "+checkcounter);
+  check.disabled = true;
   row.childNodes[0].appendChild(check);
 
   row.childNodes[0].appendChild(getSpace());
@@ -133,6 +137,18 @@ function cloneBG(){
     var br2 = document.createElement("br");
     var cln = b.cloneNode(true);
     return cln;
+}
+
+function createSendButton(){
+  var questionForm = document.getElementById("questionForm");
+
+  var sendButton = document.createElement("button");
+  sendButton.setAttribute("type", "submit");
+  sendButton.setAttribute("class", "btn btn-primary");
+  sendButton.setAttribute("id", "sendButton")
+  sendButton.innerHTML = " Send ";
+
+  questionForm.appendChild(sendButton);
 }
 
 function createQButton(){

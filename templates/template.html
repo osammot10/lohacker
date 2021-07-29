@@ -2,7 +2,7 @@
 
 {% block body %}
   <div id="rcorners">
-      <form action="/template/create" method="POST">
+      <form action="/template/create" method="POST" id="questionForm">
         <h2>Title</h2>
         <input type="text" id="title" name="titleInput" size="40">
         <br>
@@ -18,7 +18,7 @@
         </div>
         <div id="parentDiv"></div>
         <br>
-        <button type="submit" class="btn btn-primary"> Send </button>
+        <!--button type="submit" class="btn btn-primary"> Send </button-->
       </form>
       <form action="/" method="POST">
         <button type="submit" class="btn btn-secondary"> Home page </button>
