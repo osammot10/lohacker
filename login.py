@@ -4,7 +4,10 @@ login_bp = Blueprint('login_bp',__name__)
 
 @login_bp.route('/login', methods = ['GET', 'POST'])
 def show_login_page():
-    return render_template("login.html")
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    else:
+        return render_template("login.html")
 
 @login_bp.route('/login/access', methods = ['GET', 'POST'])
 def login():

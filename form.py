@@ -29,8 +29,8 @@ def show_form_create_page():
 @login_required
 def create_survey():
     if request.method == 'POST':
-        questionTitle = request.form['titleInput']
-        newSurvey = Survey(maker = current_user.get_id(), name = questionTitle, date = date.today(), template = False, active = True, deleted = False)
+        surveyTitle = request.form['titleInput']
+        newSurvey = Survey(maker = current_user.get_id(), name = surveyTitle, date = date.today(), template = False, active = True, deleted = False)
         session.add(newSurvey)
         session.commit()
         id_check = -1
