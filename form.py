@@ -57,6 +57,7 @@ def create_survey():
                     newCheckboxQuestion = CheckboxQuestion(id = str(newQuestion.id), text= v)
                     session.add(newCheckboxQuestion)
                     id_check = newCheckboxQuestion.id
+                    id_openQuestion = newQuestion.id
                     j = j + 1
                     i = 1
                 elif k == 'checkboxtext':

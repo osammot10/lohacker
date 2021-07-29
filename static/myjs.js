@@ -284,7 +284,7 @@ function firstOpen(){
     var requiredLabel = document.createElement("label");
     requiredLabel.setAttribute('class', 'form-check-label');
     requiredLabel.setAttribute('for', 'flexCheckDefault');
-    requiredLabel.innerHTML = 'Required';
+    requiredLabel.innerHTML = '&nbsp; Required';
     row.childNodes[0].appendChild(requiredLabel);
 
     var newButton = createButton.cloneNode(true);
@@ -349,6 +349,21 @@ function firstCheckbox(){
     text.setAttribute('name', counter+' checkbox');
     row.childNodes[0].appendChild(text);
 
+    row.childNodes[0].appendChild(getSpace());
+
+    var switchToggle = document.createElement("input");
+    switchToggle.setAttribute('class','form-check-input');
+    switchToggle.setAttribute('type', 'checkbox');
+    switchToggle.setAttribute('id', 'flexCheckDefault');
+    switchToggle.setAttribute('name', counter + ' required');
+    row.childNodes[0].appendChild(switchToggle);
+
+    var requiredLabel = document.createElement("label");
+    requiredLabel.setAttribute('class', 'form-check-label');
+    requiredLabel.setAttribute('for', 'flexCheckDefault');
+    requiredLabel.innerHTML = '&nbsp; Required';
+    row.childNodes[0].appendChild(requiredLabel);
+
     addLine(row.childNodes[0]);
     addLine(row.childNodes[0]);
     
@@ -356,6 +371,7 @@ function firstCheckbox(){
   	check.setAttribute("type", "checkbox");
     check.setAttribute("id", "check"+checkcounter);
     check.setAttribute("name",counter+" checkbox "+checkcounter)
+    check.disabled = true;
  	 	row.childNodes[0].appendChild(check);
 
     row.childNodes[0].appendChild(getSpace());
@@ -437,6 +453,7 @@ function openAfter(idA){
   switchToggle.setAttribute('class','form-check-input');
   switchToggle.setAttribute('type', 'checkbox');
   switchToggle.setAttribute('id', 'flexCheckDefault');
+  switchToggle.setAttribute('name', counter + ' required');
   row.childNodes[0].appendChild(switchToggle);
 
   var requiredLabel = document.createElement("label");
@@ -562,4 +579,26 @@ function copy(id){
   
     /* Alert the copied text */
     //alert("Copied the text: " + copyText.value);
+}
+
+function checkRequired(className){
+  checkbox = document.getElementsByClassName(className);
+  var atLeastOneChecked = false;
+
+  for(i = 0; i < checkbox.length; i++){
+    if(checkbox[i].checked === true){
+      atLeastOneChecked = true;
+    }
+  }
+
+  if(atLeastOneChecked === true){
+    for(i = 0; i < checkbox.length; i++){
+      checkbox[i].required = false;
+    }
+  }
+  else{
+    for(i = 0; i < checkbox.length; i++){
+      checkbox[i].required = true;
+    }
+  }
 }

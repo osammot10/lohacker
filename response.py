@@ -20,13 +20,13 @@ def show_survey(id):
                 checkboxOptionList = []
                 questionSet = []
                 
-                question = session.query(Question).filter(Question.survey==survey.id).all()
+                question = session.query(Question).filter(Question.survey==survey.id).order_by(Question.id).all()
 
                 for entry in question:
                     if entry.type == "open":
-                        questionSet += session.query(Question.type, OpenQuestion.id, OpenQuestion.text, Question.required).join(OpenQuestion).filter(OpenQuestion.id == entry.id)
+                        questionSet += session.query(Question.type, OpenQuestion.id, OpenQuestion.text, Question.required).join(OpenQuestion).filter(OpenQuestion.id == entry.id).all()
                     elif entry.type == "checkbox":
-                        questionSet += session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text, Question.required).join(CheckboxQuestion).filter(CheckboxQuestion.id == entry.id)
+                        questionSet += session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text, Question.required).join(CheckboxQuestion).filter(CheckboxQuestion.id == entry.id).all()
                         
                         checkboxOption = session.query(CheckboxOption).filter(CheckboxOption.id == entry.id).all()
                         checkboxOptionList += checkboxOption
