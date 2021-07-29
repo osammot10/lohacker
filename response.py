@@ -10,7 +10,7 @@ response_bp = Blueprint('response_bp',__name__)
 def show_survey(id):
     survey = session.query(Survey).filter(Survey.id==id).filter(Survey.template == False).filter(Survey.deleted == False).first()
 
-    existingAnswer = session.query(Answer).filter(Answer.maker == str(current_user.get_id()) and Answer.survey == id).all()
+    existingAnswer = session.query(Answer).filter(Answer.maker == str(current_user.get_id())).filter(Answer.survey == id).all()
 
     if not existingAnswer:
         
