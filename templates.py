@@ -58,13 +58,28 @@ def createTemplate():
 @templates_bp.route('/useTemplate', methods = ['GET', 'POST'])
 @login_required
 def actionTemplate():
-    buttonClicked = request.form['formButton']
+    buttonClicked = request.form['action']
     action = buttonClicked.split()[0]
-    id = buttonClicked.split()[1]
+    templateId = buttonClicked.split()[1]
 
-    data = {"formButton": id}
-    response = requests.post("http://172.27.150.172:5000/form", data=data)
-    print(response)
-
-    
-    return redirect(url_for('form_bp.show_form_create_page'))
+    if action == 'import':   
+        return redirect(url_for('form_bp.show_form_create_page', id = templateId))
+    elif action == 'visualize':
+        question = []
+        checkboxOption = []
+        templateToShow = session.query(Survey).filter(Survey.id == templateId).first()
+        templateQuestion = session.query(Question).filter(Question.survey == templateToShow.id).order_by(Question.id).all()
+        for entry in templateQuestion:
+            if entry.type == 'open':
+                question += session.query(Question.type, OpenQuestion.id, OpenQuestion.text).join(OpenQuestion).filter(OpenQuestion.id == entry.id).all()
+            elif entry.type == 'checkbox':
+                question += session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text).join(CheckboxQuestion).filter(CheckboxQuestion.id == entry.id).all()
+                checkboxOption += session.query(CheckboxOption).filter(CheckboxOption.id == entry.id).all()
+        for r in question:
+            print(r.text)
+        return render_template('showTemplate.html', template = templateToShow, question = question, checkboxOption = checkboxOption)
+    elif action == 'delete':
+        templateToDelete = session.query(Survey).filter(Survey.id == templateId).first()
+        templateToDelete.deleted = True
+        session.commit()
+        return redirect(url_for('login_bp.private'))

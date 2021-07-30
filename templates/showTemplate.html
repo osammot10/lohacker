@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <div id="rcorners">
+        <h2>{{ template.name }}</h2>
+        <br>
+        <br>
+        <br>
+        <div id="parentDiv">
+        {% for r in question %}
+            <div class="container">
+                <div class="row">
+                    {% if r.type == 'open' %}
+                    <input class="form-control" type="text" value="{{r.text}}" readonly>
+                    {% elif r.type == 'checkbox' %}
+                        <input class="form-control" type="text" value="{{r.text}}" readonly>
+                        <div class="row">
+                            <div class="col-1"></div>
+                            <div class="col">
+                                <br>
+                            {% for c in checkboxOption if c.id == r.id %}
+                                <div class="input-group mb-3">
+                                    <div class="input-group-text">
+                                        <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input" disabled>
+                                    </div>
+                                    <input type="text" class="form-control" aria-label="Text input with checkbox" value=" {{ c.text }}" readonly>
+                                </div>
+                            {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            <hr class="solid">
+            </div>
+        {% endfor %}
+        </div>
+        <form action="/" method="POST">
+            <button type="submit" class="btn btn-primary"> Go back </button>
+        </form>
+        <form action="/useTemplate" method="POST">
+            <button type="submit" class="btn btn-primary" name="action" value="import {{template.id}}"> Import </button>
+        </form>
+    </div>
+  <meta id="n" data-name="{{number}}">
+{% endblock %}

@@ -6,12 +6,12 @@ form_bp = Blueprint('form_bp',__name__)
 @form_bp.route('/form', methods = ['GET', 'POST'])
 @login_required
 def show_form_create_page():
-    if request.form['formButton'] == 'normal':
+    if request.form.get('formButton', False) == 'normal':
         return render_template("form.html", templates = True)
     else:
         checkboxOption = []
         templateQuestions = []
-        idTemplate = request.form['formButton']
+        idTemplate = request.args['id']
         question = session.query(Question).filter(Question.survey == idTemplate).all()
         n = len(templateQuestions)
         for entry in question:
