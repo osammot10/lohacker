@@ -1,5 +1,6 @@
 from connection import *
 from datetime import date
+import requests
 
 templates_bp = Blueprint('templates_bp',__name__)
 
@@ -53,3 +54,17 @@ def createTemplate():
                     session.commit()
                 session.commit()         
         return render_template('newTemplateConfirmation.html')
+
+@templates_bp.route('/useTemplate', methods = ['GET', 'POST'])
+@login_required
+def actionTemplate():
+    buttonClicked = request.form['formButton']
+    action = buttonClicked.split()[0]
+    id = buttonClicked.split()[1]
+
+    data = {"formButton": id}
+    response = requests.post("http://172.27.150.172:5000/form", data=data)
+    print(response)
+
+    
+    return redirect(url_for('form_bp.show_form_create_page'))

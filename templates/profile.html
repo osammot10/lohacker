@@ -34,14 +34,39 @@
                 </div>
                 <div class="modal-body">
                 {% if templates != false %}            
-                    <lu>
+                    <!--lu>
                         <form action="/form" method='POST'>
                         {% for r in templates %}
                             <li> {{ r.name }} <button class="btn btn-secondary" type="submit" name="formButton" value="{{ r.id }}"> Import</button></li>
                             <br>
                         {% endfor %}
                         </form>
-                    </lu>
+                    </lu-->
+                    <form action="/useTemplate" method="POST">
+                        <table id="template" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Date of creation</th>
+                                    <th>Import</th>
+                                    <th>Visualize</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for t in templates %}
+                                    <tr>
+                                        <td><p>{{t.name}}</p></td>
+                                        <td> {{t.date}} </td>
+                                        <td><button type="submit" class="btn btn-primary btn-sm" name="formButton" value="import {{t.id}}"> Import </button></td>
+                                        <td><button type="submit" class="btn btn-primary btn-sm" name="action" value="visualize {{t.id}}"> Visualize </button></td>
+                                        <td><button type="submit" class="btn btn-primary btn-sm" name = "action" value = "delete {{t.id}}"> Delete </button></td>
+                                        <!--TODO: creare un modal per quando viene cliccato il bottone di eliminazione -->
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </form>
                 {% else %}
                     <p>Create a template before using it!</p>
                 {% endif %}
@@ -52,4 +77,10 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#template').DataTable();
+        } );
+    </script>
 {% endblock %}
