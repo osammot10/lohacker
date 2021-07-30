@@ -31,6 +31,7 @@ def create_survey():
         session.add(newSurvey)
         session.commit()
         id_check = -1
+        id_radio = -1
         id_openQuestion = 0
         i = 1
         j = 1
@@ -61,6 +62,21 @@ def create_survey():
                     newCheckboxOption = CheckboxOption(id = str(id_check), number = i, text = v)
                     session.add(newCheckboxOption)
                     i = i + 1
+                elif k == 'radio' :
+                    #id è autoincrement, si può omettere
+                    newQuestion = Question(survey = str(newSurvey.id), type = "radio", required = False)
+                    session.add(newQuestion)
+                    session.commit()
+                    newRadioQuestion = RadioQuestion(id = str(newQuestion.id), text= v)
+                    session.add(newRadioQuestion)
+                    id_radio = newRadioQuestion.id
+                    id_openQuestion = newQuestion.id
+                    j = j + 1
+                    i = 1
+                elif k == 'radiobtntext' :
+                    newRadioOption = RadioOption(id = str(id_radio), number = i, text = v)
+                    session.add(newRadioOption)
+                    i = i+1
                 elif k == "required":
                     requiredQuestion = session.query(Question).filter(Question.id == id_openQuestion).first()
                     requiredQuestion.required = True

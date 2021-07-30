@@ -14,7 +14,7 @@
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" id="open_btn" onclick="createOpenQuestion(this.id)" href="#">Open</a></li>
               <li><a class="dropdown-item" id="check_btn" onclick="createCheckboxQuestion(this.id)" href="#">Checkbox</a></li>
-              <li><a class="dropdown-item" onclick="myfun('radio')" href="#">Radio button</a></li>
+              <li><a class="dropdown-item" id="radio_btn" onclick="createRadioQuestion(this.id)" href="#">Radio button</a></li>
             </ul>
           </div>
           <div id="parentDiv">    
@@ -49,7 +49,7 @@
                       <ul class="dropdown-menu">
                         <li><a class="dropdown-item" onclick="createOpenQuestion(this.id)" href="#" id="open_btn{{loop.index}}"> Open </a></li>
                         <li><a class="dropdown-item" onclick="createCheckboxQuestion(this.id)" href="#" id="check_btn{{loop.index}}"> Checkbox </a></li>
-                        <li><a class="dropdown-item" onclick="createOpenQuestion(this.id)" href="#" id="open_btn{{loop.index}}"> Radio button </a></li>
+                        <li><a class="dropdown-item" onclick="createRadioQuestion(this.id)" href="#" id="open_btn{{loop.index}}"> Radio button </a></li>
                       </ul>
                     </div>
                   </div>

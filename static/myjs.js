@@ -1,5 +1,6 @@
 var counter = 0;
 var checkcounter = 0;
+var radiocounter = 0;
 var n_question = 0;
 var createButton;
 var b;
@@ -49,6 +50,20 @@ function createCheckboxQuestion(idA){
   	checkboxAfter(idA);
   }
 }
+
+function createRadioQuestion(idA){
+	if(idA == 'radio_btn'){
+    createSendButton();
+    b = cloneBG();
+  	createButton = createQButton();
+    removeBG();
+    firstRadio();
+  }
+  else{
+  	radioAfter(idA);
+  }
+}
+
 
 function addcheck(n){
 	
@@ -102,6 +117,57 @@ function addcheck(n){
   document.getElementById("deleteCheck"+n).style.visibility = "visible";
 }
 
+function addRadio(n){
+	
+  radiocounter++;
+
+	var container = document.getElementById('addRadio'+n).parentElement.parentElement.parentElement;
+
+  var id = container.id.charAt(9);
+  
+  var row = container.childNodes[0];
+  
+  var a = document.getElementById("addRadio"+n);
+  var d = document.getElementById("deleteRadio"+n);
+  
+  var addRadio = a.cloneNode(true);
+  var deleteRadio = d.cloneNode(true);
+  
+  a.remove();
+
+  addLine(row.childNodes[0]);
+  addLine(row.childNodes[0]);
+  
+  var radio = document.createElement("input");
+  radio.setAttribute("type", "radio");
+  radio.setAttribute("id", "radio"+radiocounter);
+  radio.setAttribute("name", id+" radio");
+  row.childNodes[0].appendChild(radio);
+
+  row.childNodes[0].appendChild(getSpace());
+
+  var input = document.createElement("input");
+  input.setAttribute('type', 'text');
+  input.setAttribute('id', 'radiotext'+radiocounter);
+  input.setAttribute("name", id+" radiobtntext "+radiocounter);
+  row.childNodes[0].appendChild(input);
+
+  row.childNodes[0].appendChild(getSpace());
+  row.childNodes[0].appendChild(getSpace());
+  row.childNodes[0].appendChild(getSpace());
+
+  addRadio.setAttribute("id","addRadio"+radiocounter);
+  addRadio.setAttribute("onclick","addRadio("+radiocounter+")");
+  deleteRadio.setAttribute("id","deleteRadio"+radiocounter);
+  deleteRadio.setAttribute("onclick","deleteRadio("+radiocounter+")");
+
+  row.childNodes[0].appendChild(addRadio);
+  row.childNodes[0].appendChild(getSpace());
+  row.childNodes[0].appendChild(deleteRadio);
+  
+  document.getElementById("deleteRadio"+n).style.visibility = "visible";
+}
+
 function deleteCheck(n){
   var check = document.getElementById("check"+n);
   var text = check.nextSibling;
@@ -115,6 +181,30 @@ function deleteCheck(n){
   var br3 = br2.nextSibling;
 
   check.remove();
+  text.remove();
+  span1.remove();
+  span2.remove();
+  span3.remove();
+  span4.remove();
+  btn.remove();
+  br1.remove();
+  br2.remove();
+  br3.remove();
+}
+
+function deleteRadio(n){
+  var radio = document.getElementById("radio"+n);
+  var text = radio.nextSibling;
+  var span1 = text.nextSibling;
+  var span2 = span1.nextSibling;
+  var span3 = span2.nextSibling;
+  var span4 = span3.nextSibling;
+  var btn = span4.nextSibling;
+  var br1 = btn.nextSibling;
+  var br2 = br1.nextSibling;
+  var br3 = br2.nextSibling;
+
+  radio.remove();
   text.remove();
   span1.remove();
   span2.remove();
@@ -441,6 +531,109 @@ function firstCheckbox(){
     container.appendChild(divider);
 }
 
+function firstRadio(){
+  counter++;
+  radiocounter++;
+  n_question++;
+  
+  var parent = document.getElementById("parentDiv");
+  var container = document.createElement("div");
+  container.setAttribute("class","container");
+  container.setAttribute("id","container"+counter);
+
+  var row = document.createElement("div");
+  row.setAttribute("class","row");
+  container.appendChild(row);
+
+  var sxDiv = document.createElement("div");
+  sxDiv.setAttribute("class","col-sm-8");
+  sxDiv.setAttribute("id","centralDiv");
+
+  var dxDiv = document.createElement("div");
+  dxDiv.setAttribute("class","col-sm-4");
+  dxDiv.setAttribute("id","centralDiv");
+
+  row.appendChild(sxDiv);
+  row.appendChild(dxDiv);
+
+  parent.appendChild(container);
+  
+  var row = container.childNodes[0];
+  
+  var title = document.createElement("label");
+  title.innerHTML="Domanda " + counter;
+  row.childNodes[0].appendChild(title);
+  
+  row.childNodes[0].appendChild(getSpace());
+  
+  var text = document.createElement("input");
+  text.setAttribute('type', 'text');
+  text.setAttribute('name', counter+' radio');
+  row.childNodes[0].appendChild(text);
+
+  addLine(row.childNodes[0]);
+  addLine(row.childNodes[0]);
+  
+  var radio = document.createElement("input");
+  radio.setAttribute("type", "radio");
+  radio.setAttribute("id", "radio"+radiocounter);
+  radio.setAttribute("name",counter+" radio");
+  radio.disabled = true;
+  row.childNodes[0].appendChild(radio);
+
+  row.childNodes[0].appendChild(getSpace());
+  
+  var input = document.createElement("input");
+  input.setAttribute('type', 'text');
+  input.setAttribute('id', 'radiotext'+radiocounter);
+  input.setAttribute("name",counter+" radiobtntext "+radiocounter)
+  row.childNodes[0].appendChild(input);
+
+  row.childNodes[0].appendChild(getSpace());
+  row.childNodes[0].appendChild(getSpace());
+  row.childNodes[0].appendChild(getSpace());
+  
+  var addButton = document.createElement("button");
+  addButton.setAttribute('type', 'button');
+  addButton.setAttribute("class","btn btn-secondary btn-sm");
+  addButton.setAttribute("onclick","addRadio("+radiocounter+")");
+  addButton.setAttribute("id", "addRadio"+radiocounter);
+  addButton.innerHTML=" + ";
+  row.childNodes[0].appendChild(addButton);
+
+  row.childNodes[0].appendChild(getSpace());
+
+  var deleteRadio = document.createElement("button");
+  deleteRadio.setAttribute('type', 'button');
+  deleteRadio.setAttribute("class","btn btn-secondary btn-sm");
+  deleteRadio.setAttribute("onclick","deleteRadio("+radiocounter+")");
+  deleteRadio.setAttribute("id", "deleteRadio"+radiocounter);
+  deleteRadio.innerHTML=" X ";
+  deleteRadio.style.visibility = "hidden";
+  row.childNodes[0].appendChild(deleteRadio);
+  
+  var newButton = createButton.cloneNode(true);
+  newButton.setAttribute("id","createButton"+counter);
+  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
+  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
+  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
+  row.childNodes[1].appendChild(newButton);
+
+  row.childNodes[1].appendChild(getSpace());
+
+  var deleteButton = document.createElement("button");
+  deleteButton.setAttribute("type","button");
+  deleteButton.setAttribute("class","btn btn-primary");
+  deleteButton.setAttribute("id","delete_btn"+counter);
+  deleteButton.setAttribute("onclick","deleteQuestion(this.id)");
+  deleteButton.innerHTML=" X ";
+  row.childNodes[1].appendChild(deleteButton);
+  
+  var divider = document.createElement("hr");
+  divider.setAttribute("class","solid");
+  container.appendChild(divider);
+}
+
 function openAfter(idA){
   counter++;
   n_question++;
@@ -594,6 +787,88 @@ function checkboxAfter(idA){
     var divider = document.createElement("hr");
     divider.setAttribute("class","solid");
     container.appendChild(divider);
+}
+
+function radioAfter(idA){
+  counter++;
+  radiocounter++;
+  n_question++;
+  
+  var div = getDivId(idA);
+  var container = createDiv(div);
+  var row = container.childNodes[0];
+  
+  var title = document.createElement("label");
+  title.innerHTML="Domanda " + counter;
+  row.childNodes[0].appendChild(title);
+  
+  row.childNodes[0].appendChild(getSpace());
+
+  var text = document.createElement("input");
+  text.setAttribute('type', 'text');
+  text.setAttribute('name', counter+' radio');
+  row.childNodes[0].appendChild(text);
+
+  addLine(row.childNodes[0]);
+  addLine(row.childNodes[0]);
+
+  var radio = document.createElement("input");
+  radio.setAttribute("type", "radio");
+  radio.setAttribute("id", "radio"+radiocounter);
+  radio.setAttribute("name",counter+" radio")
+  row.childNodes[0].appendChild(radio);
+
+  row.childNodes[0].appendChild(getSpace());
+
+  var input = document.createElement("input");
+  input.setAttribute('type', 'text');
+  input.setAttribute('id', 'radiotext'+radiocounter);
+  input.setAttribute("name",counter+" radiobtntext "+radiocounter)
+  row.childNodes[0].appendChild(input);
+
+  row.childNodes[0].appendChild(getSpace());
+  row.childNodes[0].appendChild(getSpace());
+  row.childNodes[0].appendChild(getSpace());
+
+  var addButton = document.createElement("button");
+  addButton.setAttribute('type', 'button');
+  addButton.setAttribute("class","btn btn-secondary btn-sm");
+  addButton.setAttribute("onclick","addRadio("+radiocounter+")");
+  addButton.setAttribute("id", "addRadio"+radiocounter);
+  addButton.innerHTML=" + ";
+  row.childNodes[0].appendChild(addButton);
+
+  row.childNodes[0].appendChild(getSpace());
+
+  var deleteRadio = document.createElement("button");
+  deleteRadio.setAttribute('type', 'button');
+  deleteRadio.setAttribute("class","btn btn-secondary btn-sm");
+  deleteRadio.setAttribute("onclick","deleteRadio("+radiocounter+")");
+  deleteRadio.setAttribute("id", "deleteRadio"+radiocounter);
+  deleteRadio.innerHTML=" X ";
+  deleteRadio.style.visibility = "hidden";
+  row.childNodes[0].appendChild(deleteRadio);
+  
+  var newButton = createButton.cloneNode(true);
+  newButton.setAttribute("id","createButton"+counter);
+  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
+  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
+  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
+  row.childNodes[1].appendChild(newButton);
+
+  row.childNodes[1].appendChild(getSpace());
+
+  var deleteButton = document.createElement("button");
+  deleteButton.setAttribute("type","button");
+  deleteButton.setAttribute("class","btn btn-primary");
+  deleteButton.setAttribute("id","delete_btn"+counter);
+  deleteButton.setAttribute("onclick","deleteQuestion(this.id)");
+  deleteButton.innerHTML=" X ";
+  row.childNodes[1].appendChild(deleteButton);
+  
+  var divider = document.createElement("hr");
+  divider.setAttribute("class","solid");
+  container.appendChild(divider);
 }
 
 function copy(id){

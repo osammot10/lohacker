@@ -14,7 +14,7 @@ Base.metadata.schema = 'form'
 # postgresql(nome del server, non cambiare)://username:password@hostname/db_name
 # username e password sono le credenziali con le quali si accede al db
 # hostname è l'hostname o l'ip di dove si trova il server
-engine = create_engine('postgresql://postgres:postgres@localhost/lohacker')
+engine = create_engine('postgresql://postgres:postgres@localhost/postgres')
 metadata = MetaData()
 
 Session = sessionmaker(bind=engine)       # creazione della factory
@@ -93,6 +93,19 @@ class CheckboxOption(Base):
     number = Column(Integer, primary_key = True)
     text = Column(String)
 
+class RadioQuestion(Base):
+    __tablename__ = "RadioQuestion"
+
+    id = Column(Integer,ForeignKey(Question.id), primary_key=True, autoincrement=True)
+    text = Column(String)
+
+class RadioOption(Base):
+    __tablename__ = "RadioOption"
+
+    id = Column(Integer, ForeignKey(RadioQuestion.id), primary_key = True, autoincrement = True)
+    number = Column(Integer, primary_key = True)
+    text = Column(String)
+
 class Answer(Base):
     __tablename__ = "Answer"
 
@@ -115,6 +128,12 @@ class CheckboxAnswer(Base):
     number = Column(Integer, ForeignKey(CheckboxOption.number), primary_key=True, autoincrement=True)
     id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
 
+class RadioAnswer(Base):
+    __tablename__ = "RadioAnswer"
+
+    question = Column(Integer, ForeignKey(RadioOption.id), primary_key=True, autoincrement=True)
+    number = Column(Integer, ForeignKey(RadioOption.number), primary_key=True, autoincrement=True)
+    id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
 
 
 @login_manager.user_loader # attenzione a questo !
