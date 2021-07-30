@@ -20,9 +20,6 @@ def show_form_create_page():
             elif entry.type == 'checkbox':
                 templateQuestions += session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text).join(CheckboxQuestion).filter(CheckboxQuestion.id == entry.id).all()
                 checkboxOption += session.query(CheckboxOption).filter(CheckboxOption.id == entry.id).all()
-
-        for r in templateQuestions:
-            print(r.text)
         return render_template("form.html", templates = False, questionTemplate = templateQuestions, checkboxTemplate = checkboxOption, number = n)
 
 @form_bp.route('/form/create', methods = ['GET', 'POST'])

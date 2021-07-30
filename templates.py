@@ -71,12 +71,10 @@ def actionTemplate():
         templateQuestion = session.query(Question).filter(Question.survey == templateToShow.id).order_by(Question.id).all()
         for entry in templateQuestion:
             if entry.type == 'open':
-                question += session.query(Question.type, OpenQuestion.id, OpenQuestion.text).join(OpenQuestion).filter(OpenQuestion.id == entry.id).all()
+                question += session.query(Question.type, Question.required, OpenQuestion.id, OpenQuestion.text).join(OpenQuestion).filter(OpenQuestion.id == entry.id).all()
             elif entry.type == 'checkbox':
-                question += session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text).join(CheckboxQuestion).filter(CheckboxQuestion.id == entry.id).all()
+                question += session.query(Question.type, Question.required, CheckboxQuestion.id, CheckboxQuestion.text).join(CheckboxQuestion).filter(CheckboxQuestion.id == entry.id).all()
                 checkboxOption += session.query(CheckboxOption).filter(CheckboxOption.id == entry.id).all()
-        for r in question:
-            print(r.text)
         return render_template('showTemplate.html', template = templateToShow, question = question, checkboxOption = checkboxOption)
     elif action == 'delete':
         templateToDelete = session.query(Survey).filter(Survey.id == templateId).first()

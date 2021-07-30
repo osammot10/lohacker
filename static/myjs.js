@@ -224,9 +224,7 @@ function createDiv(idDiv){
   var actualDiv = document.getElementById(idDiv);
   var nextDiv = actualDiv.nextSibling;
   if(nextDiv != null && nextDiv.nodeName == '#text'){
-    //console.log("prova");
     nextDiv = nextDiv.nextSibling;
-    //console.log(nextDiv);
   }
   
   parent.insertBefore(container,nextDiv);

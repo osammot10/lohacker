@@ -7,11 +7,17 @@
         <br>
         <br>
         <div id="parentDiv">
-        {% for r in question %}
             <div class="container">
+        {% for r in question %}            
                 <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col">
                     {% if r.type == 'open' %}
-                    <input class="form-control" type="text" value="{{r.text}}" readonly>
+                        {% if r.required == true %}
+                            <input class="form-control" type="text" value="{{r.text}}" readonly>
+                        {% else %}
+                            <input class="form-control" type="text" value="{{r.text}}" readonly>
+                        {% endif %}
                     {% elif r.type == 'checkbox' %}
                         <input class="form-control" type="text" value="{{r.text}}" readonly>
                         <div class="row">
@@ -27,13 +33,16 @@
                                 </div>
                             {% endfor %}
                             </div>
+                            <div class="col-1"></div>
                         </div>
                     {% endif %}
+                    </div>
+                    <div class="col-2"></div>
                 </div>
             <hr class="solid">
-            </div>
         {% endfor %}
         </div>
+    </div>
         <form action="/" method="POST">
             <button type="submit" class="btn btn-primary"> Go back </button>
         </form>
