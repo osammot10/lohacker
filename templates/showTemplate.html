@@ -14,12 +14,23 @@
                     <div class="col">
                     {% if r.type == 'open' %}
                         {% if r.required == true %}
-                            <input class="form-control" type="text" value="{{r.text}}" readonly>
+                            <div class="row">
+                                <div class="col-11">
+                                    <textarea class="form-control" rows = "1" readonly>{{r.text}}</textarea>
+                                </div>
+                                <div class="col">
+                                    <p class="required-field left"></p>
+                                </div>
+                            </div>
                         {% else %}
-                            <input class="form-control" type="text" value="{{r.text}}" readonly>
-                        {% endif %}
+                            <div class="row">
+                                <div class="col-11">
+                                    <textarea class="form-control" rows = "1" readonly>{{r.text}}</textarea>
+                                </div>
+                            </div>
+                            {% endif %}
                     {% elif r.type == 'checkbox' %}
-                        <input class="form-control" type="text" value="{{r.text}}" readonly>
+                        <textarea class="form-control" rows = "1" readonly>{{r.text}}</textarea>
                         <div class="row">
                             <div class="col-1"></div>
                             <div class="col">
@@ -29,7 +40,7 @@
                                     <div class="input-group-text">
                                         <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input" disabled>
                                     </div>
-                                    <input type="text" class="form-control" aria-label="Text input with checkbox" value=" {{ c.text }}" readonly>
+                                    <textarea class="form-control" rows = "1" readonly>{{r.text}}</textarea>
                                 </div>
                             {% endfor %}
                             </div>

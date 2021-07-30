@@ -38,6 +38,26 @@
     </form>
 </div>
 
+<div class="modal fade" id="deleteModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"> Attenzione </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p> Sicuro di eliminare il form? </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+          <form action="/disable" method="POST">
+            <button type="submit" class="btn btn-primary">Conferma</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <script>
     $(document).ready(function() {
         $('#survey').DataTable();

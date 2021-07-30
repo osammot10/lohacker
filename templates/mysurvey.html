@@ -2,10 +2,41 @@
 
 {% block body %}
 <div id="rcorners">
-    <h1>{{ survey.name }}</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-3"></div>
+            <div class="col">
+                <h1>{{ survey.name }}</h1>
+            </div>
+            <div class="col-3 vertical-center">
+                <button type="button" class="btn btn-secondary btn-sm left" data-bs-toggle="modal" data-bs-target="#linkModal"> Condividi  <img src="{{url_for('static', filename='share.png')}}" width="10" height="10"></button>
+                <div class="modal fade" id="linkModal">
+                    <div class="modal-dialog modal-dialog-centered">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title"> {{survey.name}} </h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="text" value="localhost:5000/getsurvey/{{survey.id}}" size="25" readonly>
+                            <button type="button" class="btn btn-primary" id="linkInput" onclick="copy(this.id)"> Copy link </button>
+                            <br>
+                            <br>
+                            <input type="text" value={{survey.id}} readonly>
+                            <button type="button" class="btn btn-primary" id="idInput" onclick="copy(this.id)"> Copy id </button>
+                            <br>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </div>
     <br>
     {% for q in questions %}
-        {{ q.id }}
         <h5>{{ q.text }}</h5>
         {% if q.type == 'open' %}
             <br>
@@ -32,4 +63,5 @@
         <button type="submit" class="btn btn-secondary"> Back </button>
     </form>
 </div>
+
 {% endblock %}

@@ -33,15 +33,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                {% if templates != false %}            
-                    <!--lu>
-                        <form action="/form" method='POST'>
-                        {% for r in templates %}
-                            <li> {{ r.name }} <button class="btn btn-secondary" type="submit" name="formButton" value="{{ r.id }}"> Import</button></li>
-                            <br>
-                        {% endfor %}
-                        </form>
-                    </lu-->
+                {% if templates != false %}
                     <form action="/useTemplate" method="POST">
                         <table id="template" class="table table-striped">
                             <thead>

@@ -26,3 +26,11 @@ ul {
     content : "*";
     color: red;
 }
+
+.left{
+    float:left;
+}
+
+.vertical-center{
+    vertical-align: middle;
+}
