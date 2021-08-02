@@ -26,8 +26,24 @@
                                 <button type="submit" class="btn btn-danger btn-sm" name="action" value="disabled {{ s.id }}"> Disabled </button>
                             {% endif %}
                         </td>
-                        <td><button type="submit" class="btn btn-primary btn-sm" name = "action" value = "delete {{ s.id }}"> Delete </button></td>
-                        <!--TODO: creare un modal per quando viene cliccato il bottone di eliminazione -->
+                        <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal"> Delete </button></td>
+                        <div class="modal fade" id="deleteModal">
+                            <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title"><strong> Attenzione </strong></h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <h6> Sicuro di eliminare il form? </h6>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                                    <button type="submit" class="btn btn-primary" name = "action" value = "delete {{ s.id }}">Conferma</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -37,26 +53,6 @@
         <button type="submit" class="btn btn-secondary"> Home page </button>
     </form>
 </div>
-
-<div class="modal fade" id="deleteModal">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title"> Attenzione </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p> Sicuro di eliminare il form? </p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-          <form action="/disable" method="POST">
-            <button type="submit" class="btn btn-primary">Conferma</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
 
 <script>
     $(document).ready(function() {
