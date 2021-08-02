@@ -19,6 +19,7 @@ def show_survey(id):
             if survey.active == True:
                 checkboxOptionList = []
                 questionSet = []
+                radioOptionList = []
                 
                 question = session.query(Question).filter(Question.survey==survey.id).order_by(Question.id).all()
 
@@ -30,8 +31,13 @@ def show_survey(id):
                         
                         checkboxOption = session.query(CheckboxOption).filter(CheckboxOption.id == entry.id).all()
                         checkboxOptionList += checkboxOption
+                    elif entry.type == "radio":
+                        questionSet += session.query(Question.type, RadioQuestion.id, RadioQuestion.text, Question.required).join(RadioQuestion).filter(RadioQuestion.id == entry.id).all()
+
+                        radioOption = session.query(RadioOption).filter(RadioOption.id == entry.id).all()
+                        radioOptionList += radioOption
                 
-                return render_template("response.html", survey = survey, question = questionSet, checkbox = checkboxOptionList)
+                return render_template("response.html", survey = survey, question = questionSet, checkbox = checkboxOptionList, radio = radioOptionList)
             
             else:
                 return render_template("surveydisabled.html")
@@ -47,7 +53,6 @@ def send_response(id):
     newAnswer = Answer(survey = id, maker = current_user.get_id(), date = date.today())
     session.add(newAnswer)
     session.commit()
-    print(newAnswer)
     for k,v in request.form.items():
         idQuestion = k.split()[0]
         type = k.split()[1]
@@ -58,6 +63,9 @@ def send_response(id):
             optionSelected = k.split()[2]
             newCheckboxAnswer = CheckboxAnswer(question = idQuestion, number = optionSelected, id = str(newAnswer.id))
             session.add(newCheckboxAnswer)
+        elif type == "radio":
+            newRadioAnswer = RadioAnswer(question = idQuestion, number = v, id = str(newAnswer.id))
+            session.add(newRadioAnswer)
     session.commit()
 
     return render_template("confirmation.html")

@@ -142,6 +142,7 @@ function addRadio(n){
   radio.setAttribute("type", "radio");
   radio.setAttribute("id", "radio"+radiocounter);
   radio.setAttribute("name", id+" radio");
+  radio.disabled = true;
   row.childNodes[0].appendChild(radio);
 
   row.childNodes[0].appendChild(getSpace());
@@ -571,6 +572,21 @@ function firstRadio(){
   text.setAttribute('name', counter+' radio');
   row.childNodes[0].appendChild(text);
 
+  row.childNodes[0].appendChild(getSpace());
+
+  var switchToggle = document.createElement("input");
+  switchToggle.setAttribute('class','form-check-input');
+  switchToggle.setAttribute('type', 'checkbox');
+  switchToggle.setAttribute('id', 'flexCheckDefault');
+  switchToggle.setAttribute('name', counter + ' required');
+  row.childNodes[0].appendChild(switchToggle);
+
+  var requiredLabel = document.createElement("label");
+  requiredLabel.setAttribute('class', 'form-check-label');
+  requiredLabel.setAttribute('for', 'flexCheckDefault');
+  requiredLabel.innerHTML = '&nbsp; Required';
+  row.childNodes[0].appendChild(requiredLabel);
+
   addLine(row.childNodes[0]);
   addLine(row.childNodes[0]);
   
@@ -809,6 +825,21 @@ function radioAfter(idA){
   text.setAttribute('name', counter+' radio');
   row.childNodes[0].appendChild(text);
 
+  row.childNodes[0].appendChild(getSpace());
+
+  var switchToggle = document.createElement("input");
+  switchToggle.setAttribute('class','form-check-input');
+  switchToggle.setAttribute('type', 'checkbox');
+  switchToggle.setAttribute('id', 'flexCheckDefault');
+  switchToggle.setAttribute('name', counter + ' required');
+  row.childNodes[0].appendChild(switchToggle);
+
+  var requiredLabel = document.createElement("label");
+  requiredLabel.setAttribute('class', 'form-check-label');
+  requiredLabel.setAttribute('for', 'flexCheckDefault');
+  requiredLabel.innerHTML = '&nbsp; Required';
+  row.childNodes[0].appendChild(requiredLabel);
+
   addLine(row.childNodes[0]);
   addLine(row.childNodes[0]);
 
@@ -816,6 +847,7 @@ function radioAfter(idA){
   radio.setAttribute("type", "radio");
   radio.setAttribute("id", "radio"+radiocounter);
   radio.setAttribute("name",counter+" radio")
+  radio.disabled = true;
   row.childNodes[0].appendChild(radio);
 
   row.childNodes[0].appendChild(getSpace());

@@ -132,7 +132,7 @@ class RadioAnswer(Base):
     __tablename__ = "RadioAnswer"
 
     question = Column(Integer, ForeignKey(RadioOption.id), primary_key=True, autoincrement=True)
-    number = Column(Integer, ForeignKey(RadioOption.number), primary_key=True, autoincrement=True)
+    number = Column(Integer, ForeignKey(RadioOption.number), autoincrement=True)
     id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
 
 

@@ -40,12 +40,29 @@
                                     <div class="input-group-text">
                                         <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input" disabled>
                                     </div>
-                                    <textarea class="form-control" rows = "1" readonly>{{r.text}}</textarea>
+                                    <textarea class="form-control" rows = "1" readonly>{{c.text}}</textarea>
                                 </div>
                             {% endfor %}
                             </div>
                             <div class="col-1"></div>
                         </div>
+                    {% else %}
+                    <textarea class="form-control" rows = "1" readonly>{{r.text}}</textarea>
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col">
+                            <br>
+                        {% for c in radioOption if c.id == r.id %}
+                            <div class="input-group mb-3">
+                                <div class="input-group-text">
+                                    <input class="form-check-input mt-0" type="radio" value="" aria-label="Checkbox for following text input" disabled>
+                                </div>
+                                <textarea class="form-control" rows = "1" readonly>{{c.text}}</textarea>
+                            </div>
+                        {% endfor %}
+                        </div>
+                        <div class="col-1"></div>
+                    </div>
                     {% endif %}
                     </div>
                     <div class="col-2"></div>

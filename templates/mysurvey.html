@@ -48,10 +48,17 @@
             {% for c in checkboxs %}
                 {% if c.id == q.id %}
                     {% set item_1 = checkboxoption[loop.index-1].counter %}
-                    <span> <input type="checkbox" disabled> <input type = "text" value = "{{c.option}}" style="text-align:center;" readonly> {{ item_1 }} </span>
+                    <span> <input type="checkbox" disabled> <input type = "text" value = "{{c.option}}" style="text-align:center;" readonly> {{item_1}} </span>
                     <br>
                     <br>
                 {% endif %}
+            {% endfor %}
+        {% else %}
+            {% for c in radios if c.id == q.id %}
+                {% set radio = radiooption[loop.index-1].counter %}
+                <span> <input type="radio" disabled> <textarea style="text-align:center;" rows="1" readonly>{{c.option}}</textarea> {{radio}} </span>
+                <br>
+                <br>
             {% endfor %}
         {% endif %}
         <br>

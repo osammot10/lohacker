@@ -10,6 +10,7 @@ def show_form_create_page():
         return render_template("form.html", templates = True)
     else:
         checkboxOption = []
+        radioOption = []
         templateQuestions = []
         idTemplate = request.args['id']
         question = session.query(Question).filter(Question.survey == idTemplate).all()
@@ -20,7 +21,10 @@ def show_form_create_page():
             elif entry.type == 'checkbox':
                 templateQuestions += session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text).join(CheckboxQuestion).filter(CheckboxQuestion.id == entry.id).all()
                 checkboxOption += session.query(CheckboxOption).filter(CheckboxOption.id == entry.id).all()
-        return render_template("form.html", templates = False, questionTemplate = templateQuestions, checkboxTemplate = checkboxOption, number = n)
+            elif entry.type == 'radio':
+                templateQuestions += session.query(Question.type, RadioQuestion.id, RadioQuestion.text).join(RadioQuestion).filter(RadioQuestion.id == entry.id).all()
+                radioOption += session.query(RadioOption).filter(RadioOption.id == entry.id).all()
+        return render_template("form.html", templates = False, questionTemplate = templateQuestions, checkboxTemplate = checkboxOption, radioTemplate = radioOption, number = n)
 
 @form_bp.route('/form/create', methods = ['GET', 'POST'])
 @login_required
@@ -76,7 +80,7 @@ def create_survey():
                 elif k == 'radiobtntext' :
                     newRadioOption = RadioOption(id = str(id_radio), number = i, text = v)
                     session.add(newRadioOption)
-                    i = i+1
+                    i = i + 1
                 elif k == "required":
                     requiredQuestion = session.query(Question).filter(Question.id == id_openQuestion).first()
                     requiredQuestion.required = True

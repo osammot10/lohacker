@@ -7,8 +7,10 @@ myform_bp = Blueprint('myform_bp',__name__)
 def show_my_survey(id):
 
     checkbox = []
+    radio = []
     openAnswer = []
     checkboxAnswer = []
+    radioAnswer = []
     questionSet = []
 
     selectedSurvey = session.query(Survey).filter(Survey.id == id).filter(Survey.template == False).filter(Survey.deleted == False).first()
@@ -30,8 +32,16 @@ def show_my_survey(id):
 
             checkboxOption = session.query(CheckboxOption.id, CheckboxOption.number, func.count(CheckboxAnswer.number).label('counter')).outerjoin(CheckboxAnswer, (CheckboxAnswer.question == CheckboxOption.id) & (CheckboxAnswer.number == CheckboxOption.number)).filter(CheckboxOption.id == entry.id).group_by(CheckboxOption.id, CheckboxOption.number).all()
             checkboxAnswer += checkboxOption
+        elif entry.type == "radio":
+            questionSet += session.query(Question.type, RadioQuestion.id, RadioQuestion.text).join(RadioQuestion).filter(Question.id == entry.id).all()
+
+            radioQuestionText = session.query(RadioQuestion.id, RadioQuestion.text, RadioOption.id.label('optionNumber'), RadioOption.text.label('option')).join(RadioOption).filter(RadioQuestion.id == entry.id).all()
+            radio += radioQuestionText
+
+            radioOption = session.query(RadioOption.id, RadioOption.number, func.count(RadioAnswer.number).label('counter')).outerjoin(RadioAnswer, (RadioAnswer.question == RadioOption.id) & (RadioAnswer.number == RadioOption.number)).filter(RadioOption.id == entry.id).group_by(RadioOption.id, RadioOption.number).all()
+            radioAnswer += radioOption
       
-    return render_template("mysurvey.html", survey = selectedSurvey, questions = questionSet, checkboxs = checkbox, openAnswers = openAnswer, checkboxoption = checkboxAnswer)
+    return render_template("mysurvey.html", survey = selectedSurvey, questions = questionSet, checkboxs = checkbox, openAnswers = openAnswer, checkboxoption = checkboxAnswer, radios = radio, radiooption = radioAnswer)
 
 @myform_bp.route('/disable', methods = ['GET', 'POST'])
 @login_required

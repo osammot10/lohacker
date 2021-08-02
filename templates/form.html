@@ -35,13 +35,26 @@
                       <br>
                       <br>
                       {% for c in checkboxTemplate if c.id == r.id %}
-                        <input type="checkbox" id="check{{c.number}}" name="{{loop.index}} checkbox {{c.number}}">
+                        <input type="checkbox" id="check{{c.number}}" name="{{loop.index}} checkbox {{c.number}}" disabled>
                         <span>&nbsp;&nbsp;</span>
                         <input type="text" id="checktext{{c.number}}" name="{{loop.index}} checkboxtext {{c.number}}" value="{{c.text}}">
                         <br>
                         <br>
                       {% endfor %}
                     </div>
+                  {% else %}
+                  <div class="col-sm-8" id="centralDiv">
+                    <label>Domanda {{loop.index}}</label> <span>&nbsp;&nbsp;</span> <input type="text" name="{{loop.index}} checkbox" value="{{r.text}}">
+                    <br>
+                    <br>
+                    {% for c in radioTemplate if c.id == r.id %}
+                      <input type="radio" id="check{{c.number}}" name="{{loop.index}} checkbox {{c.number}}" disabled>
+                      <span>&nbsp;&nbsp;</span>
+                      <input type="text" id="checktext{{c.number}}" name="{{loop.index}} checkboxtext {{c.number}}" value="{{c.text}}">
+                      <br>
+                      <br>
+                    {% endfor %}
+                  </div>
                   {% endif %}
                   <div class="col-sm-4" id="centralDiv">
                     <div class="btn-group" id="createButton{{loop.index}}">

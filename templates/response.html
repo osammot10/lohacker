@@ -18,7 +18,7 @@
                                 <br>
                                 <input class="form-control" type="text" name="{{u.id}} open">
                             {% endif %}
-                        {% else %}
+                        {% elif u.type == "checkbox" %}
                             {% if u.required == true %}
                                 <label class="form-label required-field">{{ u.text }}</label>
                                 <br>
@@ -40,6 +40,30 @@
                                         </div>
                                         <input type="text" class="form-control" aria-label="Text input with checkbox" value=" {{ c.text }}" readonly>
                                     </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% else %}
+                            {% if u.required == true %}
+                                <label class="form-label required-field">{{ u.text }}</label>
+                                <br>
+                                {% for c in radio if c.id == u.id %}
+                                <div class="input-group">
+                                    <div class="input-group-text">
+                                    <input class="form-check-input mt-0" type="radio" value="{{c.number}}" aria-label="Radio button for following text input" name="{{u.id}} radio" required>
+                                    </div>
+                                    <input type="text" class="form-control" aria-label="Text input with radio button" value="{{c.text}}" readonly>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <label class="form-label">{{ u.text }}</label>
+                                <br>
+                                {% for c in radio if c.id == u.id %}
+                                <div class="input-group">
+                                    <div class="input-group-text">
+                                    <input class="form-check-input mt-0" type="radio" value="{{c.number}}" aria-label="Radio button for following text input" name="{{u.id}} radio">
+                                    </div>
+                                    <input type="text" class="form-control" aria-label="Text input with radio button" value="{{c.text}}" readonly>
+                                </div>
                                 {% endfor %}
                             {% endif %}
                         {% endif %}

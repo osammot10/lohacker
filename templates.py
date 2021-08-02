@@ -18,6 +18,7 @@ def createTemplate():
         session.add(newTemplate)
         session.commit()
         id_check = -1
+        id_radio = -1
         id_openQuestion = 0
         i = 1
         j = 1
@@ -48,6 +49,21 @@ def createTemplate():
                     newCheckboxOption = CheckboxOption(id = str(id_check), number = i, text = v)
                     session.add(newCheckboxOption)
                     i = i + 1
+                elif k == "radio":
+                    #id è autoincrement, si può omettere
+                    newQuestion = Question(survey = str(newTemplate.id), type = "radio", required = False)
+                    session.add(newQuestion)
+                    session.commit()
+                    newRadioQuestion = RadioQuestion(id = str(newQuestion.id), text= v)
+                    session.add(newRadioQuestion)
+                    id_radio = newRadioQuestion.id
+                    id_openQuestion = newQuestion.id
+                    j = j + 1
+                    i = 1
+                elif k == 'radiobtntext' :
+                    newRadioOption = RadioOption(id = str(id_radio), number = i, text = v)
+                    session.add(newRadioOption)
+                    i = i + 1
                 elif k == "required":
                     requiredQuestion = session.query(Question).filter(Question.id == id_openQuestion).first()
                     requiredQuestion.required = True
@@ -67,6 +83,7 @@ def actionTemplate():
     elif action == 'visualize':
         question = []
         checkboxOption = []
+        radioOption = []
         templateToShow = session.query(Survey).filter(Survey.id == templateId).first()
         templateQuestion = session.query(Question).filter(Question.survey == templateToShow.id).order_by(Question.id).all()
         for entry in templateQuestion:
@@ -75,7 +92,10 @@ def actionTemplate():
             elif entry.type == 'checkbox':
                 question += session.query(Question.type, Question.required, CheckboxQuestion.id, CheckboxQuestion.text).join(CheckboxQuestion).filter(CheckboxQuestion.id == entry.id).all()
                 checkboxOption += session.query(CheckboxOption).filter(CheckboxOption.id == entry.id).all()
-        return render_template('showTemplate.html', template = templateToShow, question = question, checkboxOption = checkboxOption)
+            elif entry.type == 'radio':
+                question += session.query(Question.type, Question.required, RadioQuestion.id, RadioQuestion.text).join(RadioQuestion).filter(RadioQuestion.id == entry.id).all()
+                radioOption += session.query(RadioOption).filter(RadioOption.id == entry.id).all()
+        return render_template('showTemplate.html', template = templateToShow, question = question, checkboxOption = checkboxOption, radioOption = radioOption)
     elif action == 'delete':
         templateToDelete = session.query(Survey).filter(Survey.id == templateId).first()
         templateToDelete.deleted = True
