@@ -5,8 +5,9 @@
         <div class="row">
             <div class = "col"></div>
             <div class="col-6">
-                <form action="/getresponse/{{survey.id}}" method="POST">
+                <form action="/getresponse/{{survey.id}}" method="POST" enctype="multipart/form-data">
                     <h1>{{ survey.name }}</h1>
+                    <br>
                     {% for u in question %}
                         {% if u.type == "open" %}
                             {% if u.required == true %}
@@ -42,7 +43,7 @@
                                     </div>
                                 {% endfor %}
                             {% endif %}
-                        {% else %}
+                        {% elif u.type == "radio" %}
                             {% if u.required == true %}
                                 <label class="form-label required-field">{{ u.text }}</label>
                                 <br>
@@ -66,6 +67,20 @@
                                 </div>
                                 {% endfor %}
                             {% endif %}
+                        {% else %}
+                            {% if u.required == true %}
+                                <div class="mb-3">
+                                    <label for="formFile" class="form-label required-field">{{u.text}}</label>
+                                    <input name="{{u.id}} file" value="{{u.id}}" hidden>
+                                    <input class="form-control" type="file" id="formFile" name="{{u.id}} file" required>
+                                </div>
+                            {% else %}
+                                <div class="mb-3">
+                                    <label for="formFile" class="form-label">{{u.text}}</label>
+                                    <input name="{{u.id}} file" value="{{u.id}}" hidden>
+                                    <input class="form-control" type="file" id="formFile" name="{{u.id}} file">
+                                </div>
+							{% endif %}
                         {% endif %}
                         <br>
                         <br>

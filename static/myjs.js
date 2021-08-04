@@ -5,6 +5,24 @@ var n_question = 0;
 var createButton;
 var b;
 
+function createFileQuestion(idA){
+  createButton = createQButton();
+  if(idA == 'file_btn'){
+    createSendButton();
+    b = cloneBG();
+    removeBG();
+    firstFileQuestion();
+  }
+  else{
+    var t = $('#n').data().name;
+    if(counter == 0)
+      counter = t;
+    if(n_question == 0)
+      n_question = t;
+    afterFileQuestion(idA);
+  }
+}
+
 function createOpenQuestion(idA){
   createButton = createQButton();
 	if(idA == 'open_btn'){
@@ -63,7 +81,6 @@ function createRadioQuestion(idA){
   	radioAfter(idA);
   }
 }
-
 
 function addcheck(n){
 	
@@ -287,6 +304,15 @@ function createQButton(){
     a3.innerHTML=" Radio button ";
     li3.appendChild(a3);
     ul.appendChild(li3);
+
+    var li4 = document.createElement("li");
+    var a4 = document.createElement("a");
+    a4.setAttribute("class", "dropdown-item");
+    a4.setAttribute("onclick", "createFileQuestion(this.id)");
+    a4.setAttribute("href", "#");
+    a4.innerHTML=" File ";
+    li4.appendChild(a4);
+    ul.appendChild(li4);
     
     return div;
 }
@@ -397,6 +423,7 @@ function firstOpen(){
     newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
     newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
     newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
+    newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("id","file_btn"+counter);
     row.childNodes[1].appendChild(newButton);
 
     row.childNodes[1].appendChild(getSpace());
@@ -515,6 +542,7 @@ function firstCheckbox(){
     newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
     newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
     newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
+    newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("id","file_btn"+counter);
     row.childNodes[1].appendChild(newButton);
 
     row.childNodes[1].appendChild(getSpace());
@@ -633,6 +661,7 @@ function firstRadio(){
   newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
   newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
   newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
+  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("id","file_btn"+counter);
   row.childNodes[1].appendChild(newButton);
 
   row.childNodes[1].appendChild(getSpace());
@@ -645,6 +674,97 @@ function firstRadio(){
   deleteButton.innerHTML=" X ";
   row.childNodes[1].appendChild(deleteButton);
   
+  var divider = document.createElement("hr");
+  divider.setAttribute("class","solid");
+  container.appendChild(divider);
+}
+
+function firstFileQuestion(){
+  counter++;
+  n_question++;
+
+  var parent = document.getElementById("parentDiv");
+  
+  var container = document.createElement("div");
+  container.setAttribute("class","container");
+  container.setAttribute("id","container"+counter);
+
+  var row = document.createElement("div");
+  row.setAttribute("class","row");
+  container.appendChild(row);
+
+  var sxDiv = document.createElement("div");
+  sxDiv.setAttribute("class","col-sm-8");
+  sxDiv.setAttribute("id","centralDiv");
+
+  var dxDiv = document.createElement("div");
+  dxDiv.setAttribute("class","col-sm-4");
+  dxDiv.setAttribute("id","centralDiv");
+
+  row.appendChild(sxDiv);
+  row.appendChild(dxDiv);
+
+  parent.appendChild(container);
+
+  var div = document.createElement("div");
+  div.setAttribute("class", "mb-3");
+  row.childNodes[0].appendChild(div);
+
+  var label = document.createElement("label");
+  label.setAttribute("for", "formFile");
+  label.setAttribute("class", "form-label");
+  label.innerHTML = "Domanda " + counter;
+  div.appendChild(label);
+
+  div.appendChild(getSpace());
+
+  var textarea = document.createElement("textarea");
+  textarea.setAttribute("rows", "1");
+  textarea.setAttribute("name", counter + " fileText");
+  textarea.setAttribute("cols", "70");
+  div.appendChild(textarea);
+
+  div.appendChild(getSpace());
+
+  var switchToggle = document.createElement("input");
+  switchToggle.setAttribute('class','form-check-input');
+  switchToggle.setAttribute('type', 'checkbox');
+  switchToggle.setAttribute('id', 'flexCheckDefault');
+  switchToggle.setAttribute('name', counter + ' required');
+  div.appendChild(switchToggle);
+
+  var requiredLabel = document.createElement("label");
+  requiredLabel.setAttribute('class', 'form-check-label');
+  requiredLabel.setAttribute('for', 'flexCheckDefault');
+  requiredLabel.innerHTML = '&nbsp; Required';
+  div.appendChild(requiredLabel);
+
+  var input = document.createElement("input");
+  input.setAttribute("class", "form-control");
+  input.setAttribute("type", "file");
+  input.setAttribute("id", "formFile");
+  input.setAttribute("name", counter + " file");
+  input.disabled = true;
+  div.appendChild(input);
+
+  var newButton = createButton.cloneNode(true);
+  newButton.setAttribute("id","createButton"+counter);
+  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
+  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
+  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
+  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("id","file_btn"+counter);
+  row.childNodes[1].appendChild(newButton);
+
+  row.childNodes[1].appendChild(getSpace());
+
+  var deleteButton = document.createElement("button");
+  deleteButton.setAttribute("type","button");
+  deleteButton.setAttribute("class","btn btn-primary");
+  deleteButton.setAttribute("id","delete_btn"+counter);
+  deleteButton.setAttribute("onclick","deleteQuestion(this.id)");
+  deleteButton.innerHTML=" X ";
+  row.childNodes[1].appendChild(deleteButton);
+
   var divider = document.createElement("hr");
   divider.setAttribute("class","solid");
   container.appendChild(divider);
@@ -690,6 +810,7 @@ function openAfter(idA){
   newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
   newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
   newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
+  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("id","file_btn"+counter);
   row.childNodes[1].appendChild(newButton);
 
   row.childNodes[1].appendChild(getSpace());
@@ -788,6 +909,7 @@ function checkboxAfter(idA){
     newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
     newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
     newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
+    newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("id","file_btn"+counter);
     row.childNodes[1].appendChild(newButton);
 
     row.childNodes[1].appendChild(getSpace());
@@ -803,6 +925,94 @@ function checkboxAfter(idA){
     var divider = document.createElement("hr");
     divider.setAttribute("class","solid");
     container.appendChild(divider);
+}
+
+function afterFileQuestion(idA){
+  counter++;
+  checkcounter++;
+  n_question++;
+  
+  var div = getDivId(idA);
+  var container = createDiv(div);
+  var row = container.childNodes[0];
+  
+  var div = document.createElement("div");
+  div.setAttribute("class", "mb-3");
+  row.childNodes[0].appendChild(div);
+
+  var label = document.createElement("label");
+  label.setAttribute("for", "formFile");
+  label.setAttribute("class", "form-label");
+  label.innerHTML = "Domanda " + counter;
+  div.appendChild(label);
+
+  div.appendChild(getSpace());
+
+  var textarea = document.createElement("textarea");
+  textarea.setAttribute("rows", "1");
+  textarea.setAttribute("name", counter + " fileText");
+  textarea.setAttribute("cols", "70");
+  div.appendChild(textarea);
+
+  div.appendChild(getSpace());
+
+  var switchToggle = document.createElement("input");
+  switchToggle.setAttribute('class','form-check-input');
+  switchToggle.setAttribute('type', 'checkbox');
+  switchToggle.setAttribute('id', 'flexCheckDefault');
+  switchToggle.setAttribute('name', counter + ' required');
+  div.appendChild(switchToggle);
+
+  var requiredLabel = document.createElement("label");
+  requiredLabel.setAttribute('class', 'form-check-label');
+  requiredLabel.setAttribute('for', 'flexCheckDefault');
+  requiredLabel.innerHTML = '&nbsp; Required';
+  div.appendChild(requiredLabel);
+
+  var input = document.createElement("input");
+  input.setAttribute("class", "form-control");
+  input.setAttribute("type", "file");
+  input.setAttribute("id", "formFile");
+  input.setAttribute("name", counter + " file");
+  input.disabled = true;
+  div.appendChild(input);
+
+  row.childNodes[0].appendChild(getSpace());
+  row.childNodes[0].appendChild(getSpace());
+  row.childNodes[0].appendChild(getSpace());
+
+  row.childNodes[0].appendChild(getSpace());
+
+  var deleteCheck = document.createElement("button");
+  deleteCheck.setAttribute('type', 'button');
+  deleteCheck.setAttribute("class","btn btn-secondary");
+  deleteCheck.setAttribute("onclick","deleteCheck("+checkcounter+")");
+  deleteCheck.setAttribute("id", "deleteCheck"+checkcounter);
+  deleteCheck.innerHTML=" X ";
+  deleteCheck.style.visibility = "hidden";
+  row.childNodes[0].appendChild(deleteCheck);
+  
+  var newButton = createButton.cloneNode(true);
+  newButton.setAttribute("id","createButton"+counter);
+  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
+  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
+  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
+  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("id","file_btn"+counter);
+  row.childNodes[1].appendChild(newButton);
+
+  row.childNodes[1].appendChild(getSpace());
+
+  var deleteButton = document.createElement("button");
+  deleteButton.setAttribute("type","button");
+  deleteButton.setAttribute("class","btn btn-primary");
+  deleteButton.setAttribute("id","delete_btn"+counter);
+  deleteButton.setAttribute("onclick","deleteQuestion(this.id)");
+  deleteButton.innerHTML=" X ";
+  row.childNodes[1].appendChild(deleteButton);
+  
+  var divider = document.createElement("hr");
+  divider.setAttribute("class","solid");
+  container.appendChild(divider);
 }
 
 function radioAfter(idA){
@@ -886,6 +1096,7 @@ function radioAfter(idA){
   newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
   newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
   newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
+  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("id","file_btn"+counter);
   row.childNodes[1].appendChild(newButton);
 
   row.childNodes[1].appendChild(getSpace());

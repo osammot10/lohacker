@@ -11,6 +11,7 @@ def show_my_survey(id):
     openAnswer = []
     checkboxAnswer = []
     radioAnswer = []
+    fileAnswer = []
     questionSet = []
 
     selectedSurvey = session.query(Survey).filter(Survey.id == id).filter(Survey.template == False).filter(Survey.deleted == False).first()
@@ -40,8 +41,12 @@ def show_my_survey(id):
 
             radioOption = session.query(RadioOption.id, RadioOption.number, func.count(RadioAnswer.number).label('counter')).outerjoin(RadioAnswer, (RadioAnswer.question == RadioOption.id) & (RadioAnswer.number == RadioOption.number)).filter(RadioOption.id == entry.id).group_by(RadioOption.id, RadioOption.number).all()
             radioAnswer += radioOption
-      
-    return render_template("mysurvey.html", survey = selectedSurvey, questions = questionSet, checkboxs = checkbox, openAnswers = openAnswer, checkboxoption = checkboxAnswer, radios = radio, radiooption = radioAnswer)
+        elif entry.type == "file":
+            questionSet += session.query(Question.type, FileQuestion.id, FileQuestion.text).join(FileQuestion).filter(Question.id == entry.id).all()
+
+            newFileAnswer = session.query(FileAnswer.id, FileAnswer.question, FileAnswer.path, Answer.maker).join(Answer).filter(FileAnswer.question == entry.id).all()
+            fileAnswer += newFileAnswer
+    return render_template("mysurvey.html", survey = selectedSurvey, questions = questionSet, checkboxs = checkbox, openAnswers = openAnswer, checkboxoption = checkboxAnswer, radios = radio, radiooption = radioAnswer, file = fileAnswer)
 
 @myform_bp.route('/disable', methods = ['GET', 'POST'])
 @login_required
@@ -61,3 +66,9 @@ def disable_survey():
     session.commit()
     
     return redirect(url_for('form_bp.show_my_form'))
+
+@myform_bp.route('/download/<path:filename>', methods = ['GET', 'POST'])
+@login_required
+def download(filename):
+    filename = app.config['UPLOAD_FOLDER']+"/"+filename
+    return send_file(filename, as_attachment = True)

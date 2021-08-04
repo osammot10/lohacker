@@ -6,6 +6,9 @@ from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
+import os
+from werkzeug.utils import *
+
 app = Flask(__name__)
 
 Base = declarative_base()
@@ -21,6 +24,7 @@ Session = sessionmaker(bind=engine)       # creazione della factory
 session = Session()
 
 app.config['SECRET_KEY'] = 'ubersecret'
+app.config['UPLOAD_FOLDER'] = os.path.abspath(os.path.dirname(__file__)) + '/uploads'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -106,6 +110,12 @@ class RadioOption(Base):
     number = Column(Integer, primary_key = True)
     text = Column(String)
 
+class FileQuestion(Base):
+    __tablename__ = "FileQuestion"
+
+    id = Column(Integer, ForeignKey(Question.id), primary_key = True, autoincrement = True)
+    text = Column(String)
+
 class Answer(Base):
     __tablename__ = "Answer"
 
@@ -134,6 +144,13 @@ class RadioAnswer(Base):
     question = Column(Integer, ForeignKey(RadioOption.id), primary_key=True, autoincrement=True)
     number = Column(Integer, ForeignKey(RadioOption.number), autoincrement=True)
     id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
+
+class FileAnswer(Base):
+    __tablename__ = "FileAnswer"
+
+    id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
+    question = Column(Integer, ForeignKey(FileQuestion.id), primary_key = True)
+    path = Column(String)
 
 
 @login_manager.user_loader # attenzione a questo !

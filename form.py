@@ -1,5 +1,9 @@
+from sqlalchemy.log import Identified
 from connection import *
 from datetime import date
+
+import os
+from werkzeug.utils import *
 
 form_bp = Blueprint('form_bp',__name__)
 
@@ -24,6 +28,8 @@ def show_form_create_page():
             elif entry.type == 'radio':
                 templateQuestions += session.query(Question.type, RadioQuestion.id, RadioQuestion.text).join(RadioQuestion).filter(RadioQuestion.id == entry.id).all()
                 radioOption += session.query(RadioOption).filter(RadioOption.id == entry.id).all()
+            elif entry.type == 'file':
+                templateQuestions += session.query(Question.type, FileQuestion.id, FileQuestion.text).join(FileQuestion).filter(FileQuestion.id == entry.id).all()
         return render_template("form.html", templates = False, questionTemplate = templateQuestions, checkboxTemplate = checkboxOption, radioTemplate = radioOption, number = n)
 
 @form_bp.route('/form/create', methods = ['GET', 'POST'])
@@ -36,7 +42,7 @@ def create_survey():
         session.commit()
         id_check = -1
         id_radio = -1
-        id_openQuestion = 0
+        idRequiredQuestion = 0
         i = 1
         j = 1
         for k,v in request.form.items():
@@ -49,7 +55,7 @@ def create_survey():
                     session.commit()
                     newOpenQuestion = OpenQuestion(id = str(newQuestion.id), text = v)
                     session.add(newOpenQuestion)
-                    id_openQuestion = newQuestion.id
+                    idRequiredQuestion = newQuestion.id
                     j = j + 1
                 elif k == 'checkbox':
                     #id è autoincrement, si può omettere
@@ -59,7 +65,7 @@ def create_survey():
                     newCheckboxQuestion = CheckboxQuestion(id = str(newQuestion.id), text= v)
                     session.add(newCheckboxQuestion)
                     id_check = newCheckboxQuestion.id
-                    id_openQuestion = newQuestion.id
+                    idRequiredQuestion = newQuestion.id
                     j = j + 1
                     i = 1
                 elif k == 'checkboxtext':
@@ -74,15 +80,23 @@ def create_survey():
                     newRadioQuestion = RadioQuestion(id = str(newQuestion.id), text= v)
                     session.add(newRadioQuestion)
                     id_radio = newRadioQuestion.id
-                    id_openQuestion = newQuestion.id
+                    idRequiredQuestion = newQuestion.id
                     j = j + 1
                     i = 1
                 elif k == 'radiobtntext' :
                     newRadioOption = RadioOption(id = str(id_radio), number = i, text = v)
                     session.add(newRadioOption)
                     i = i + 1
+                elif k == 'fileText':
+                    newQuestion = Question(survey = str(newSurvey.id), type = "file", required = False)
+                    session.add(newQuestion)
+                    session.commit()
+                    newFileQuestion = FileQuestion(id = str(newQuestion.id), text = v)
+                    session.add(newFileQuestion)
+                    idRequiredQuestion = newFileQuestion.id
+                    j = j + 1
                 elif k == "required":
-                    requiredQuestion = session.query(Question).filter(Question.id == id_openQuestion).first()
+                    requiredQuestion = session.query(Question).filter(Question.id ==    idRequiredQuestion).first()
                     requiredQuestion.required = True
                     session.commit()
                 session.commit()         

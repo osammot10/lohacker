@@ -64,6 +64,13 @@ def createTemplate():
                     newRadioOption = RadioOption(id = str(id_radio), number = i, text = v)
                     session.add(newRadioOption)
                     i = i + 1
+                elif k == 'fileText':
+                    newQuestion = Question(survey = str(newTemplate.id), type = "file", required = False)
+                    session.add(newQuestion)
+                    session.commit()
+                    newFileQuestion = FileQuestion(id = str(newQuestion.id), text = v)
+                    session.add(newFileQuestion)
+                    j = j + 1
                 elif k == "required":
                     requiredQuestion = session.query(Question).filter(Question.id == id_openQuestion).first()
                     requiredQuestion.required = True
@@ -95,6 +102,8 @@ def actionTemplate():
             elif entry.type == 'radio':
                 question += session.query(Question.type, Question.required, RadioQuestion.id, RadioQuestion.text).join(RadioQuestion).filter(RadioQuestion.id == entry.id).all()
                 radioOption += session.query(RadioOption).filter(RadioOption.id == entry.id).all()
+            elif entry.type == 'file':
+                question += session.query(Question.type, Question.required, FileQuestion.id, FileQuestion.text).join(FileQuestion).filter(FileQuestion.id == entry.id).all()
         return render_template('showTemplate.html', template = templateToShow, question = question, checkboxOption = checkboxOption, radioOption = radioOption)
     elif action == 'delete':
         templateToDelete = session.query(Survey).filter(Survey.id == templateId).first()

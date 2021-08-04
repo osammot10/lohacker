@@ -15,57 +15,65 @@
               <li><a class="dropdown-item" id="open_btn" onclick="createOpenQuestion(this.id)" href="#">Open</a></li>
               <li><a class="dropdown-item" id="check_btn" onclick="createCheckboxQuestion(this.id)" href="#">Checkbox</a></li>
               <li><a class="dropdown-item" id="radio_btn" onclick="createRadioQuestion(this.id)" href="#">Radio button</a></li>
+              <li><a class="dropdown-item" id="file_btn" onclick="createFileQuestion(this.id)" href="#">File</a></li>
             </ul>
           </div>
-          <div id="parentDiv">    
-          </div>
+          <div id="parentDiv"></div>
         {% else %}
           <div id="parentDiv">
             {% set i = 1 %}
-            {% for r in questionTemplate %}
+        	{% for r in questionTemplate %}
               <div class="container" id="container{{loop.index}}">
                 <div class="row">
-                  {% if r.type == 'open' %}
-                  <div class="col-sm-8" id="centralDiv">
-                    <label>Domanda {{loop.index}}</label> <span>&nbsp;&nbsp;</span> <input type="text" name="{{loop.index}} open" value="{{r.text}}">
-                  </div>
-                  {% elif r.type == 'checkbox' %}
-                    <div class="col-sm-8" id="centralDiv">
-                      <label>Domanda {{loop.index}}</label> <span>&nbsp;&nbsp;</span> <input type="text" name="{{loop.index}} checkbox" value="{{r.text}}">
-                      <br>
-                      <br>
-                      {% for c in checkboxTemplate if c.id == r.id %}
-                        <input type="checkbox" id="check{{c.number}}" name="{{loop.index}} checkbox {{c.number}}" disabled>
-                        <span>&nbsp;&nbsp;</span>
-                        <input type="text" id="checktext{{c.number}}" name="{{loop.index}} checkboxtext {{c.number}}" value="{{c.text}}">
-                        <br>
-                        <br>
-                      {% endfor %}
-                    </div>
-                  {% else %}
-                  <div class="col-sm-8" id="centralDiv">
-                    <label>Domanda {{loop.index}}</label> <span>&nbsp;&nbsp;</span> <input type="text" name="{{loop.index}} checkbox" value="{{r.text}}">
-                    <br>
-                    <br>
-                    {% for c in radioTemplate if c.id == r.id %}
-                      <input type="radio" id="check{{c.number}}" name="{{loop.index}} checkbox {{c.number}}" disabled>
-                      <span>&nbsp;&nbsp;</span>
-                      <input type="text" id="checktext{{c.number}}" name="{{loop.index}} checkboxtext {{c.number}}" value="{{c.text}}">
-                      <br>
-                      <br>
-                    {% endfor %}
-                  </div>
-                  {% endif %}
-                  <div class="col-sm-4" id="centralDiv">
-                    <div class="btn-group" id="createButton{{loop.index}}">
-                      <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> + </button>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" onclick="createOpenQuestion(this.id)" href="#" id="open_btn{{loop.index}}"> Open </a></li>
-                        <li><a class="dropdown-item" onclick="createCheckboxQuestion(this.id)" href="#" id="check_btn{{loop.index}}"> Checkbox </a></li>
-                        <li><a class="dropdown-item" onclick="createRadioQuestion(this.id)" href="#" id="open_btn{{loop.index}}"> Radio button </a></li>
-                      </ul>
-                    </div>
-                  </div>
+                	{% if r.type == 'open' %}
+					<div class="col-sm-8" id="centralDiv">
+						<label>Domanda {{loop.index}}</label> <span>&nbsp;&nbsp;</span> <input type="text" name="{{loop.index}} open" value="{{r.text}}">
+					</div>
+                  	{% elif r.type == 'checkbox' %}
+						<div class="col-sm-8" id="centralDiv">
+						<label>Domanda {{loop.index}}</label> <span>&nbsp;&nbsp;</span> <input type="text" name="{{loop.index}} checkbox" value="{{r.text}}">
+						<br>
+						<br>
+						{% for c in checkboxTemplate if c.id == r.id %}
+							<input type="checkbox" id="check{{c.number}}" name="{{loop.index}} checkbox {{c.number}}" disabled>
+							<span>&nbsp;&nbsp;</span>
+							<input type="text" id="checktext{{c.number}}" name="{{loop.index}} checkboxtext {{c.number}}" value="{{c.text}}">
+							<br>
+							<br>
+						{% endfor %}
+						</div>
+					{% elif r.type == 'radio' %}
+						<div class="col-sm-8" id="centralDiv">
+						<label>Domanda {{loop.index}}</label> <span>&nbsp;&nbsp;</span> <input type="text" name="{{loop.index}} checkbox" value="{{r.text}}">
+						<br>
+						<br>
+						{% for c in radioTemplate if c.id == r.id %}
+							<input type="radio" id="check{{c.number}}" name="{{loop.index}} checkbox {{c.number}}" disabled>
+							<span>&nbsp;&nbsp;</span>
+							<input type="text" id="checktext{{c.number}}" name="{{loop.index}} checkboxtext {{c.number}}" value="{{c.text}}">
+							<br>
+							<br>
+						{% endfor %}
+						</div>
+                  	{% else %}
+						<div class="col-sm-8" id="centralDiv">
+							<label>Domanda {{loop.index}}</label> <span>&nbsp;&nbsp;</span> <textarea class="form-control" rows = "1" readonly>{{r.text}}</textarea>
+							<div class="mb-3">
+								<input class="form-control" type="file" id="formFile" disabled>
+							</div>
+						</div>
+                  	{% endif %}
+					<div class="col-sm-4" id="centralDiv">
+						<div class="btn-group" id="createButton{{loop.index}}">
+						<button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> + </button>
+						<ul class="dropdown-menu">
+							<li><a class="dropdown-item" onclick="createOpenQuestion(this.id)" href="#" id="open_btn{{loop.index}}"> Open </a></li>
+							<li><a class="dropdown-item" onclick="createCheckboxQuestion(this.id)" href="#" id="check_btn{{loop.index}}"> Checkbox </a></li>
+							<li><a class="dropdown-item" onclick="createRadioQuestion(this.id)" href="#" id="radio_btn{{loop.index}}"> Radio button </a></li>
+							<li><a class="dropdown-item" onclick="createFileQuestion(this.id)" href="#" id="file_btn{{loop.index}}">File</a></li>
+						</ul>
+						</div>
+					</div>
                 </div>
                 <hr class="solid">
               </div>           

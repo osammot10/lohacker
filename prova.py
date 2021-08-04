@@ -59,6 +59,7 @@ class Question(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     survey = Column(Integer, ForeignKey(Survey.id), primary_key=True)
     type = Column(String)
+    required = Column(Boolean)
 
     def toString(self):
         return "id: {0}, text: {1}, type: {2}".format(self.id, self.text, self.type)
@@ -82,12 +83,31 @@ class CheckboxOption(Base):
     number = Column(Integer, primary_key = True)
     text = Column(String)
 
+class RadioQuestion(Base):
+    __tablename__ = "RadioQuestion"
+
+    id = Column(Integer,ForeignKey(Question.id), primary_key=True, autoincrement=True)
+    text = Column(String)
+
+class RadioOption(Base):
+    __tablename__ = "RadioOption"
+
+    id = Column(Integer, ForeignKey(RadioQuestion.id), primary_key = True, autoincrement = True)
+    number = Column(Integer, primary_key = True)
+    text = Column(String)
+
+class FileQuestion(Base):
+    __tablename__ = "FileQuestion"
+
+    id = Column(Integer, ForeignKey(Question.id), primary_key = True, autoincrement = True)
+    text = Column(String)
+
 class Answer(Base):
     __tablename__ = "Answer"
 
     id = Column(Integer, primary_key = True, autoincrement = True)
-    survey = Column(Integer, ForeignKey(Survey.id), primary_key = True, autoincrement = True)
-    maker = Column(Integer, ForeignKey(Utenti.id), primary_key = True, autoincrement = True)
+    survey = Column(Integer, ForeignKey(Survey.id), primary_key = True)
+    maker = Column(Integer, ForeignKey(Utenti.id), primary_key = True)
     date = Column(Date)
 
 class OpenAnswer(Base):
@@ -104,16 +124,21 @@ class CheckboxAnswer(Base):
     number = Column(Integer, ForeignKey(CheckboxOption.number), primary_key=True, autoincrement=True)
     id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
 
-#c = session.query(CheckboxQuestion.id, CheckboxQuestion.text.label('question'), CheckboxOption.text.label('option')).join(CheckboxOption).filter(CheckboxQuestion.id == 33).all()
-#for r in c:
-#    print(r.id, r.question, r.option)
+class RadioAnswer(Base):
+    __tablename__ = "RadioAnswer"
 
-#u = session.query(CheckboxAnswer.question, CheckboxAnswer.number, func.count(CheckboxAnswer.number)).outerjoin(CheckboxAnswer, (CheckboxAnswer.question == CheckboxQuestion.id) & (CheckboxAnswer.number == CheckboxQuestion.number)).filter(CheckboxQuestion.id == r.id).group_by(CheckboxQuestion.id, CheckboxQuestion.number).all()
-#u = session.query(CheckboxOption.id, CheckboxOption.number, func.count(CheckboxAnswer.number).label('n')).outerjoin(CheckboxAnswer, (CheckboxAnswer.question == CheckboxOption.id) & (CheckboxAnswer.number == CheckboxOption.number)).filter(CheckboxOption.id == 33).group_by(CheckboxOption.id, CheckboxOption.number).all()
-#u = session.query(CheckboxAnswer.question, CheckboxAnswer.number, func.count(CheckboxAnswer.number).label('n')).filter(CheckboxAnswer.question == 32).group_by(CheckboxAnswer.question, CheckboxAnswer.number).all()
-#for r in u:
-#    print(r.id, r.number, r.n)
+    question = Column(Integer, ForeignKey(RadioOption.id), primary_key=True, autoincrement=True)
+    number = Column(Integer, ForeignKey(RadioOption.number), autoincrement=True)
+    id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
 
-newOpenAnswer = session.query(OpenAnswer.id, OpenAnswer.question, OpenAnswer.text, Answer.maker).join(Answer).filter(OpenAnswer.question == 30).all()
-for r in newOpenAnswer:
+class FileAnswer(Base):
+    __tablename__ = "FileAnswer"
+
+    id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
+    question = Column(Integer, ForeignKey(FileQuestion.id), primary_key = True)
+    path = Column(String)
+
+
+prova = session.query(Question.type, FileQuestion.id, FileQuestion.text).join(FileQuestion).filter(Question.id == 45).all()
+for r in prova:
     print(r.text)

@@ -36,6 +36,8 @@ def show_survey(id):
 
                         radioOption = session.query(RadioOption).filter(RadioOption.id == entry.id).all()
                         radioOptionList += radioOption
+                    elif entry.type == "file":
+                        questionSet += session.query(Question.type, FileQuestion.id, FileQuestion.text, Question.required).join(FileQuestion).filter(FileQuestion.id == entry.id).all()
                 
                 return render_template("response.html", survey = survey, question = questionSet, checkbox = checkboxOptionList, radio = radioOptionList)
             
@@ -66,6 +68,19 @@ def send_response(id):
         elif type == "radio":
             newRadioAnswer = RadioAnswer(question = idQuestion, number = v, id = str(newAnswer.id))
             session.add(newRadioAnswer)
+        elif type == "file":
+            name = v + ' file'
+            file = request.files[name]
+            extension = file.filename.split(".")[1]
+            newName = "fileQ"+str(idQuestion)+"A"+str(newAnswer.id)+"."+extension
+            newFileAnswer = FileAnswer(id = str(newAnswer.id), question = idQuestion, path = newName)
+            session.add(newFileAnswer)
+            session.commit()
+            file = request.files[name]
+            file.filename = newName
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(file.filename)))
+            print("File stored")
+            
     session.commit()
 
     return render_template("confirmation.html")
