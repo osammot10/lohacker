@@ -18,7 +18,7 @@ def show_form_create_page():
         templateQuestions = []
         idTemplate = request.args['id']
         question = session.query(Question).filter(Question.survey == idTemplate).all()
-        n = len(templateQuestions)
+        n = len(question)
         for entry in question:
             if entry.type == 'open':
                 templateQuestions += session.query(Question.type, OpenQuestion.id, OpenQuestion.text).join(OpenQuestion).filter(OpenQuestion.id == entry.id).all()

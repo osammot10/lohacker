@@ -93,6 +93,7 @@ def actionTemplate():
         radioOption = []
         templateToShow = session.query(Survey).filter(Survey.id == templateId).first()
         templateQuestion = session.query(Question).filter(Question.survey == templateToShow.id).order_by(Question.id).all()
+        n = len(templateQuestion)
         for entry in templateQuestion:
             if entry.type == 'open':
                 question += session.query(Question.type, Question.required, OpenQuestion.id, OpenQuestion.text).join(OpenQuestion).filter(OpenQuestion.id == entry.id).all()
@@ -104,9 +105,79 @@ def actionTemplate():
                 radioOption += session.query(RadioOption).filter(RadioOption.id == entry.id).all()
             elif entry.type == 'file':
                 question += session.query(Question.type, Question.required, FileQuestion.id, FileQuestion.text).join(FileQuestion).filter(FileQuestion.id == entry.id).all()
-        return render_template('showTemplate.html', template = templateToShow, question = question, checkboxOption = checkboxOption, radioOption = radioOption)
+        return render_template('showTemplate.html', template = templateToShow, question = question, checkboxOption = checkboxOption, radioOption = radioOption, number = n)
     elif action == 'delete':
         templateToDelete = session.query(Survey).filter(Survey.id == templateId).first()
         templateToDelete.deleted = True
         session.commit()
         return redirect(url_for('login_bp.private'))
+
+@templates_bp.route('/saveTemplate/<id>', methods = ['GET', 'POST'])
+@login_required
+def saveTemplate(id):
+    if request.method == 'POST':
+        templateToDelete = session.query(Survey).filter(Survey.id == id).first()
+        templateToDelete.deleted = True
+        session.commit()
+        templateTitle = request.form['titleInput']
+        newTemplate = Survey(maker = current_user.get_id(), name = templateTitle, date = date.today(), template = True, active = True, deleted = False)
+        session.add(newTemplate)
+        session.commit()
+        id_check = -1
+        id_radio = -1
+        id_openQuestion = 0
+        i = 1
+        j = 1
+        for k,v in request.form.items():
+            if k != "titleInput":
+                k = k.split()[1]
+                if k == 'open':
+                    newQuestion = Question(survey = str(newTemplate.id), type = "open", required = False)
+                    session.add(newQuestion)
+                    session.commit()
+                    newOpenQuestion = OpenQuestion(id = str(newQuestion.id), text = v)
+                    session.add(newOpenQuestion)
+                    id_openQuestion = newQuestion.id
+                    j = j + 1
+                elif k == 'checkbox':
+                    newQuestion = Question(survey = str(newTemplate.id), type = "checkbox", required = False)
+                    session.add(newQuestion)
+                    session.commit()
+                    newCheckboxQuestion = CheckboxQuestion(id = str(newQuestion.id), text= v)
+                    session.add(newCheckboxQuestion)
+                    id_check = newCheckboxQuestion.id
+                    id_openQuestion = newQuestion.id
+                    j = j + 1
+                    i = 1
+                elif k == 'checkboxtext':
+                    newCheckboxOption = CheckboxOption(id = str(id_check), number = i, text = v)
+                    session.add(newCheckboxOption)
+                    i = i + 1
+                elif k == "radio":
+                    newQuestion = Question(survey = str(newTemplate.id), type = "radio", required = False)
+                    session.add(newQuestion)
+                    session.commit()
+                    newRadioQuestion = RadioQuestion(id = str(newQuestion.id), text= v)
+                    session.add(newRadioQuestion)
+                    id_radio = newRadioQuestion.id
+                    id_openQuestion = newQuestion.id
+                    j = j + 1
+                    i = 1
+                elif k == 'radiobtntext' :
+                    newRadioOption = RadioOption(id = str(id_radio), number = i, text = v)
+                    session.add(newRadioOption)
+                    i = i + 1
+                elif k == 'fileText':
+                    newQuestion = Question(survey = str(newTemplate.id), type = "file", required = False)
+                    session.add(newQuestion)
+                    session.commit()
+                    newFileQuestion = FileQuestion(id = str(newQuestion.id), text = v)
+                    session.add(newFileQuestion)
+                    id_openQuestion = newQuestion.id
+                    j = j + 1
+                elif k == "required":
+                    requiredQuestion = session.query(Question).filter(Question.id == id_openQuestion).first()
+                    requiredQuestion.required = True
+                    session.commit()
+                session.commit()         
+        return render_template('templateUpdatedConfirmation.html')
