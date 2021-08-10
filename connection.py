@@ -25,6 +25,7 @@ session = Session()
 
 app.config['SECRET_KEY'] = 'ubersecret'
 app.config['UPLOAD_FOLDER'] = os.path.abspath(os.path.dirname(__file__)) + '/uploads'
+app.config['CSV_FOLDER'] = os.path.abspath(os.path.dirname(__file__)) + '/csv'
 
 login_manager = LoginManager()
 login_manager.init_app(app)

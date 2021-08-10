@@ -10,6 +10,9 @@
             </div>
             <div class="col-3 vertical-center">
                 <button type="button" class="btn btn-secondary btn-sm left" data-bs-toggle="modal" data-bs-target="#linkModal"> Condividi  <img src="{{url_for('static', filename='share.png')}}" width="10" height="10"></button>
+                <form action="{{ url_for('myform_bp.downloadCSV', formID=survey.id) }}" method="POST" enctype="multipart/form-data">
+                    <button type="submit" class="btn btn-secondary btn-sm left"> Download CSV </button>
+                </form>
                 <div class="modal fade" id="linkModal">
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content">

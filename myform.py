@@ -1,4 +1,5 @@
 from connection import *
+import csv
 
 myform_bp = Blueprint('myform_bp',__name__)
 
@@ -71,4 +72,57 @@ def disable_survey():
 @login_required
 def download(filename):
     filename = app.config['UPLOAD_FOLDER']+"/"+filename
+    return send_file(filename, as_attachment = True)
+
+@myform_bp.route('/downloadCSV/<formID>', methods = ['GET', 'POST'])
+@login_required
+def downloadCSV(formID):
+    form = session.query(Survey).filter(Survey.id == formID).first()
+    questions = session.query(Question).filter(Question.survey == form.id).order_by(Question.id).all()
+    answers = session.query(Answer).filter(Answer.survey == form.id).all()
+
+    questionSet = []
+    csvQuestion = []
+    answerSet = []
+    checkboxOption = []
+    radioOption = []
+    for entry in questions:
+        if entry.type == 'open':
+            openQuestionText = session.query(Question.type, OpenQuestion.id, OpenQuestion.text).join(OpenQuestion).filter(OpenQuestion.id == entry.id).first()
+            csvQuestion.append(openQuestionText.text)
+        elif entry.type == 'checkbox':
+            checkboxQuestionText = session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text).join(CheckboxQuestion).filter(CheckboxQuestion.id == entry.id).first()
+            csvQuestion.append(checkboxQuestionText.text)
+        elif entry.type == 'radio':
+            radioQuestionText = session.query(Question.type, RadioQuestion.id, RadioQuestion.text).join(RadioQuestion).filter(RadioQuestion.id == entry.id).first()
+            csvQuestion.append(radioQuestionText.text)
+        elif entry.type == 'file':
+            fileQuestionText = session.query(Question.type, FileQuestion.id, FileQuestion.text).join(FileQuestion).filter(FileQuestion.id == entry.id).first()
+            csvQuestion.append(fileQuestionText.text)
+
+    filename = app.config['CSV_FOLDER'] + '/form' + str(form.id) + '.csv'
+    file = open(filename, 'w', newline = '')
+    writer = csv.writer(file)
+    writer.writerow(csvQuestion)
+    
+    for entry in answers:
+        answerSet = []
+        for q in questions:
+            if q.type == "open":
+                openAnswer = session.query(OpenAnswer.text).filter(OpenAnswer.id == entry.id).filter(OpenAnswer.question == q.id).first()
+                answerSet.append(openAnswer.text)
+            elif q.type == "checkbox":
+                checkboxAnswer = session.query(CheckboxOption.text, CheckboxAnswer.number).filter(CheckboxAnswer.id == entry.id).filter(CheckboxAnswer.question == q.id).filter(CheckboxOption.id == CheckboxAnswer.question).filter(CheckboxOption.number == CheckboxAnswer.number).all()
+                option = " | "
+                for r in checkboxAnswer:
+                    option = option + r.text + " | "
+                answerSet.append(option)
+            elif q.type == "radio":
+                radioAnswer = session.query(RadioOption.text, RadioAnswer.number).filter(RadioAnswer.id == entry.id).filter(RadioAnswer.question == q.id).filter(RadioOption.id == RadioAnswer.question).filter(RadioOption.number == RadioAnswer.number).first()
+                answerSet.append(radioAnswer.text)
+            elif q.type == "file":
+                answerSet.append(" / ")
+        writer.writerow(answerSet)
+    file.close()
+
     return send_file(filename, as_attachment = True)

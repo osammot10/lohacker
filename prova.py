@@ -139,6 +139,11 @@ class FileAnswer(Base):
     path = Column(String)
 
 
-prova = session.query(Question.type, FileQuestion.id, FileQuestion.text).join(FileQuestion).filter(Question.id == 45).all()
-for r in prova:
-    print(r.text)
+questions = session.query(Question).filter(Question.survey == 88).order_by(Question.id).all()
+answers = session.query(Answer).filter(Answer.survey == 88).all()
+
+
+
+checkboxAnswer = session.query(CheckboxOption.text, CheckboxAnswer.number).filter(CheckboxAnswer.id == 18).filter(CheckboxAnswer.question == 126).filter(CheckboxOption.id == CheckboxAnswer.question).filter(CheckboxOption.number == CheckboxAnswer.number).all()
+for r in checkboxAnswer:
+    print(r.text, r.number)
