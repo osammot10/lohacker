@@ -45,6 +45,17 @@
             <br>
             {% for a in openAnswers if a.question == q.id %}
                 <input type="text" value="{{ a.text }}" style="text-align:center;" readonly></input>
+        <div class="row-2">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="summary-tab" data-bs-toggle="tab" data-bs-target="#summary" type="button" role="tab" aria-controls="summary" aria-selected="true">Summary</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="individual-tab" data-bs-toggle="tab" data-bs-target="#individual" type="button" role="tab" aria-controls="individual" aria-selected="false">Individual</button>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="summary" role="tabpanel" aria-labelledby="summary-tab">
                 <br>
             {% endfor %}
         {% elif q.type == 'checkbox' %}
@@ -53,7 +64,33 @@
                     {% set item_1 = checkboxoption[loop.index-1].counter %}
                     <span> <input type="checkbox" disabled> <input type = "text" value = "{{c.option}}" style="text-align:center;" readonly> {{item_1}} </span>
                     <br>
+                {% for q in questions %}
+                    <h5>{{ q.text }}</h5>
+                    {% if q.type == 'open' %}
+                        <br>
+                        {% for a in openAnswers if a.question == q.id %}
+                            <input type="text" value="{{ a.text }}" style="text-align:center;" readonly></input>
+                            <br>
+                        {% endfor %}
+                    {% elif q.type == 'checkbox' %}
+                        {% for c in checkboxs %}
+                            {% if c.id == q.id %}
+                                {% set item_1 = checkboxoption[loop.index-1].counter %}
+                                <span> <input type="checkbox" disabled> <input type = "text" value = "{{c.option}}" style="text-align:center;" readonly> {{item_1}} </span>
+                                <br>
+                                <br>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {% for c in radios if c.id == q.id %}
+                            {% set radio = radiooption[loop.index-1].counter %}
+                            <span> <input type="radio" disabled> <textarea style="text-align:center;" rows="1" readonly>{{c.option}}</textarea> {{radio}} </span>
+                            <br>
+                            <br>
+                        {% endfor %}
+                    {% endif %}
                     <br>
+<<<<<<< Updated upstream
                 {% endif %}
             {% endfor %}
         {% elif q.type == 'radio' %}
@@ -72,6 +109,35 @@
         {% endif %}
         <br>
     {% endfor %}
+=======
+                {% endfor %}
+            </div>
+            <div class="tab-pane fade" id="individual" role="tabpanel" aria-labelledby="individual-tab">
+              <br>
+              <table id="survey" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Number of answers</th>
+                        <th>Answers</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in makers %}
+                        <tr>
+                            <td> <a> {{ loop.index }} </a></td>
+                            <td> <a> {{m.number}} </a></td>
+                            <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{m.maker}}">See the answers</button></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+    </div>
+    
+>>>>>>> Stashed changes
     <form action="/" method="POST">
         <button type="submit" class="btn btn-secondary"> Home page </button>
       </form>
@@ -80,4 +146,70 @@
     </form>
 </div>
 
+{% for m in makers %}
+<div class="modal fade" id="modal{{m.maker}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Risposte</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-dialog modal-dialog-scrollable">
+        {% for q in questions %}
+          <h5>{{ q.text }}</h5>
+          {% if q.type == 'open' %}
+          {% for a in openAnswers if (a.question == q.id) and (a.maker == m.maker) %}
+          <input type="text" value="{{ a.text }}" style="text-align:center;" disabled readonly></input>
+          <br>
+          {% endfor %}
+          {% elif q.type == 'checkbox'%}
+            {% for c in checkboxs if (c.id == q.id)%}
+              {% set count = namespace(value=0) %}
+              {% for s in checkMakerAnswer if (s.question == q.id) and (m.maker == s.maker) %}
+                {% if s.number ==  c.optionNumber %}
+                  {% set count.value = 1 %}
+                {% endif %}
+              {% endfor %}
+              {% if count.value == 1 %}
+                <input class="form-check-input" type="checkbox" value="" id="check_c.id_c.option" checked disabled>
+                  <label class="form-check-label" for="check_c.id_c.option">
+                    {{c.option}}
+                  </label>
+              {% else %}
+                <input class="form-check-input" type="checkbox" value="" id="check_c.id_c.option" disabled>
+                  <label class="form-check-label" for="check_c.id_c.option">
+                    {{c.option}}
+                  </label>
+              {% endif %}
+              <br>
+            {% endfor %}
+          {% else %}
+            {% set count = namespace(value=-1) %}
+            {% for s in radioMakerAnswer if (s.question == q.id) and (m.maker == s.maker) %}
+              {% set count.value = s.number %}
+            {% endfor %}
+            {% for c in radios if (c.id == q.id)%}
+              {% if count.value != c.optionNumber %}
+                <input class="form-check-input" type="radio" name="flexRadioDisabled" id="radio_c.id_c.option" disabled>
+                <label class="form-check-label" for="radio_c.id_c.option">
+                  {{c.option}}
+                </label>
+              {% else %}
+                <input class="form-check-input" type="radio" name="flexRadioDisabled" id="radio_c.id_c.option" checked disabled>
+                <label class="form-check-label" for="radio_c.id_c.option">
+                  {{c.option}}
+                </label>
+              {% endif %}
+              <br>
+            {% endfor %}
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
 {% endblock %}
