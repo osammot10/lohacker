@@ -14,7 +14,6 @@ def show_my_survey(id):
     radioAnswer = []
     fileAnswer = []
     questionSet = []
-
     answer = []
     maker = []
     singleAnswerRadio = []
@@ -23,19 +22,16 @@ def show_my_survey(id):
  
     question = session.query(Question).filter(Question.survey == id).all()
 
-    for entry in question:
     for entry in question: #entry = riga 
         if entry.type == 'open':
             questionSet += session.query(Question.type, OpenQuestion.id, OpenQuestion.text).join(OpenQuestion).filter(Question.id == entry.id).all()
             
-            newOpenAnswer = session.query(OpenAnswer.id, OpenAnswer.question, OpenAnswer.text, Answer.maker).join(Answer).filter(OpenAnswer.question == entry.id).all()
             newOpenAnswer = session.query(OpenAnswer.id, OpenAnswer.question, OpenAnswer.text, Answer.maker, Answer.date).join(Answer).filter(OpenAnswer.question == entry.id).all()
             
             openAnswer += newOpenAnswer
         elif entry.type == 'checkbox':
             questionSet += session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text).join(CheckboxQuestion).filter(Question.id == entry.id).all()
 
-            checkboxQuestionText = session.query(CheckboxQuestion.id, CheckboxQuestion.text, CheckboxOption.id.label('optionNumber'), CheckboxOption.text.label('option')).join(CheckboxOption).filter(CheckboxQuestion.id == entry.id).all()
             checkboxQuestionText = session.query(CheckboxQuestion.id, CheckboxQuestion.text, CheckboxOption.number.label('optionNumber'), CheckboxOption.text.label('option',)).join(CheckboxOption).filter(CheckboxQuestion.id == entry.id).all()
             checkbox += checkboxQuestionText
 
@@ -46,27 +42,22 @@ def show_my_survey(id):
         elif entry.type == "radio":
             questionSet += session.query(Question.type, RadioQuestion.id, RadioQuestion.text).join(RadioQuestion).filter(Question.id == entry.id).all()
 
-            radioQuestionText = session.query(RadioQuestion.id, RadioQuestion.text, RadioOption.id.label('optionNumber'), RadioOption.text.label('option')).join(RadioOption).filter(RadioQuestion.id == entry.id).all()
             radioQuestionText = session.query(RadioQuestion.id, RadioQuestion.text, RadioOption.number.label('optionNumber'), RadioOption.text.label('option')).join(RadioOption).filter(RadioQuestion.id == entry.id).all()
             radio += radioQuestionText
 
             radioOption = session.query(RadioOption.id, RadioOption.number, func.count(RadioAnswer.number).label('counter')).outerjoin(RadioAnswer, (RadioAnswer.question == RadioOption.id) & (RadioAnswer.number == RadioOption.number)).filter(RadioOption.id == entry.id).group_by(RadioOption.id, RadioOption.number).all()
             radioAnswer += radioOption
-<<<<<<< Updated upstream
+
+            singleAnswerRadio+=session.query(Answer.maker,Answer.date,RadioAnswer.number,RadioAnswer.question).join(Answer).filter(RadioAnswer.question == entry.id).all()
         elif entry.type == "file":
             questionSet += session.query(Question.type, FileQuestion.id, FileQuestion.text).join(FileQuestion).filter(Question.id == entry.id).all()
 
             newFileAnswer = session.query(FileAnswer.id, FileAnswer.question, FileAnswer.path, Answer.maker).join(Answer).filter(FileAnswer.question == entry.id).all()
             fileAnswer += newFileAnswer
-    return render_template("mysurvey.html", survey = selectedSurvey, questions = questionSet, checkboxs = checkbox, openAnswers = openAnswer, checkboxoption = checkboxAnswer, radios = radio, radiooption = radioAnswer, file = fileAnswer)
-=======
-
-            singleAnswerRadio+=session.query(Answer.maker,Answer.date,RadioAnswer.number,RadioAnswer.question).join(Answer).filter(RadioAnswer.question == entry.id).all()
-    
+            
     answer = session.query(Answer).filter(Answer.survey == id).all()
     maker= session.query(Answer.maker,func.count(Answer.maker).label('number')).filter(Answer.survey == id).group_by(Answer.maker).all()
-    return render_template("mysurvey.html", survey = selectedSurvey, questions = questionSet, checkboxs = checkbox, openAnswers = openAnswer, checkboxoption = checkboxAnswer, radios = radio, radiooption = radioAnswer,answers=answer,makers=maker,checkMakerAnswer=singleAnswerCheck,radioMakerAnswer=singleAnswerRadio)
->>>>>>> Stashed changes
+    return render_template("mysurvey.html", survey = selectedSurvey, questions = questionSet, checkboxs = checkbox, openAnswers = openAnswer, checkboxoption = checkboxAnswer, radios = radio, radiooption = radioAnswer,answers=answer,makers=maker,checkMakerAnswer=singleAnswerCheck,radioMakerAnswer=singleAnswerRadio, file = fileAnswer)
 
 @myform_bp.route('/disable', methods = ['GET', 'POST'])
 @login_required

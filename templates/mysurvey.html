@@ -37,14 +37,6 @@
                   </div>
             </div>
         </div>
-    </div>
-    <br>
-    {% for q in questions %}
-        <h5>{{ q.text }}</h5>
-        {% if q.type == 'open' %}
-            <br>
-            {% for a in openAnswers if a.question == q.id %}
-                <input type="text" value="{{ a.text }}" style="text-align:center;" readonly></input>
         <div class="row-2">
           <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
@@ -57,13 +49,6 @@
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="summary" role="tabpanel" aria-labelledby="summary-tab">
                 <br>
-            {% endfor %}
-        {% elif q.type == 'checkbox' %}
-            {% for c in checkboxs %}
-                {% if c.id == q.id %}
-                    {% set item_1 = checkboxoption[loop.index-1].counter %}
-                    <span> <input type="checkbox" disabled> <input type = "text" value = "{{c.option}}" style="text-align:center;" readonly> {{item_1}} </span>
-                    <br>
                 {% for q in questions %}
                     <h5>{{ q.text }}</h5>
                     {% if q.type == 'open' %}
@@ -81,36 +66,22 @@
                                 <br>
                             {% endif %}
                         {% endfor %}
-                    {% else %}
+                    {% elif q.type == 'radio' %}
                         {% for c in radios if c.id == q.id %}
                             {% set radio = radiooption[loop.index-1].counter %}
                             <span> <input type="radio" disabled> <textarea style="text-align:center;" rows="1" readonly>{{c.option}}</textarea> {{radio}} </span>
                             <br>
                             <br>
                         {% endfor %}
+                    {% else %}
+                      {% for f in file if f.question == q.id %}
+                        <form action="{{ url_for('myform_bp.download', filename=f.path) }}" method="POST" enctype="multipart/form-data">
+                          <button class="btn btn-primary" type="submit">Download</button>
+                        </form>
+                      {% endfor %}
                     {% endif %}
                     <br>
-<<<<<<< Updated upstream
-                {% endif %}
-            {% endfor %}
-        {% elif q.type == 'radio' %}
-            {% for c in radios if c.id == q.id %}
-                {% set radio = radiooption[loop.index-1].counter %}
-                <span> <input type="radio" disabled> <textarea style="text-align:center;" rows="1" readonly>{{c.option}}</textarea> {{radio}} </span>
-                <br>
-                <br>
-            {% endfor %}
-        {% else %}
-            {% for f in file if f.question == q.id %}
-                <form action="{{ url_for('myform_bp.download', filename=f.path) }}" method="POST" enctype="multipart/form-data">
-                    <button class="btn btn-primary" type="submit">Download</button>
-                </form>
-            {% endfor %}
-        {% endif %}
-        <br>
-    {% endfor %}
-=======
-                {% endfor %}
+                {% endfor %}  
             </div>
             <div class="tab-pane fade" id="individual" role="tabpanel" aria-labelledby="individual-tab">
               <br>
@@ -136,8 +107,6 @@
           </div>
         </div>
     </div>
-    
->>>>>>> Stashed changes
     <form action="/" method="POST">
         <button type="submit" class="btn btn-secondary"> Home page </button>
       </form>
@@ -183,7 +152,7 @@
               {% endif %}
               <br>
             {% endfor %}
-          {% else %}
+          {% elif q.type == 'radio' %}
             {% set count = namespace(value=-1) %}
             {% for s in radioMakerAnswer if (s.question == q.id) and (m.maker == s.maker) %}
               {% set count.value = s.number %}
@@ -201,6 +170,12 @@
                 </label>
               {% endif %}
               <br>
+            {% endfor %}
+          {% else %}
+            {% for f in file if (f.question == q.id) and (f.maker == m.maker) %}
+              <form action="{{ url_for('myform_bp.download', filename=f.path) }}" method="POST" enctype="multipart/form-data">
+                <button class="btn btn-primary" type="submit">Download</button>
+              </form>
             {% endfor %}
           {% endif %}
         {% endfor %}
