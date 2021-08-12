@@ -81,11 +81,8 @@ def downloadCSV(formID):
     questions = session.query(Question).filter(Question.survey == form.id).order_by(Question.id).all()
     answers = session.query(Answer).filter(Answer.survey == form.id).all()
 
-    questionSet = []
     csvQuestion = []
     answerSet = []
-    checkboxOption = []
-    radioOption = []
     for entry in questions:
         if entry.type == 'open':
             openQuestionText = session.query(Question.type, OpenQuestion.id, OpenQuestion.text).join(OpenQuestion).filter(OpenQuestion.id == entry.id).first()

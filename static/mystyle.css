@@ -34,3 +34,7 @@ ul {
 .vertical-center{
     vertical-align: middle;
 }
+
+.horizontal-center{
+    text-align: center;
+}

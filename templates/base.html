@@ -35,8 +35,15 @@
         <title>Home page</title>
     </head>
     <body>
-        <br>
-        <h1 id="header">Welcome in LoHacker!</h1>
+        <nav class="navbar navbar-light bg-light shadow">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">
+                    <img src="{{url_for('static', filename='favicon.png')}}" alt="" width="25" height="25" class="d-inline-block align-text-top">
+                    Progetto Basi di Dati
+                </a>
+            </div>
+          </nav>
+        <!--h1 id="header">Welcome in LoHacker!</h1-->
         {% block body %}
         {% endblock %}
     </body>

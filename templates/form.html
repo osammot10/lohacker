@@ -3,13 +3,16 @@
 {% block body %}
   <div id="rcorners">
       <form action="/form/create" method="POST" id="questionForm">
-        <h2>Title</h2>
-        <input type="text" id="title" name="titleInput" size="40" required>
-        <br>
-        <br>
-        <br>
-        {% if templates != false %}
-          <div class="btn-group" id="createButton">
+		<h2>Title</h2>
+		<div class="row">
+			<div class="col-2"></div>
+			<div class="col">
+				<textarea class="form-control" rows="1" id="title" name="titleInput" cols="" required></textarea>			
+        	<!--input type="text" id="title" name="titleInput" size="40" required-->
+        	<br>
+        	<br>
+        	{% if templates != false %}
+          	<div class="btn-group" id="createButton">
             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="newQuestionButton"> Create new question <span class="caret"></span></button>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" id="open_btn" onclick="createOpenQuestion(this.id)" href="#">Open</a></li>
@@ -17,8 +20,11 @@
               <li><a class="dropdown-item" id="radio_btn" onclick="createRadioQuestion(this.id)" href="#">Radio button</a></li>
               <li><a class="dropdown-item" id="file_btn" onclick="createFileQuestion(this.id)" href="#">File</a></li>
             </ul>
-          </div>
-          <div id="parentDiv"></div>
+          	</div>
+        	<div id="parentDiv"></div>
+			</div>
+		  	<div class="col-2"></div>
+		</div>
         {% else %}
           <div id="parentDiv">
             {% set i = 1 %}

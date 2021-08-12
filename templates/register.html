@@ -5,23 +5,35 @@
         Sign in <br/>        
         <br>
         <form action="/register/send" method="POST">
-            <label><b>First name</b></label>
-            <input name="first_name" type="text">    <!-- TODO email confirmation-->
-            <br>
-            <br>
-            <label><b>Surname</b></label>
-            <input name="surname" type="text">
-            <br>
-            <br>
-            <label><b>Email</b></label>
-            <input name="email" type="text">
-            <br>
-            <br>
-            <label><b>Password</b></label>
-            <input name="password" type="text">
-            <br>
-            <br>
-            <button class="btn btn-primary" type="submit">Register</button>
+            <div class="container">
+                <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label> First name </label>
+                            <input type="firstname" name="first_name" class="form-control" placeholder="First name">
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label> Surname </label>
+                            <input type="surname" name="surname" class="form-control" placeholder="Surname">
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label> Email </label>
+                            <input type="email" name="email" class="form-control" placeholder="Enter email">
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label> Password </label>
+                            <input type="password" name="password" class="form-control" placeholder="Password">
+                        </div>
+                        <br>
+                        <button class="btn btn-primary" type="submit">Register</button>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
+            </div>
         </form>
         <form action="/" method="POST">
             <button type="submit" class="btn btn-secondary"> Home page </button>

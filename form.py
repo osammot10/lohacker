@@ -96,7 +96,7 @@ def create_survey():
                     idRequiredQuestion = newFileQuestion.id
                     j = j + 1
                 elif k == "required":
-                    requiredQuestion = session.query(Question).filter(Question.id ==    idRequiredQuestion).first()
+                    requiredQuestion = session.query(Question).filter(Question.id == idRequiredQuestion).first()
                     requiredQuestion.required = True
                     session.commit()
                 session.commit()         
