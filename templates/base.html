@@ -8,9 +8,12 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='mystyle.css') }}">
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        
 
         <!-- bootstrap css 5-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
 
         <!-- bootstrap 4 css>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"-->
@@ -35,16 +38,45 @@
         <title>Home page</title>
     </head>
     <body>
-        <nav class="navbar navbar-light bg-light shadow">
+        <nav class="navbar navbar-light bg-light shadow border">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">
                     <img src="{{url_for('static', filename='favicon.png')}}" alt="" width="25" height="25" class="d-inline-block align-text-top">
                     Progetto Basi di Dati
                 </a>
             </div>
-          </nav>
-        <!--h1 id="header">Welcome in LoHacker!</h1-->
+        </nav>
+        <br>
+        <br>
         {% block body %}
         {% endblock %}
+        <br>
+        <br>
+        <footer class="bg-dark text-white">
+            <div class="container p-4">
+                <div class="row">
+                    <div class="col-md-3">
+                        <ul class="list-unstyled mb-0 text-start">
+                            <li><h2 class="fw-bold">Members</h2></li>
+                            <li><p class="fw-light">Castellani Mattia</p></li>
+                            <li><p class="fw-light">Pastrello Marco</p></li>
+                            <li><p class="fw-light">Pellizzon Tommaso</p></li>
+                        </ul>
+                    </div>
+                    <div class="col-md text-center">
+                        <h4 class="fw-bold">Progetto di Basi di Dati</h4>
+                    </div>
+                    <div class="col-md-3">
+                        <i class="fab fa-stack-overflow"></i>
+                        <i class="fab fa-slack-hash"></i>
+                        <i class="fab fa-github"></i>
+                        <i class="fab fa-google"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                Università Ca'Foscari
+            </div>
+        </footer>
     </body>
 </html>

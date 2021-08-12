@@ -1,136 +1,178 @@
 {% extends "base.html" %}
 
 {% block body %}
-<div id="rcorners">
-    <div class="container">
-        <div class="row">
-            <div class="col-3"></div>
-            <div class="col">
-                <h1>{{ survey.name }}</h1>
-            </div>
-            <div class="col-3 vertical-center">
-                <button type="button" class="btn btn-secondary btn-sm left" data-bs-toggle="modal" data-bs-target="#linkModal"> Condividi  <img src="{{url_for('static', filename='share.png')}}" width="10" height="10"></button>
-                <form action="{{ url_for('myform_bp.downloadCSV', formID=survey.id) }}" method="POST" enctype="multipart/form-data">
-                    <button type="submit" class="btn btn-secondary btn-sm left"> Download CSV </button>
-                </form>
-                <div class="modal fade" id="linkModal">
-                    <div class="modal-dialog modal-dialog-centered">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title"> {{survey.name}} </h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <input type="text" value="localhost:5000/getsurvey/{{survey.id}}" size="25" readonly>
-                            <button type="button" class="btn btn-primary" id="linkInput" onclick="copy(this.id)"> Copy link </button>
-                            <br>
-                            <br>
-                            <input type="text" value={{survey.id}} readonly>
-                            <button type="button" class="btn btn-primary" id="idInput" onclick="copy(this.id)"> Copy id </button>
-                            <br>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-            </div>
-        </div>
-        <div class="row-2">
-          <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="summary-tab" data-bs-toggle="tab" data-bs-target="#summary" type="button" role="tab" aria-controls="summary" aria-selected="true">Summary</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="individual-tab" data-bs-toggle="tab" data-bs-target="#individual" type="button" role="tab" aria-controls="individual" aria-selected="false">Individual</button>
-            </li>
-          </ul>
-          <div class="tab-content" id="myTabContent">
-            <div class="tab-pane fade show active" id="summary" role="tabpanel" aria-labelledby="summary-tab">
-                <br>
-                {% for q in questions %}
-                    <h5>{{ q.text }}</h5>
-                    {% if q.type == 'open' %}
-                        <br>
-                        {% for a in openAnswers if a.question == q.id %}
-                            <input type="text" value="{{ a.text }}" style="text-align:center;" readonly></input>
-                            <br>
-                        {% endfor %}
-                    {% elif q.type == 'checkbox' %}
-                        {% for c in checkboxs %}
-                            {% if c.id == q.id %}
-                                {% set item_1 = checkboxoption[loop.index-1].counter %}
-                                <span> <input type="checkbox" disabled> <input type = "text" value = "{{c.option}}" style="text-align:center;" readonly> {{item_1}} </span>
-                                <br>
-                                <br>
-                            {% endif %}
-                        {% endfor %}
-                    {% elif q.type == 'radio' %}
-                        {% for c in radios if c.id == q.id %}
-                            {% set radio = radiooption[loop.index-1].counter %}
-                            <span> <input type="radio" disabled> <textarea style="text-align:center;" rows="1" readonly>{{c.option}}</textarea> {{radio}} </span>
-                            <br>
-                            <br>
-                        {% endfor %}
-                    {% else %}
-                      {% for f in file if f.question == q.id %}
-                        <form action="{{ url_for('myform_bp.download', filename=f.path) }}" method="POST" enctype="multipart/form-data">
-                          <button class="btn btn-primary" type="submit">Download</button>
-                        </form>
-                      {% endfor %}
-                    {% endif %}
-                    <br>
-                {% endfor %}  
-            </div>
-            <div class="tab-pane fade" id="individual" role="tabpanel" aria-labelledby="individual-tab">
-              <br>
-              <table id="answersTable" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Number of answers</th>
-                        <th>Answers</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for m in makers %}
-                        <tr>
-                            <td> <a> {{ loop.index }} </a></td>
-                            <td> <a> {{m.number}} </a></td>
-                            <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{m.maker}}">See the answers</button></td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-    </div>
-    <form action="/" method="POST">
-        <button type="submit" class="btn btn-secondary"> Home page </button>
-      </form>
-    <form action="/myform" method="POST">
-        <button type="submit" class="btn btn-secondary"> Back </button>
-    </form>
-</div>
+	<div class="row">
+	<div class="col-1"></div>
+	<div class="col d-flex justify-content-center">
+		<div class="card text-center w-100 shadow rounded">
+			<div class="card-header">
+				<div class="row">
+				<div class="col-3"></div>
+				<div class="col">
+					<h3>{{ survey.name }}</h3>
+				</div>
+				<div class="col-1 vertical-center p-0">
+					<button type="button" class="btn btn-secondary btn-sm left" data-bs-toggle="modal" data-bs-target="#linkModal"><small>Condividi</small> <img src="{{url_for('static', filename='share.png')}}" width="10" height="10"></button>
+					<div class="modal fade" id="linkModal">
+						<div class="modal-dialog modal-dialog-centered">
+							<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title"> {{survey.name}} </h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<input type="text" value="localhost:5000/getsurvey/{{survey.id}}" size="25" readonly>
+								<button type="button" class="btn btn-primary" id="linkInput" onclick="copy(this.id)"> Copy link </button>
+								<br>
+								<br>
+								<input type="text" value={{survey.id}} readonly>
+								<button type="button" class="btn btn-primary" id="idInput" onclick="copy(this.id)"> Copy id </button>
+								<br>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+							</div>
+							</div>
+						</div>
+						</div>
+				</div>
+				<div class="col-2 vertical-center p-0">
+					<form action="{{ url_for('myform_bp.downloadCSV', formID=survey.id) }}" method="POST" enctype="multipart/form-data">
+					<button type="submit" class="btn btn-secondary btn-sm left"><small>Download CSV</small></button>
+				</form>
+				</div>
+			</div>
+			</div>
+			<div class="card-body">
+				<div class="row-2">
+				<ul class="nav nav-tabs" id="myTab" role="tablist">
+					<li class="nav-item" role="presentation">
+					<button class="nav-link active" id="summary-tab" data-bs-toggle="tab" data-bs-target="#summary" type="button" role="tab" aria-controls="summary" aria-selected="true">Summary</button>
+					</li>
+					<li class="nav-item" role="presentation">
+					<button class="nav-link" id="individual-tab" data-bs-toggle="tab" data-bs-target="#individual" type="button" role="tab" aria-controls="individual" aria-selected="false">Individual</button>
+					</li>
+				</ul>
+				<div class="tab-content" id="myTabContent">
+					<div class="tab-pane fade show active" id="summary" role="tabpanel" aria-labelledby="summary-tab">
+						<br>
+						{% for q in questions %}
+							<div class="row">
+							<div class="col-2"></div>
+							<div class="col">
+								<div class="card text-center w-100 shadow rounded">
+								<div class="card-header">
+									<h3>{{q.text}}</h3>
+								</div>
+							{% if q.type == 'open' %}
+								{% for a in openAnswers if a.question == q.id %}
+								<div class="card-body justify-content-center">
+									<textarea class="form-control" rows="1" readonly>{{a.text}}</textarea>
+								</div>
+								{% endfor %}
+
+							{% elif q.type == 'checkbox' %}
+								{% for c in checkboxs %}
+									{% if c.id == q.id %}
+										{% set item_1 = checkboxoption[loop.index-1].counter %}
+										<div class="card-body justify-content-center">
+											<div class="input-group">
+												<div class="input-group-text">
+													<input type="checkbox" class="form-check-input mt-0" disabled>
+												</div>
+												<textarea class="form-control" rows="1" readonly>{{c.option}}</textarea>
+												<span class="input-group-text">{{item_1}}</span>
+											</div>
+										</div>
+									{% endif %}
+								{% endfor %}
+							{% elif q.type == 'radio' %}
+								{% for c in radios if c.id == q.id %}
+									{% set radio = radiooption[loop.index-1].counter %}
+									<div class="card-body justify-content-center">
+									<div class="input-group">
+										<div class="input-group-text">
+											<input type="radio" class="form-check-input mt-0" disabled>
+										</div>
+										<textarea class="form-control" rows="1" readonly>{{c.option}}</textarea>
+										<span class="input-group-text">{{radio}}</span>
+									</div>
+									</div>
+								{% endfor %}
+							{% else %}
+							{% for f in file if f.question == q.id %}
+								<div class="card-body justify-content-center">
+									<form action="{{ url_for('myform_bp.download', filename=f.path) }}" method="POST" enctype="multipart/form-data">
+										<button class="btn btn-primary rounded-pill" type="submit">Download {{f.path}}</button>
+									</form>
+								</div>
+							{% endfor %}
+							{% endif %}
+								</div>
+							</div>
+							<div class="col-2"></div>
+							</div>
+							<br>
+						{% endfor %}  
+					</div>
+					<div class="tab-pane fade" id="individual" role="tabpanel" aria-labelledby="individual-tab">
+					<br>
+					<table id="answersTable" class="table table-striped">
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Number of answers</th>
+								<th>Answers</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for m in makers %}
+								<tr>
+									<td> <a> {{ loop.index }} </a></td>
+									<td> <a> {{m.number}} </a></td>
+									<td><button type="button" class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modal{{m.maker}}">See the answers</button></td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					</div>
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-1"></div>
+	</div>
+	<br>
+	<div class="container">
+		<div class="row text-center">
+			<form action="/" method="POST">
+				<button type="submit" class="btn btn-secondary rounded-pill w-25"> Home page </button>
+			</form>
+		</div>
+		<div class="row text-center">
+			<form action="/myform" method="POST">
+				<button type="submit" class="btn btn-secondary rounded-pill w-25"> Back </button>
+			</form>
+		</div>
+	</div>
 
 {% for m in makers %}
 <div class="modal fade" id="modal{{m.maker}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-scrollable modal-xl">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Risposte</h5>
+        <h2 class="modal-title w-100 text-center" id="exampleModalLabel">Risposte</h2>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-body mx-auto">
         {% for q in questions %}
-          <h5>{{ q.text }}</h5>
+          <h4 class="text-center">{{ q.text }}</h4>
           {% if q.type == 'open' %}
-          {% for a in openAnswers if (a.question == q.id) and (a.maker == m.maker) %}
-          <input type="text" value="{{ a.text }}" style="text-align:center;" disabled readonly></input>
-          <br>
-          {% endfor %}
+          	{% for a in openAnswers if (a.question == q.id) and (a.maker == m.maker) %}
+				<textarea class="form-control w-100 text-center" rows="1" readonly>{{a.text}}</textarea>
+				<br>
+          	{% endfor %}
           {% elif q.type == 'checkbox'%}
             {% for c in checkboxs if (c.id == q.id)%}
               {% set count = namespace(value=0) %}
@@ -140,15 +182,19 @@
                 {% endif %}
               {% endfor %}
               {% if count.value == 1 %}
-                <input class="form-check-input" type="checkbox" value="" id="check_c.id_c.option" checked disabled>
-                  <label class="form-check-label" for="check_c.id_c.option">
-                    {{c.option}}
-                  </label>
+			  	<div class="input-group text-center">
+					<div class="input-group-text">
+						<input class="form-check-input" type="checkbox" value="" id="check_c.id_c.option" checked disabled>
+					</div>
+						<textarea class="form-control" rows="1" readonly>{{c.option}}</textarea>
+				</div>
               {% else %}
-                <input class="form-check-input" type="checkbox" value="" id="check_c.id_c.option" disabled>
-                  <label class="form-check-label" for="check_c.id_c.option">
-                    {{c.option}}
-                  </label>
+				<div class="input-group text-center">
+					<div class="input-group-text">
+						<input class="form-check-input" type="checkbox" value="" id="check_c.id_c.option" disabled>
+					</div>
+						<textarea class="form-control" rows="1" readonly>{{c.option}}</textarea>
+				</div>
               {% endif %}
               <br>
             {% endfor %}
@@ -159,23 +205,29 @@
             {% endfor %}
             {% for c in radios if (c.id == q.id)%}
               {% if count.value != c.optionNumber %}
-                <input class="form-check-input" type="radio" name="flexRadioDisabled" id="radio_c.id_c.option" disabled>
-                <label class="form-check-label" for="radio_c.id_c.option">
-                  {{c.option}}
-                </label>
+				<div class="input-group text-center">
+					<div class="input-group-text">
+						<input class="form-check-input" type="radio" value="" id="check_c.id_c.option" disabled>
+					</div>
+						<textarea class="form-control" rows="1" readonly>{{c.option}}</textarea>
+				</div>
               {% else %}
-                <input class="form-check-input" type="radio" name="flexRadioDisabled" id="radio_c.id_c.option" checked disabled>
-                <label class="form-check-label" for="radio_c.id_c.option">
-                  {{c.option}}
-                </label>
+				<div class="input-group text-center">
+					<div class="input-group-text">
+						<input class="form-check-input" type="radio" value="" id="check_c.id_c.option" checked disabled>
+					</div>
+						<textarea class="form-control" rows="1" readonly>{{c.option}}</textarea>
+				</div>
               {% endif %}
               <br>
             {% endfor %}
           {% else %}
             {% for f in file if (f.question == q.id) and (f.maker == m.maker) %}
-              <form action="{{ url_for('myform_bp.download', filename=f.path) }}" method="POST" enctype="multipart/form-data">
-                <button class="btn btn-primary" type="submit">Download</button>
-              </form>
+				<div class="row text-center m-0">
+					<form action="{{ url_for('myform_bp.download', filename=f.path) }}" method="POST" enctype="multipart/form-data">
+						<button class="btn btn-primary rounded-pill w-25" type="submit"> Download </button>
+					</form>
+				</div>
             {% endfor %}
           {% endif %}
         {% endfor %}

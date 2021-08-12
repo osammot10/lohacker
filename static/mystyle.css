@@ -38,3 +38,7 @@ ul {
 .horizontal-center{
     text-align: center;
 }
+
+* {
+    max-width: 100%;
+}

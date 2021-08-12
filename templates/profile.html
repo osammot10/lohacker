@@ -1,28 +1,41 @@
 {% extends "base.html" %}
 
 {% block body %}
-    <br>
-    <!--TODO: vedere se si può sostituire con una card-->
-    <div id="rcorners" style="padding-left: 40%; padding-right: 40%;">
-        <h5> My account </h5>
-        <form id="nospaceform" action="/form" method="POST">
-            <button class="btn btn-primary w-100 p-3 rounded-0" type="submit" name="formButton" value="normal"> Create form </button>
-        </form>
-        <form id="nospaceform" action="/form" method="POST">
-            <button class="btn btn-primary w-100 p-3 rounded-0" type="button" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"> Create form by template </button>
-        </form> 
-        <form id="nospaceform" action="/myform" method="POST">
-            <button class="btn btn-primary w-100 p-3 rounded-0" type="submit"> My form </button>
-        </form>    
-        <form id="nospaceform" action="/template" method="POST">
-            <button class="btn btn-primary w-100 p-3 rounded-0" type="submit"> Create template </button>
-        </form>
-        <form id="nospaceform" action="/answer" method="POST">
-            <button class="btn btn-primary w-100 p-3 rounded-0" type="submit"> Answer to a form </button>
-        </form>
-        <form id="nospace" action="/logout" method="POST">
-            <button class="btn btn-primary w-100 p-3 rounded-0" type="submit"> Logout </button>
-        </form>
+    <div class="row">
+        <div class="col-2"></div>
+        <div class="col d-flex justify-content-center">
+            <div class="card text-center w-50 shadow rounded">
+                <div class="card-header">
+                <h3>Il mio account</h3>
+                </div>
+                <div class="card-body">
+                    <form id="nospaceform" action="/form" method="POST">
+                        <button class="btn btn-primary w-100 p-3 rounded-pill" type="submit" name="formButton" value="normal"> Crea nuovo form </button>
+                    </form>
+                    <br>
+                    <form id="nospaceform" action="/form" method="POST">
+                        <button class="btn btn-primary w-100 p-3 rounded-pill" type="button" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"> Crea form usando un template </button>
+                    </form> 
+                    <br>
+                    <form id="nospaceform" action="/myform" method="POST">
+                        <button class="btn btn-primary w-100 p-3 rounded-pill" type="submit"> I miei form </button>
+                    </form> 
+                    <br>   
+                    <form id="nospaceform" action="/template" method="POST">
+                        <button class="btn btn-primary w-100 p-3 rounded-pill" type="submit"> Crea nuovo template </button>
+                    </form>
+                    <br>
+                    <form id="nospaceform" action="/answer" method="POST">
+                        <button class="btn btn-primary w-100 p-3 rounded-pill" type="submit"> Rispondi a un form </button>
+                    </form>
+                    <br>
+                    <form id="nospace" action="/logout" method="POST">
+                        <button class="btn btn-primary w-100 p-3 rounded-pill" type="submit"> Logout </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-2"></div>
     </div>
 
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
