@@ -95,12 +95,11 @@ def actionTemplate():
         return redirect(url_for('form_bp.show_form_create_page', id = templateId))
     elif action == 'visualize':
         question = getAllFormQuestion(templateId)
-        checkboxOption = getAllFormRadioOptions(templateId)
-        radioOption = getAllFormRadioOptions
+        checkboxOption = getAllFormCheckboxOptions(templateId)
+        radioOption = getAllFormRadioOptions(templateId)
         templateToShow = getTemplate(templateId)
         #templateQuestion = getForm
         n = len(getFormQuestions(templateId))
-
         #for entry in templateQuestion:
         #    if entry.type == 'open':
         #        question += session.query(Question.type, Question.required, OpenQuestion.id, OpenQuestion.text).join(OpenQuestion).filter(OpenQuestion.id == entry.id).all()
@@ -133,7 +132,7 @@ def saveTemplate(id):
         except Exception as e:
             return render_template("error.html", error = e, message="")
 
-        newTemplate = templateCreation(templateTitle)
+        newTemplate = createNewTemplate(templateTitle)
         #newTemplate = Survey(maker = current_user.get_id(), name = templateTitle, date = date.today(), template = True, active = True, deleted = False)
         #session.add(newTemplate)
         #session.commit()

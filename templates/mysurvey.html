@@ -21,13 +21,35 @@
 								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 							</div>
 							<div class="modal-body">
-								<input type="text" value="localhost:5000/getsurvey/{{survey.id}}" size="25" readonly>
-								<button type="button" class="btn btn-primary" id="linkInput" onclick="copy(this.id)"> Copy link </button>
-								<br>
-								<br>
-								<input type="text" value={{survey.id}} readonly>
-								<button type="button" class="btn btn-primary" id="idInput" onclick="copy(this.id)"> Copy id </button>
-								<br>
+								<div class="row">
+									<div class="col-sm">
+										<div class="form-group mb-3">
+												<label class="form-label"> Link </label>
+												<div class="row">
+													<div class="col-8">
+														<input type="link" class="form-control" value="{{link}}" id="linkInputText" readonly>
+													</div>
+													<div class="col">
+														<button type="button" class="btn btn-primary rounded-pill" id="linkInput" onclick="copy(this.id)"> Copia link </button>
+													</div>
+												</div>
+										</div>
+										<br>
+										<hr class="solid">
+										<br>
+										<div class="form-group mb-3">
+											<label class="form-label"> ID </label>
+											<div class="row">
+												<div class="col-8">
+													<input type="text" class="form-control" value="{{idForm}}" id="idInputText" readonly>
+												</div>
+												<div class="col">
+													<button type="button" class="btn btn-primary rounded-pill" id="idInput" onclick="copy(this.id)"> Copia id </button>
+												</div>
+											</div>                                        
+										</div>
+									</div>
+								</div>
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>

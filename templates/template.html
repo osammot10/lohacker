@@ -1,34 +1,31 @@
 {% extends "base.html" %}
 
 {% block body %}
-  <div id="rcorners">
-      <form action="/template/create" method="POST" id="questionForm">
-        <h2>Title</h2>
-        <div class="row">
-          <div class="col-2"></div>
-            <div class="col">
-              <input type="text" id="title" name="titleInput" size="40">
-              <br>
-              <br>
-              <br>
-              <div class="btn-group" id="createButton">
-                  <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> Create new question <span class="caret"></span></button>
-                  <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" id="open_btn" onclick="createOpenQuestion(this.id)" href="#">Open</a></li>
-                      <li><a class="dropdown-item" id="check_btn" onclick="createCheckboxQuestion(this.id)" href="#">Checkbox</a></li>
-                      <li><a class="dropdown-item" id="radio_btn" onclick="createRadioQuestion(this.id)" href="#">Radio button</a></li>
-                      <li><a class="dropdown-item" id="file_btn" onclick="createFileQuestion(this.id)" href="#">File</a></li>
-                  </ul>
-              </div>
-              <div id="parentDiv"></div>
-              <br>
-            </div>
-          <div class="col-2"></div>
+  <form action="/template/create" method="POST" id="questionForm">
+    <div class="row">
+      <div class="col-2"></div>
+        <div class="col">
+          <h2>Titolo form</h2>
+          <textarea class="form-control" rows="1" id="title" name="titleInput" required></textarea>
+          <br>
+          <br>
+          <div class="btn-group" id="createButton">
+              <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> Create new question <span class="caret"></span></button>
+              <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" id="open_btn" onclick="createOpenQuestion(this.id)" href="#">Open</a></li>
+                  <li><a class="dropdown-item" id="check_btn" onclick="createCheckboxQuestion(this.id)" href="#">Checkbox</a></li>
+                  <li><a class="dropdown-item" id="radio_btn" onclick="createRadioQuestion(this.id)" href="#">Radio button</a></li>
+                  <li><a class="dropdown-item" id="file_btn" onclick="createFileQuestion(this.id)" href="#">File</a></li>
+              </ul>
+          </div>
+          <div id="parentDiv"></div>
+          <br>
         </div>
-      </form>
-      <form action="/" method="POST">
-        <button type="submit" class="btn btn-secondary"> Home page </button>
-      </form>
-  </div>
+      <div class="col-2"></div>
+    </div>
+  </form>
+  <form action="/" method="POST">
+    <button type="submit" class="btn btn-secondary"> Home page </button>
+  </form>
   <meta id="n" data-name="{{number}}">
 {% endblock %}

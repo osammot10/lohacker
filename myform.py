@@ -34,6 +34,8 @@ def show_my_survey(id):
 
         checkbox = getAllFormCheckboxOptions(id)
         checkboxAnswer = getAllCheckboxAnswers(id)
+        for r in checkboxAnswer:
+            print(r.number, r.counter)
         singleAnswerCheck = getAllSingleCheckboxAnswer(id)
 
         radio = getAllFormRadioOptions(id)
@@ -85,7 +87,8 @@ def show_my_survey(id):
         maker = getMakers(id)
     except Exception as e:
         return render_template("error.html", error = e, message = "Errore lettura utenti che hanno risposto al form")
-    return render_template("mysurvey.html", survey = selectedSurvey, questions = questionSet, checkboxs = checkbox, openAnswers = openAnswer, checkboxoption = checkboxAnswer, radios = radio, radiooption = radioAnswer,answers=answer,makers=maker,checkMakerAnswer=singleAnswerCheck,radioMakerAnswer=singleAnswerRadio, file = fileAnswer)
+    url = "localhost:5000/getsurvey/"+id
+    return render_template("mysurvey.html", survey = selectedSurvey, questions = questionSet, checkboxs = checkbox, openAnswers = openAnswer, checkboxoption = checkboxAnswer, radios = radio, radiooption = radioAnswer,answers=answer,makers=maker,checkMakerAnswer=singleAnswerCheck,radioMakerAnswer=singleAnswerRadio, file = fileAnswer, link = url, idForm = id)
 
 @myform_bp.route('/disable', methods = ['GET', 'POST'])
 @login_required
@@ -158,7 +161,10 @@ def downloadCSV(formID):
                 answerSet.append(option)
             elif question.type == "radio":
                 radioAnswer = session.query(RadioOption.text, RadioAnswer.number).filter(RadioAnswer.id == answer.id).filter(RadioAnswer.question == question.id).filter(RadioOption.id == RadioAnswer.question).filter(RadioOption.number == RadioAnswer.number).first()
-                answerSet.append(radioAnswer.text)
+                if not radioAnswer:
+                    answerSet.append("|")
+                else:
+                    answerSet.append(radioAnswer.text)
             elif question.type == "file":
                 answerSet.append(" / ")
         writer.writerow(answerSet)

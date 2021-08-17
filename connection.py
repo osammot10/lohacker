@@ -394,7 +394,6 @@ def questionsInsertion(form, formRequest):
                     idRequiredQuestion = newQuestion.id
                     i = 1
                 elif k == 'checkboxtext':
-                    print(v)
                     newCheckboxOption = CheckboxOption(id = str(id_check), number = i, text = v)
                     session.add(newCheckboxOption)
                     i = i + 1
@@ -453,7 +452,7 @@ def createNewOpenAnswer(questionID, content, answerID):
 
 def createNewCheckboxAnswer(questionID, optionSelected, answerID):
     try:
-        newCheckboxAnswer = CheckboxAnswer(question = questionID, number = optionSelected, id = str(answerID.id))
+        newCheckboxAnswer = CheckboxAnswer(question = questionID, number = optionSelected, id = str(answerID))
         session.add(newCheckboxAnswer)
         session.commit()
     except Exception as e:
@@ -462,7 +461,7 @@ def createNewCheckboxAnswer(questionID, optionSelected, answerID):
 
 def createNewRadioAnswer(questionID, optionSelected, answerID):
     try:
-        newRadioAnswer = RadioAnswer(question = questionID, number = optionSelected, id = str(answerID.id))
+        newRadioAnswer = RadioAnswer(question = questionID, number = optionSelected, id = str(answerID))
         session.add(newRadioAnswer)
         session.commit()
     except Exception as e:
@@ -480,9 +479,7 @@ def createNewFileAnswer(value, questionID, answerID):
             extension = file.filename.split(".")[1]
             newName = "fileQ"+str(questionID)+"A"+str(answerID)+"."+extension
             try:
-                print("prova")
                 newFileAnswer = FileAnswer(id = str(answerID), question = questionID, path = newName)
-                print("Inserito")
                 session.add(newFileAnswer)
                 session.commit()
             except Exception as e:
