@@ -15,7 +15,7 @@ app = Flask(__name__)
 Base = declarative_base()
 Base.metadata.schema = 'form'
 
-engine = create_engine('postgresql://postgres:postgres@localhost/lohacker')
+engine = create_engine('postgresql://postgres:postgres@localhost/postgres')
 metadata = MetaData()
 
 Session = sessionmaker(bind=engine)
