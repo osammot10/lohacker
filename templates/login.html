@@ -1,42 +1,43 @@
 {% extends "base.html" %}
 
-{% block body %}       
-    <div class="col-2"></div>
-    <div class="col d-flex justify-content-center">
-        <div class="card text-center w-50 shadow rounded">
-            <div class="card-header">
-            <h3>Login</h3>
-            </div>
-            <div class="card-body">
-                <form action="/login/access" method="POST">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-2"></div>
-                            <div class="col-sm">
-                                <div class="form-group">
-                                    <label>Email address</label>
-                                    <input type="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email" name="email">
+{% block body %}
+    <div class="row m-auto">    
+        <div class="col-2"></div>
+        <div class="col d-flex justify-content-center">
+            <div class="card text-center w-100 shadow rounded">
+                <div class="card-header">
+                <h3>Login</h3>
+                </div>
+                <div class="card-body">
+                    <form action="/login/access" method="POST">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label>Email address</label>
+                                        <input type="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email" name="email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="pwd" required>
+                                    </div>
+                                    <br>
+                                    <button class="btn btn-primary rounded-pill w-50" type="submit"> Submit </button>
                                 </div>
-                                <div class="form-group">
-                                    <label>Password</label>
-                                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="pwd">
-                                </div>
-                                <br>
-                                <button class="btn btn-primary rounded-pill w-50" type="submit"> Submit </button>
+                                <div class="col-sm-2"></div>
                             </div>
-                            <div class="col-sm-2"></div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
+        <div class="col-2"></div>
     </div>
-    <div class="col-2"></div>
     <br>
     <div class="row text-center">
         <form action="/" method="POST">
-            <button type="submit" class="btn btn-secondary w-20 rounded-pill"> Home page </button>
+            <button type="submit" class="btn btn-secondary w-25 rounded-pill"> Home page </button>
         </form>
-    </div>   
-
+    </div>
 {% endblock %}

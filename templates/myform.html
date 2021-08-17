@@ -1,58 +1,69 @@
 {% extends "base.html" %}
 
 {% block body %}
-<div id="rcorners">
-    <h3>Hello {{ current_user.first_name }}, your forms are:</h3>
+
+    <div class="row m-auto">
+        <div class="col-2"></div>
+        <div class="col d-flex justify-content-center">
+            <div class="card text-center w-100 shadow rounded">
+                <div class="card-header">
+                <h3>I tuoi form sono:</h3>
+                </div>
+                <div class="card-body">
+                    <form action="/disable" method="POST">
+                        <table id="survey" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Date of creation</th>
+                                    <th>Disable</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for s in surveys %}
+                                    <tr>
+                                        <td> <a href="myform/{{ s.id }}"> {{s.name}} </a></td>
+                                        <td> {{s.date}} </td>
+                                        <td>
+                                            {% if s.active == true %}
+                                                <button type="submit" class="btn btn-success btn-sm" name="action" value="active {{ s.id }}"> Active </button>
+                                            {% else %}
+                                                <button type="submit" class="btn btn-danger btn-sm" name="action" value="disabled {{ s.id }}"> Disabled </button>
+                                            {% endif %}
+                                        </td>
+                                        <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{s.id}}"> Delete </button></td>
+                                        <div class="modal fade" id="deleteModal{{s.id}}">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                <h5 class="modal-title"><strong> Attenzione! </strong></h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                <h6> Sicuro di eliminare il form? </h6>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                                                    <button type="submit" class="btn btn-primary" name = "action" value = "delete {{ s.id }}">Conferma</button>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-2"></div>
+    </div>
     <br>
-    <form action="/disable" method="POST">
-        <table id="survey" class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Date of creation</th>
-                    <th>Disable</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for s in surveys %}
-                    <tr>
-                        <td> <a href="myform/{{ s.id }}"> {{s.name}} </a></td>
-                        <td> {{s.date}} </td>
-                        <td>
-                            {% if s.active == true %}
-                                <button type="submit" class="btn btn-success btn-sm" name="action" value="active {{ s.id }}"> Active </button>
-                            {% else %}
-                                <button type="submit" class="btn btn-danger btn-sm" name="action" value="disabled {{ s.id }}"> Disabled </button>
-                            {% endif %}
-                        </td>
-                        <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{s.id}}"> Delete </button></td>
-                        <div class="modal fade" id="deleteModal{{s.id}}">
-                            <div class="modal-dialog modal-dialog-centered">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <h5 class="modal-title"><strong> Attenzione! </strong></h5>
-                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                  <h6> Sicuro di eliminare il form? </h6>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-                                    <button type="submit" class="btn btn-primary" name = "action" value = "delete {{ s.id }}">Conferma</button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </form>
     <form action="/" method="POST">
-        <button type="submit" class="btn btn-secondary"> Home page </button>
+        <button type="submit" class="btn btn-secondary rounded-pill"> Home page </button>
     </form>
-</div>
 
 <script>
     $(document).ready(function() {

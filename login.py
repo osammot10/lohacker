@@ -4,38 +4,49 @@ login_bp = Blueprint('login_bp',__name__)
 
 @login_bp.route('/login', methods = ['GET', 'POST'])
 def show_login_page():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    else:
-        return render_template("login.html")
+    try:
+        if current_user.is_authenticated:
+            return redirect(url_for('home'))
+        else:
+            return render_template("login.html")
+    except Exception as e:
+        return render_template("error.html", error = e, message = "Errore, non è possibile verificare se l'utente è auntenticato")
 
 @login_bp.route('/login/access', methods = ['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        e = request.form['email']
-        if e != "":
-            rs = session.query(Utenti.password).filter(Utenti.email==e)
-            if rs.first() is not None:
-                real_pwd = rs.first()[0]
-                if request.form['pwd'] == real_pwd:
-                    user = get_user_by_email(request.form['email'])
-                    login_user(user)
-                    return redirect(url_for('login_bp.private'))
-                else:
-                    return render_template("wrongpassword.html")
+        try:
+            email = request.form['email']
+        except Exception as e:
+            return render_template("error.html", error = e, message = "Errore: campo email mancante")
+        if email != "":
+            userPassword = getUserPassword(email)
+            if userPassword is not None:
+                userPassword = userPassword[0]
             else:
                 return render_template("wrongemail.html")
+            try:
+                if userPassword is not None:
+                    if request.form['pwd'] == userPassword:
+                        user = get_user_by_email(request.form['email'])
+                        login_user(user)
+                        return redirect(url_for('login_bp.private'))
+                    else:
+                        return render_template("wrongpassword.html")
+                else:
+                    return render_template("wrongemail.html")
+            except Exception as e:
+                return render_template("error.html", error = e, message = "Errore: la password è None")
         else:
             return render_template("wrongemail.html")
-
     else:
         return redirect(url_for('login_bp.show_login_page'))
 
 @login_bp.route('/private')
 @login_required
 def private():
-    t = session.query(Survey).filter(Survey.maker == current_user.get_id()).filter(Survey.template == True).filter(Survey.deleted == False).all()
-    return render_template("profile.html", templates = t)
+    #forms = session.query(Survey).filter(Survey.maker == current_user.get_id()).filter(Survey.template == True).filter(Survey.deleted == False).all()
+    return render_template("profile.html", templates = getAllMyTemplates())
 
 @login_bp.route('/register', methods = ['GET', 'POST'])
 def show_register_page():
@@ -43,10 +54,11 @@ def show_register_page():
 
 @login_bp.route('/register/send', methods = ['GET', 'POST'])
 def register():
-    if request.form['email'] is not None and request.form['email'] != "" and request.form['password'] is not None and request.form['password'] != "" and request.form['first_name'] is not None and request.form['first_name'] != "" and request.form['surname'] is not None and request.form['surname'] != "":
-        user = Utenti(email = request.form['email'], password = request.form['password'], first_name = request.form['first_name'], surname = request.form['surname'])
-        session.add(user)
-        session.commit()
-        return redirect(url_for('login_bp.show_login_page'))
-    else:
-        return render_template("wrongcredentials.html")
+    try:
+        if request.form['email'] is not None and request.form['email'] != "" and request.form['password'] is not None and request.form['password'] != "" and request.form['first_name'] is not None and request.form['first_name'] != "" and request.form['surname'] is not None and request.form['surname'] != "":
+            createNewUser(request.form['email'], request.form['password'], request.form['first_name'], request.form['surname'])
+            return redirect(url_for('login_bp.show_login_page'))
+        else:
+            return render_template("wrongcredentials.html")
+    except Exception as e:
+        return render_template("error.html", error = e, message = "Errore: non sono stati compilati tutti i campi")

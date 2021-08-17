@@ -1,30 +1,60 @@
 {% extends "base.html" %}
 
 {% block body %}
-<div class="container" id="rcorners">
-    <div class="row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-8">
-            <form action="/redirect" method="POST">
-                <label>Insert link: </label>
-                <input type="text" size="25" name="link">
-                <button type="submit" class="btn btn-primary btn-sm"> Send </button>
-                <br>
-                <br>
-                <label>or</label>
-                <br>
-                <br>
-                <label>Insert id:</label>
-                <input type="text" name="id">
-                <button type="submit" class="btn btn-primary btn-sm"> Send </button>
-            </form>
-            <br>
-            <br>
-            <form action="/" method="POST">
-                <button type="submit" class="btn btn-secondary"> Home page </button>
-            </form>
+    <div class="row m-auto">    
+        <div class="col-2"></div>
+        <div class="col d-flex justify-content-center">
+            <div class="card text-center w-100 shadow rounded">
+                <div class="card-header">
+                <h3>Rispondi!</h3>
+                </div>
+                <div class="card-body">
+                    <form action="/redirect" method="POST">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm">
+                                    <div class="form-group mb-3">
+                                            <label class="form-label"> Inserisci link </label>
+                                            <div class="row">
+                                                <div class="col-9">
+                                                    <input type="link" class="form-control" name="link" placeholder="Inserire link">
+                                                </div>
+                                                <div class="col">
+                                                    <button type="submit" class="btn btn-primary rounded-pill"> Send </button>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <br>
+                                    <hr class="solid">
+                                    <br>
+                                    <div class="form-group mb-3">
+                                        <label class="form-label"> Inserisci id </label>
+                                        <div class="row">
+                                            <div class="col-9">
+                                                <input type="id" class="form-control" name="id" placeholder="Inserire id">
+                                            </div>
+                                            <div class="col">
+                                                <button type="submit" class="btn btn-primary rounded-pill"> Send </button>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                    <br>
+                                    <button class="btn btn-primary rounded-pill w-50" type="submit"> Submit </button>
+                                </div>
+                                <div class="col-sm-2"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="col-sm-2"></div>
+        <div class="col-2"></div>
     </div>
-</div>
+    <br>
+    <div class="row text-center">
+        <form action="/" method="POST">
+            <button type="submit" class="btn btn-secondary w-25 rounded-pill"> Home page </button>
+        </form>
+    </div>
 {% endblock %}

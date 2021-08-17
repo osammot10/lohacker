@@ -81,24 +81,6 @@ function createQButton(){
 // Function for the creation of the div container where the new question will be located (it is used for the no-first question, but when anotherone is already existing)
 function createDiv(idDiv){
 	var parentDiv = document.getElementById("parentDiv");
-	/*var container = document.createElement("div");
-  container.setAttribute("class","container");
-  container.setAttribute("id","container"+counter);
-  
-  var row = document.createElement("div");
-  row.setAttribute("class","row");
-  container.appendChild(row);
-  
-  var sxDiv = document.createElement("div");
-  sxDiv.setAttribute("class","col-sm-8");
-  sxDiv.setAttribute("id","centralDiv");
-  
-  var dxDiv = document.createElement("div");
-  dxDiv.setAttribute("class","col-sm-4");
-  dxDiv.setAttribute("id","centralDiv");
-  
-  row.appendChild(sxDiv);
-  row.appendChild(dxDiv);*/
 
   var card = createCard()
   
@@ -109,7 +91,7 @@ function createDiv(idDiv){
   }
   
   parentDiv.insertBefore(card,nextDiv);
-  parentDiv.insertBefore(document.createElement("br"), card);
+  //parentDiv.insertBefore(document.createElement("br"), card);
   
   return card;
 }
@@ -253,18 +235,15 @@ function deleteQuestion(idBtn){
     n_question--;
   }
   if(!n_question){
-    document.getElementById("sendButton").previousSibling.remove();
+    //document.getElementById("sendButton").previousSibling.remove();
+    document.getElementById("questionForm").insertBefore(b,document.getElementById("sendButton"));
     document.getElementById("sendButton").remove();
-    var div = document.getElementById("rcorners");
-    var form = div.childNodes[1];
-    var divBtn = form.childNodes[11];
-    form.insertBefore(b,divBtn);
   }
 }
 
 function createCard(){
   var card = document.createElement("div");
-  card.setAttribute("class","card shadow rounded");
+  card.setAttribute("class","card shadow rounded m-3");
   card.setAttribute("id", "container"+counter);
   parentDiv.appendChild(card);
 
@@ -291,12 +270,11 @@ function createCard(){
   row.appendChild(sxDiv);
 
   var centralDiv = document.createElement("div");
-  centralDiv.setAttribute("class", "col-auto");
+  centralDiv.setAttribute("class", "col-auto p-1");
   row.appendChild(centralDiv);
 
   var dxDiv = document.createElement("div");
-  dxDiv.setAttribute("class","col-auto");
-  dxDiv.setAttribute("id","centralDiv");
+  dxDiv.setAttribute("class","col-auto p-1");
   row.appendChild(dxDiv);
 
   return card;
@@ -508,7 +486,7 @@ function createFirstCheckboxOption(){
   checkbox.setAttribute("class", "form-check-input");
   checkbox.setAttribute("type", "checkbox");
   checkbox.setAttribute("id", "check"+checkcounter);
-  checkbox.setAttribute("name",counter+" checkbox "+checkcounter)
+  checkbox.setAttribute("name",counter+" checkbox");
   checkbox.disabled = true;
   checkboxDiv.appendChild(checkbox);
   
@@ -516,7 +494,7 @@ function createFirstCheckboxOption(){
   textarea.setAttribute("class", "form-control");
   textarea.setAttribute("rows", "1");
   textarea.setAttribute('id', 'chechtext'+checkcounter);
-  textarea.setAttribute("name",counter+" checkboxtext "+checkcounter)
+  textarea.setAttribute("name",counter+" checkboxtext " + checkcounter);
   checkboxDiv.appendChild(textarea);
   
   var addButton = document.createElement("button");
@@ -575,7 +553,7 @@ function addcheck(n){
   checkbox.setAttribute("class", "form-check-input");
   checkbox.setAttribute("type", "checkbox");
   checkbox.setAttribute("id", "check" + checkcounter);
-  checkbox.setAttribute("name", questionID + " checkbox " + checkcounter)
+  checkbox.setAttribute("name", questionID + " checkbox");
   checkbox.disabled = true;
   checkboxDiv.appendChild(checkbox);
 
@@ -833,27 +811,6 @@ function addRadio(n){
 
 function deleteRadio(n){
   document.getElementById("radioRow " + n).remove();
-  /*var radio = document.getElementById("radio"+n);
-  var text = radio.nextSibling;
-  var span1 = text.nextSibling;
-  var span2 = span1.nextSibling;
-  var span3 = span2.nextSibling;
-  var span4 = span3.nextSibling;
-  var btn = span4.nextSibling;
-  var br1 = btn.nextSibling;
-  var br2 = br1.nextSibling;
-  var br3 = br2.nextSibling;
-
-  radio.remove();
-  text.remove();
-  span1.remove();
-  span2.remove();
-  span3.remove();
-  span4.remove();
-  btn.remove();
-  br1.remove();
-  br2.remove();
-  br3.remove();*/
 }
 
 // File upload question
@@ -937,7 +894,7 @@ function createSendButton(){
   sendButton.innerHTML = " Submit ";
 
   questionForm.appendChild(sendButton);
-  questionForm.insertBefore(document.createElement("br"), document.getElementById("sendButton"));
+  //questionForm.insertBefore(document.createElement("br"), document.getElementById("sendButton"));
 }
 
 // Functions called by the onclick trigger of the DOM elements for the creation or modification of the questions of a template

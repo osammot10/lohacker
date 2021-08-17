@@ -225,7 +225,7 @@
             {% for f in file if (f.question == q.id) and (f.maker == m.maker) %}
 				<div class="row text-center m-0">
 					<form action="{{ url_for('myform_bp.download', filename=f.path) }}" method="POST" enctype="multipart/form-data">
-						<button class="btn btn-primary rounded-pill w-25" type="submit"> Download </button>
+						<button class="btn btn-primary rounded-pill w-100" type="submit"> Download </button>
 					</form>
 				</div>
             {% endfor %}
