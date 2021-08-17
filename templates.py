@@ -13,7 +13,6 @@ def templateCreation():
 @login_required
 def createTemplate():
     if request.method == 'POST':
-<<<<<<< HEAD
         try:
             templateTitle = request.form['titleInput']
         except Exception as e:
@@ -79,72 +78,6 @@ def createTemplate():
         #except Exception as e:
         #    return render_template("error.html", error = e, message = "Errore nella creazione delle domande")
         questionsInsertion(newtemplate, request.form.items())
-=======
-        templateTitle = request.form['titleInput']
-        newTemplate = Survey(maker = current_user.get_id(), name = templateTitle, date = date.today(), template = True, active = True, deleted = False)
-        session.add(newTemplate)
-        session.commit()
-        id_check = -1
-        id_radio = -1
-        id_openQuestion = 0
-        i = 1
-        j = 1
-        for k,v in request.form.items():
-            if k != "titleInput":
-                k = k.split()[1]
-                if k == 'open':
-                    #id è autoincrement, si può omettere
-                    newQuestion = Question(survey = str(newTemplate.id), type = "open", required = False)
-                    session.add(newQuestion)
-                    session.commit()
-                    newOpenQuestion = OpenQuestion(id = str(newQuestion.id), text = v)
-                    session.add(newOpenQuestion)
-                    id_openQuestion = newQuestion.id
-                    j = j + 1
-                elif k == 'checkbox':
-                    #id è autoincrement, si può omettere
-                    newQuestion = Question(survey = str(newTemplate.id), type = "checkbox", required = False)
-                    session.add(newQuestion)
-                    session.commit()
-                    newCheckboxQuestion = CheckboxQuestion(id = str(newQuestion.id), text= v)
-                    session.add(newCheckboxQuestion)
-                    id_check = newCheckboxQuestion.id
-                    id_openQuestion = newQuestion.id
-                    j = j + 1
-                    i = 1
-                elif k == 'checkboxtext':
-                    newCheckboxOption = CheckboxOption(id = str(id_check), number = i, text = v)
-                    session.add(newCheckboxOption)
-                    i = i + 1
-                elif k == "radio":
-                    #id è autoincrement, si può omettere
-                    newQuestion = Question(survey = str(newTemplate.id), type = "radio", required = False)
-                    session.add(newQuestion)
-                    session.commit()
-                    newRadioQuestion = RadioQuestion(id = str(newQuestion.id), text= v)
-                    session.add(newRadioQuestion)
-                    id_radio = newRadioQuestion.id
-                    id_openQuestion = newQuestion.id
-                    j = j + 1
-                    i = 1
-                elif k == 'radiobtntext' :
-                    newRadioOption = RadioOption(id = str(id_radio), number = i, text = v)
-                    session.add(newRadioOption)
-                    i = i + 1
-                elif k == 'fileText':
-                    newQuestion = Question(survey = str(newTemplate.id), type = "file", required = False)
-                    session.add(newQuestion)
-                    session.commit()
-                    newFileQuestion = FileQuestion(id = str(newQuestion.id), text = v)
-                    session.add(newFileQuestion)
-                    id_openQuestion = newQuestion.id
-                    j = j + 1
-                elif k == "required":
-                    requiredQuestion = session.query(Question).filter(Question.id == id_openQuestion).first()
-                    requiredQuestion.required = True
-                    session.commit()
-                session.commit()         
->>>>>>> e40ca658b9bc0e2df238a132473285d1fc3c91de
         return render_template('newTemplateConfirmation.html')
 
 @templates_bp.route('/useTemplate', methods = ['GET', 'POST'])
