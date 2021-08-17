@@ -368,6 +368,34 @@ function createAddAndDeleteButtons(){
 
   return containerDiv;
 }
+function createTemplateAddAndDeleteButtons(){
+  var containerDiv = document.createElement("div");
+  containerDiv.setAttribute("class", "container p-1");
+
+  var addButton = createButton.cloneNode(true);
+  addButton.setAttribute("id","createButton"+counter);
+  addButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","template_open#btn"+counter);
+  addButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","template_check#btn"+counter);
+  addButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","template_radio#btn"+counter);
+  addButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("id","template_file#btn"+counter);
+  addButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("onclick","templateOpenAfter(this.id)");
+  addButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("onclick","templateCheckboxAfter(this.id)");
+  addButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("onclick","templateRadioAfter(this.id)");
+  addButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("onclick","templateAfterFileQuestion(this.id)");
+  containerDiv.appendChild(addButton);
+
+  containerDiv.appendChild(getSpace());
+
+  var deleteButton = document.createElement("a");
+  deleteButton.setAttribute("type","button");
+  deleteButton.setAttribute("class","btn btn-primary");
+  deleteButton.setAttribute("id","delete_btn"+counter);
+  deleteButton.setAttribute("onclick", "deleteTemplateQuestion(this.id)");
+  deleteButton.innerHTML=" X ";
+  containerDiv.appendChild(deleteButton);
+
+  return containerDiv;
+}
 
 // Functions used for the creation of the questions of a form
 // Open questions
@@ -1015,14 +1043,29 @@ function createTemplateFileQuestion(idA){
 }
 
 function deleteTemplateQuestion(idBtn){
+  /*if(n_question){
+    var divToDelete = document.getElementById(idBtn).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+    divToDelete.remove();
+    n_question--;
+  }
+  if(!n_question){
+    document.getElementById("sendButton").previousSibling.remove();
+    document.getElementById("sendButton").remove();
+    var div = document.getElementById("rcorners");
+    var form = div.childNodes[1];
+    var divBtn = form.childNodes[11];
+    form.insertBefore(b,divBtn);
+  }*/
+
   if(n_question < 0)
     n_question = $('#n').data().name;
-  var divToDelete = document.getElementById(idBtn).parentElement.parentElement.parentElement;
+  var divToDelete = document.getElementById(idBtn).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+
   divToDelete.remove();
   n_question--;
   if(n_question == 0){
-    document.getElementById("saveButton").remove();
     createQuestionGroupButton();
+    document.getElementById("saveButton").remove();
   }
 }
 // Functions used for the creation of the questions of a template
@@ -1031,88 +1074,45 @@ function deleteTemplateQuestion(idBtn){
 function templateFirstOpen(){
   counter++;
 
-  if(n_question < 0)
-    n_question = 0;
-  n_question++;
+    if(n_question < 0)
+      n_question = 0;
+    n_question++;
 
-  var parent = document.getElementById("parentDiv");
-  
-  var container = document.createElement("div");
-  container.setAttribute("class","container");
-  container.setAttribute("id","container"+counter);
+    var parentDiv = document.getElementById("parentDiv");
 
-  var row = document.createElement("div");
-  row.setAttribute("class","row");
-  container.appendChild(row);
+    var card = createCard();
+    parentDiv.appendChild(card);
+    var textareaDiv = getTextareaDiv(card);
+    var requiredDiv = getRequiredCheckboxDiv(card);
+    var buttonsDiv = getButtonsDiv(card);
+    
+    textareaDiv.appendChild(createTextarea(counter+" open"));
 
-  var sxDiv = document.createElement("div");
-  sxDiv.setAttribute("class","col-sm-8");
-  sxDiv.setAttribute("id","centralDiv");
+    requiredDiv.appendChild(createSwitchForRequired());
 
-  var dxDiv = document.createElement("div");
-  dxDiv.setAttribute("class","col-sm-4");
-  dxDiv.setAttribute("id","centralDiv");
-
-  row.appendChild(sxDiv);
-  row.appendChild(dxDiv);
-
-  parent.appendChild(container);
-
-  var title = document.createElement("label");
-  title.innerHTML="Domanda " + counter;
-  row.childNodes[0].appendChild(title);
-
-  row.childNodes[0].appendChild(getSpace());
-
-  var input = document.createElement("input");
-  input.setAttribute('type', 'text');
-  input.setAttribute('name', counter+' open');
-  row.childNodes[0].appendChild(input);
-
-  row.childNodes[0].appendChild(getSpace());
-  row.childNodes[0].appendChild(getSpace());
-
-  var switchToggle = document.createElement("input");
-  switchToggle.setAttribute('class','form-check-input');
-  switchToggle.setAttribute('type', 'checkbox');
-  switchToggle.setAttribute('id', 'flexCheckDefault');
-  switchToggle.setAttribute('name', counter + ' required');
-  row.childNodes[0].appendChild(switchToggle);
-
-  var requiredLabel = document.createElement("label");
-  requiredLabel.setAttribute('class', 'form-check-label');
-  requiredLabel.setAttribute('for', 'flexCheckDefault');
-  requiredLabel.innerHTML = '&nbsp; Required';
-  row.childNodes[0].appendChild(requiredLabel);
-
-  var newButton = createButton.cloneNode(true);
-  newButton.setAttribute("id","createButton"+counter);
-  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
-  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
-  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
-  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("id","file_btn"+counter);
-  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("onclick","createTemplateOpenQuestion(this.id)");
-  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("onclick","createTemplateCheckboxQuestion(this.id)");
-  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("onclick","createTemplateRadioQuestion(this.id)");
-  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("onclick","createTemplateFileQuestion(this.id)");
-  row.childNodes[1].appendChild(newButton);
-
-  row.childNodes[1].appendChild(getSpace());
-
-  var deleteButton = document.createElement("a");
-  deleteButton.setAttribute("type","button");
-  deleteButton.setAttribute("class","btn btn-primary");
-  deleteButton.setAttribute("id","delete_btn"+counter);
-  deleteButton.setAttribute("onclick", "deleteTemplateQuestion(this.id)");
-  deleteButton.innerHTML=" X ";
-  row.childNodes[1].appendChild(deleteButton);
-
-  var divider = document.createElement("hr");
-  divider.setAttribute("class","solid");
-  container.appendChild(divider);
+    buttonsDiv.appendChild(createTemplateAddAndDeleteButtons());
 }
 
 function templateOpenAfter(idA){
+
+  counter++;
+  n_question++;
+  var div = getDivId(idA);
+  var card = createDiv(div);
+
+  var textareaDiv = getTextareaDiv(card);
+  var requiredDiv = getRequiredCheckboxDiv(card);
+  var buttonsDiv = getButtonsDiv(card);
+
+  textareaDiv.appendChild(createTextarea(counter + " open"));
+
+  requiredDiv.appendChild(createSwitchForRequired());
+  
+  buttonsDiv.appendChild(createAddAndDeleteButtons());
+/*
+
+
+
   counter++;
   n_question++;
   var div = getDivId(idA);
@@ -1170,465 +1170,158 @@ function templateOpenAfter(idA){
 
   var divider = document.createElement("hr");
   divider.setAttribute("class","solid");
-  container.appendChild(divider);
+  container.appendChild(divider);*/
 }
 
 // Checkbox questions
 function templateFirstCheckbox(){
   counter++;
-  checkcounter++;
-  if(n_question < 0)
-    n_question = 0;
-  n_question++;
-  
-  var parent = document.getElementById("parentDiv");
-  var container = document.createElement("div");
-  container.setAttribute("class","container");
-  container.setAttribute("id","container"+counter);
+    checkcounter++;
+    if(n_question < 0)
+      n_question = 0;
+    n_question++;
+    
+    var parentDiv = document.getElementById("parentDiv");
 
-  var row = document.createElement("div");
-  row.setAttribute("class","row");
-  container.appendChild(row);
+    var card = createCard();
+    parentDiv.appendChild(card);
+    var textareaDiv = getTextareaDiv(card);
+    var requiredDiv = getRequiredCheckboxDiv(card);
+    var buttonsDiv = getButtonsDiv(card);
 
-  var sxDiv = document.createElement("div");
-  sxDiv.setAttribute("class","col-sm-8");
-  sxDiv.setAttribute("id","centralDiv");
+    textareaDiv.appendChild(createTextarea(counter + " checkbox"));
 
-  var dxDiv = document.createElement("div");
-  dxDiv.setAttribute("class","col-sm-4");
-  dxDiv.setAttribute("id","centralDiv");
+    addLine(textareaDiv);
 
-  row.appendChild(sxDiv);
-  row.appendChild(dxDiv);
+    var row = document.createElement("div");
+    row.setAttribute("class", "row");
+    row.setAttribute("id", "checkboxOptionContainer " + counter);
+    textareaDiv.appendChild(row);
 
-  parent.appendChild(container);
-  
-  var row = container.childNodes[0];
-  
-  var title = document.createElement("label");
-  title.innerHTML="Domanda " + counter;
-  row.childNodes[0].appendChild(title);
-  
-  row.childNodes[0].appendChild(getSpace());
-  
-  var text = document.createElement("input");
-  text.setAttribute('type', 'text');
-  text.setAttribute('name', counter+' checkbox');
-  row.childNodes[0].appendChild(text);
+    var emptyLeftDiv = document.createElement("div");
+    emptyLeftDiv.setAttribute("class", "col-1");
+    row.appendChild(emptyLeftDiv);
+    
+    row.appendChild(createFirstCheckboxOption());
 
-  row.childNodes[0].appendChild(getSpace());
+    var emptyRightDiv = document.createElement("div");
+    emptyRightDiv.setAttribute("class", "col-1");
+    row.appendChild(emptyRightDiv);
 
-  var switchToggle = document.createElement("input");
-  switchToggle.setAttribute('class','form-check-input');
-  switchToggle.setAttribute('type', 'checkbox');
-  switchToggle.setAttribute('id', 'flexCheckDefault');
-  switchToggle.setAttribute('name', counter + ' required');
-  row.childNodes[0].appendChild(switchToggle);
+    requiredDiv.appendChild(createSwitchForRequired());
 
-  var requiredLabel = document.createElement("label");
-  requiredLabel.setAttribute('class', 'form-check-label');
-  requiredLabel.setAttribute('for', 'flexCheckDefault');
-  requiredLabel.innerHTML = '&nbsp; Required';
-  row.childNodes[0].appendChild(requiredLabel);
-
-  addLine(row.childNodes[0]);
-  addLine(row.childNodes[0]);
-  
-  var check = document.createElement("input");
-  check.setAttribute("type", "checkbox");
-  check.setAttribute("id", "check"+checkcounter);
-  check.setAttribute("name",counter+" checkbox "+checkcounter)
-  check.disabled = true;
-    row.childNodes[0].appendChild(check);
-
-  row.childNodes[0].appendChild(getSpace());
-  
-  var input = document.createElement("input");
-  input.setAttribute('type', 'text');
-  input.setAttribute('id', 'chechtext'+checkcounter);
-  input.setAttribute("name",counter+" checkboxtext "+checkcounter)
-  row.childNodes[0].appendChild(input);
-
-  row.childNodes[0].appendChild(getSpace());
-  row.childNodes[0].appendChild(getSpace());
-  row.childNodes[0].appendChild(getSpace());
-  
-  var addButton = document.createElement("button");
-  addButton.setAttribute('type', 'button');
-  addButton.setAttribute("class","btn btn-secondary btn-sm");
-  addButton.setAttribute("onclick","addcheck("+checkcounter+")");
-  addButton.setAttribute("id", "addCheck"+checkcounter);
-  addButton.innerHTML=" + ";
-  row.childNodes[0].appendChild(addButton);
-
-  row.childNodes[0].appendChild(getSpace());
-
-  var deleteCheck = document.createElement("button");
-  deleteCheck.setAttribute('type', 'button');
-  deleteCheck.setAttribute("class","btn btn-secondary btn-sm");
-  deleteCheck.setAttribute("onclick","deleteCheck("+checkcounter+")");
-  deleteCheck.setAttribute("id", "deleteCheck"+checkcounter);
-  deleteCheck.innerHTML=" X ";
-  deleteCheck.style.visibility = "hidden";
-  row.childNodes[0].appendChild(deleteCheck);
-  
-  var newButton = createButton.cloneNode(true);
-  newButton.setAttribute("id","createButton"+counter);
-  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
-  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
-  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
-  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("id","file_btn"+counter);
-  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("onclick","createTemplateOpenQuestion(this.id)");
-  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("onclick","createTemplateCheckboxQuestion(this.id)");
-  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("onclick","createTemplateRadioQuestion(this.id)");
-  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("onclick","createTemplateFileQuestion(this.id)");
-  row.childNodes[1].appendChild(newButton);
-
-  row.childNodes[1].appendChild(getSpace());
-
-  var deleteButton = document.createElement("a");
-  deleteButton.setAttribute("type","button");
-  deleteButton.setAttribute("class","btn btn-primary");
-  deleteButton.setAttribute("id","delete_btn"+counter);
-  deleteButton.setAttribute("onclick","deleteTemplateQuestion(this.id)");
-  deleteButton.innerHTML=" X ";
-  row.childNodes[1].appendChild(deleteButton);
-  
-  var divider = document.createElement("hr");
-  divider.setAttribute("class","solid");
-  container.appendChild(divider);
+    buttonsDiv.appendChild(createAddAndDeleteButtons());
 }
 
 function templateCheckboxAfter(idA){
   counter++;
-  checkcounter++;
-  n_question++;
-  
-  var div = getDivId(idA);
-  var container = createDiv(div);
-  var row = container.childNodes[0];
-  
-  var title = document.createElement("label");
-  title.innerHTML="Domanda " + counter;
-  row.childNodes[0].appendChild(title);
-  
-  row.childNodes[0].appendChild(getSpace());
+    checkcounter++;
+    n_question++;
+    
+    var div = getDivId(idA);
+  	var card = createDiv(div);
 
-  var text = document.createElement("input");
-  text.setAttribute('type', 'text');
-  text.setAttribute('name', counter+' checkbox');
-  row.childNodes[0].appendChild(text);
+    var textareaDiv = getTextareaDiv(card);
+    var requiredDiv = getRequiredCheckboxDiv(card);
+    var buttonsDiv = getButtonsDiv(card);
 
-  row.childNodes[0].appendChild(getSpace());
+    textareaDiv.appendChild(createTextarea(counter + " checkbox"));
 
-  var switchToggle = document.createElement("input");
-  switchToggle.setAttribute('class','form-check-input');
-  switchToggle.setAttribute('type', 'checkbox');
-  switchToggle.setAttribute('id', 'flexCheckDefault');
-  switchToggle.setAttribute('name', counter + ' required');
-  row.childNodes[0].appendChild(switchToggle);
+    addLine(textareaDiv);
 
-  var requiredLabel = document.createElement("label");
-  requiredLabel.setAttribute('class', 'form-check-label');
-  requiredLabel.setAttribute('for', 'flexCheckDefault');
-  requiredLabel.innerHTML = '&nbsp; Required';
-  row.childNodes[0].appendChild(requiredLabel);
+    var row = document.createElement("div");
+    row.setAttribute("class", "row");
+    row.setAttribute("id", "checkboxOptionContainer " + counter);
+    textareaDiv.appendChild(row);
 
-  addLine(row.childNodes[0]);
-  addLine(row.childNodes[0]);
-  
-  var check = document.createElement("input");
-  check.setAttribute("type", "checkbox");
-  check.setAttribute("id", "check"+checkcounter);
-  check.setAttribute("name",counter+" checkbox "+checkcounter);
-  check.disabled = true;
-    row.childNodes[0].appendChild(check);
+    var emptyLeftDiv = document.createElement("div");
+    emptyLeftDiv.setAttribute("class", "col-1");
+    row.appendChild(emptyLeftDiv);
+    
+    row.appendChild(createFirstCheckboxOption());
 
-  row.childNodes[0].appendChild(getSpace());
-  
-  var input = document.createElement("input");
-  input.setAttribute('type', 'text');
-  input.setAttribute('id', 'chechtext'+checkcounter);
-  input.setAttribute("name", counter+" checkboxtext "+checkcounter);
-  row.childNodes[0].appendChild(input);
+    var emptyRightDiv = document.createElement("div");
+    emptyRightDiv.setAttribute("class", "col-1");
+    row.appendChild(emptyRightDiv);
 
-  row.childNodes[0].appendChild(getSpace());
-  row.childNodes[0].appendChild(getSpace());
-  row.childNodes[0].appendChild(getSpace());
-  
-  var addButton = document.createElement("button");
-  addButton.setAttribute('type', 'button');
-  addButton.setAttribute("class","btn btn-secondary");
-  addButton.setAttribute("onclick","addcheck("+checkcounter+")");
-  addButton.setAttribute("id", "addCheck"+checkcounter);
-  addButton.innerHTML=" + ";
-  row.childNodes[0].appendChild(addButton);
+    requiredDiv.appendChild(createSwitchForRequired());
 
-  row.childNodes[0].appendChild(getSpace());
-
-  var deleteCheck = document.createElement("button");
-  deleteCheck.setAttribute('type', 'button');
-  deleteCheck.setAttribute("class","btn btn-secondary");
-  deleteCheck.setAttribute("onclick","deleteCheck("+checkcounter+")");
-  deleteCheck.setAttribute("id", "deleteCheck"+checkcounter);
-  deleteCheck.innerHTML=" X ";
-  deleteCheck.style.visibility = "hidden";
-  row.childNodes[0].appendChild(deleteCheck);
-  
-  var newButton = createButton.cloneNode(true);
-  newButton.setAttribute("id","createButton"+counter);
-  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
-  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
-  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
-  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("id","file_btn"+counter);
-  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("onclick","createTemplateOpenQuestion(this.id)");
-  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("onclick","createTemplateCheckboxQuestion(this.id)");
-  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("onclick","createTemplateRadioQuestion(this.id)");
-  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("onclick","createTemplateFileQuestion(this.id)");
-  row.childNodes[1].appendChild(newButton);
-
-  row.childNodes[1].appendChild(getSpace());
-
-  var deleteButton = document.createElement("a");
-  deleteButton.setAttribute("type","button");
-  deleteButton.setAttribute("class","btn btn-primary");
-  deleteButton.setAttribute("id","delete_btn"+counter);
-  deleteButton.setAttribute("onclick","deleteTemplateQuestion(this.id)");
-  deleteButton.innerHTML=" X ";
-  row.childNodes[1].appendChild(deleteButton);
-  
-  var divider = document.createElement("hr");
-  divider.setAttribute("class","solid");
-  container.appendChild(divider);
+    buttonsDiv.appendChild(createAddAndDeleteButtons());
 }
 
 // Radio button questions
 function templateFirstRadio(){
+  
   counter++;
   radiocounter++;
   if(n_question < 0)
     n_question = 0;
   n_question++;
   
-  var parent = document.getElementById("parentDiv");
-  var container = document.createElement("div");
-  container.setAttribute("class","container");
-  container.setAttribute("id","container"+counter);
+  var parentDiv = document.getElementById("parentDiv");
+
+  var card = createCard();
+  parentDiv.appendChild(card);
+  var textareaDiv = getTextareaDiv(card);
+  var requiredDiv = getRequiredCheckboxDiv(card);
+  var buttonsDiv = getButtonsDiv(card);
+
+  textareaDiv.appendChild(createTextarea(counter + " radio"));
+
+  addLine(textareaDiv);
 
   var row = document.createElement("div");
-  row.setAttribute("class","row");
-  container.appendChild(row);
+  row.setAttribute("class", "row");
+  textareaDiv.appendChild(row);
 
-  var sxDiv = document.createElement("div");
-  sxDiv.setAttribute("class","col-sm-8");
-  sxDiv.setAttribute("id","centralDiv");
-
-  var dxDiv = document.createElement("div");
-  dxDiv.setAttribute("class","col-sm-4");
-  dxDiv.setAttribute("id","centralDiv");
-
-  row.appendChild(sxDiv);
-  row.appendChild(dxDiv);
-
-  parent.appendChild(container);
+  var emptyLeftDiv = document.createElement("div");
+  emptyLeftDiv.setAttribute("class", "col-1");
+  row.appendChild(emptyLeftDiv);
   
-  var row = container.childNodes[0];
-  
-  var title = document.createElement("label");
-  title.innerHTML="Domanda " + counter;
-  row.childNodes[0].appendChild(title);
-  
-  row.childNodes[0].appendChild(getSpace());
-  
-  var text = document.createElement("input");
-  text.setAttribute('type', 'text');
-  text.setAttribute('name', counter+' radio');
-  row.childNodes[0].appendChild(text);
+  row.appendChild(createFirstRadioOption());
 
-  row.childNodes[0].appendChild(getSpace());
+  var emptyRightDiv = document.createElement("div");
+  emptyRightDiv.setAttribute("class", "col-1");
+  row.appendChild(emptyRightDiv);
 
-  var switchToggle = document.createElement("input");
-  switchToggle.setAttribute('class','form-check-input');
-  switchToggle.setAttribute('type', 'checkbox');
-  switchToggle.setAttribute('id', 'flexCheckDefault');
-  switchToggle.setAttribute('name', counter + ' required');
-  row.childNodes[0].appendChild(switchToggle);
+  requiredDiv.appendChild(createSwitchForRequired());
 
-  var requiredLabel = document.createElement("label");
-  requiredLabel.setAttribute('class', 'form-check-label');
-  requiredLabel.setAttribute('for', 'flexCheckDefault');
-  requiredLabel.innerHTML = '&nbsp; Required';
-  row.childNodes[0].appendChild(requiredLabel);
-
-  addLine(row.childNodes[0]);
-  addLine(row.childNodes[0]);
-  
-  var radio = document.createElement("input");
-  radio.setAttribute("type", "radio");
-  radio.setAttribute("id", "radio"+radiocounter);
-  radio.setAttribute("name",counter+" radio");
-  radio.disabled = true;
-  row.childNodes[0].appendChild(radio);
-
-  row.childNodes[0].appendChild(getSpace());
-  
-  var input = document.createElement("input");
-  input.setAttribute('type', 'text');
-  input.setAttribute('id', 'radiotext'+radiocounter);
-  input.setAttribute("name",counter+" radiobtntext "+radiocounter)
-  row.childNodes[0].appendChild(input);
-
-  row.childNodes[0].appendChild(getSpace());
-  row.childNodes[0].appendChild(getSpace());
-  row.childNodes[0].appendChild(getSpace());
-  
-  var addButton = document.createElement("button");
-  addButton.setAttribute('type', 'button');
-  addButton.setAttribute("class","btn btn-secondary btn-sm");
-  addButton.setAttribute("onclick","addRadio("+radiocounter+")");
-  addButton.setAttribute("id", "addRadio"+radiocounter);
-  addButton.innerHTML=" + ";
-  row.childNodes[0].appendChild(addButton);
-
-  row.childNodes[0].appendChild(getSpace());
-
-  var deleteRadio = document.createElement("button");
-  deleteRadio.setAttribute('type', 'button');
-  deleteRadio.setAttribute("class","btn btn-secondary btn-sm");
-  deleteRadio.setAttribute("onclick","deleteRadio("+radiocounter+")");
-  deleteRadio.setAttribute("id", "deleteRadio"+radiocounter);
-  deleteRadio.innerHTML=" X ";
-  deleteRadio.style.visibility = "hidden";
-  row.childNodes[0].appendChild(deleteRadio);
-  
-  var newButton = createButton.cloneNode(true);
-  newButton.setAttribute("id","createButton"+counter);
-  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
-  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
-  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
-  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("id","file_btn"+counter);
-  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("onclick","createTemplateOpenQuestion(this.id)");
-  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("onclick","createTemplateCheckboxQuestion(this.id)");
-  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("onclick","createTemplateRadioQuestion(this.id)");
-  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("onclick","createTemplateFileQuestion(this.id)");
-  row.childNodes[1].appendChild(newButton);
-
-  row.childNodes[1].appendChild(getSpace());
-
-  var deleteButton = document.createElement("a");
-  deleteButton.setAttribute("type","button");
-  deleteButton.setAttribute("class","btn btn-primary");
-  deleteButton.setAttribute("id","delete_btn"+counter);
-  deleteButton.setAttribute("onclick","deleteTemplateQuestion(this.id)");
-  deleteButton.innerHTML=" X ";
-  row.childNodes[1].appendChild(deleteButton);
-  
-  var divider = document.createElement("hr");
-  divider.setAttribute("class","solid");
-  container.appendChild(divider);
+  buttonsDiv.appendChild(createAddAndDeleteButtons());
 }
 
 function templateRadioAfter(idA){
   counter++;
   radiocounter++;
   n_question++;
-  
+
   var div = getDivId(idA);
-  var container = createDiv(div);
-  var row = container.childNodes[0];
+  var card = createDiv(div);
+
+  var textareaDiv = getTextareaDiv(card);
+  var requiredDiv = getRequiredCheckboxDiv(card);
+  var buttonsDiv = getButtonsDiv(card);
+
+  textareaDiv.appendChild(createTextarea(counter + " radio"));
+
+  addLine(textareaDiv);
+
+  var row = document.createElement("div");
+  row.setAttribute("class", "row");
+  textareaDiv.appendChild(row);
+
+  var emptyLeftDiv = document.createElement("div");
+  emptyLeftDiv.setAttribute("class", "col-1");
+  row.appendChild(emptyLeftDiv);
   
-  var title = document.createElement("label");
-  title.innerHTML="Domanda " + counter;
-  row.childNodes[0].appendChild(title);
-  
-  row.childNodes[0].appendChild(getSpace());
+  row.appendChild(createFirstRadioOption());
 
-  var text = document.createElement("input");
-  text.setAttribute('type', 'text');
-  text.setAttribute('name', counter+' radio');
-  row.childNodes[0].appendChild(text);
+  var emptyRightDiv = document.createElement("div");
+  emptyRightDiv.setAttribute("class", "col-1");
+  row.appendChild(emptyRightDiv);
 
-  row.childNodes[0].appendChild(getSpace());
+  requiredDiv.appendChild(createSwitchForRequired());
 
-  var switchToggle = document.createElement("input");
-  switchToggle.setAttribute('class','form-check-input');
-  switchToggle.setAttribute('type', 'checkbox');
-  switchToggle.setAttribute('id', 'flexCheckDefault');
-  switchToggle.setAttribute('name', counter + ' required');
-  row.childNodes[0].appendChild(switchToggle);
-
-  var requiredLabel = document.createElement("label");
-  requiredLabel.setAttribute('class', 'form-check-label');
-  requiredLabel.setAttribute('for', 'flexCheckDefault');
-  requiredLabel.innerHTML = '&nbsp; Required';
-  row.childNodes[0].appendChild(requiredLabel);
-
-  addLine(row.childNodes[0]);
-  addLine(row.childNodes[0]);
-
-  var radio = document.createElement("input");
-  radio.setAttribute("type", "radio");
-  radio.setAttribute("id", "radio"+radiocounter);
-  radio.setAttribute("name",counter+" radio")
-  radio.disabled = true;
-  row.childNodes[0].appendChild(radio);
-
-  row.childNodes[0].appendChild(getSpace());
-
-  var input = document.createElement("input");
-  input.setAttribute('type', 'text');
-  input.setAttribute('id', 'radiotext'+radiocounter);
-  input.setAttribute("name",counter+" radiobtntext "+radiocounter)
-  row.childNodes[0].appendChild(input);
-
-  row.childNodes[0].appendChild(getSpace());
-  row.childNodes[0].appendChild(getSpace());
-  row.childNodes[0].appendChild(getSpace());
-
-  var addButton = document.createElement("button");
-  addButton.setAttribute('type', 'button');
-  addButton.setAttribute("class","btn btn-secondary btn-sm");
-  addButton.setAttribute("onclick","addRadio("+radiocounter+")");
-  addButton.setAttribute("id", "addRadio"+radiocounter);
-  addButton.innerHTML=" + ";
-  row.childNodes[0].appendChild(addButton);
-
-  row.childNodes[0].appendChild(getSpace());
-
-  var deleteRadio = document.createElement("button");
-  deleteRadio.setAttribute('type', 'button');
-  deleteRadio.setAttribute("class","btn btn-secondary btn-sm");
-  deleteRadio.setAttribute("onclick","deleteRadio("+radiocounter+")");
-  deleteRadio.setAttribute("id", "deleteRadio"+radiocounter);
-  deleteRadio.innerHTML=" X ";
-  deleteRadio.style.visibility = "hidden";
-  row.childNodes[0].appendChild(deleteRadio);
-  
-  var newButton = createButton.cloneNode(true);
-  newButton.setAttribute("id","createButton"+counter);
-  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
-  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
-  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
-  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("id","file_btn"+counter);
-  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("onclick","createTemplateOpenQuestion(this.id)");
-  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("onclick","createTemplateCheckboxQuestion(this.id)");
-  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("onclick","createTemplateRadioQuestion(this.id)");
-  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("onclick","createTemplateFileQuestion(this.id)");
-  row.childNodes[1].appendChild(newButton);
-
-  row.childNodes[1].appendChild(getSpace());
-
-  var deleteButton = document.createElement("a");
-  deleteButton.setAttribute("type","button");
-  deleteButton.setAttribute("class","btn btn-primary");
-  deleteButton.setAttribute("id","delete_btn"+counter);
-  deleteButton.setAttribute("onclick","deleteTemplateQuestion(this.id)");
-  deleteButton.innerHTML=" X ";
-  row.childNodes[1].appendChild(deleteButton);
-  
-  var divider = document.createElement("hr");
-  divider.setAttribute("class","solid");
-  container.appendChild(divider);
+  buttonsDiv.appendChild(createAddAndDeleteButtons());
 }
 
 // File upload questions
@@ -1638,187 +1331,43 @@ function templateFirstFileQuestion(){
     n_question = 0;
   n_question++;
 
-  var parent = document.getElementById("parentDiv");
+  var parentDiv = document.getElementById("parentDiv");
+
+  var card = createCard();
+  parentDiv.appendChild(card);
+  var textareaDiv = getTextareaDiv(card);
+  var requiredDiv = getRequiredCheckboxDiv(card);
+  var buttonsDiv = getButtonsDiv(card);
+  var containerDiv = getCardContainer(card);
   
-  var container = document.createElement("div");
-  container.setAttribute("class","container");
-  container.setAttribute("id","container"+counter);
+  textareaDiv.appendChild(createTextarea(counter+" fileText"));
 
-  var row = document.createElement("div");
-  row.setAttribute("class","row");
-  container.appendChild(row);
+  requiredDiv.appendChild(createSwitchForRequired());
 
-  var sxDiv = document.createElement("div");
-  sxDiv.setAttribute("class","col-sm-8");
-  sxDiv.setAttribute("id","centralDiv");
+  buttonsDiv.appendChild(createAddAndDeleteButtons());
 
-  var dxDiv = document.createElement("div");
-  dxDiv.setAttribute("class","col-sm-4");
-  dxDiv.setAttribute("id","centralDiv");
-
-  row.appendChild(sxDiv);
-  row.appendChild(dxDiv);
-
-  parent.appendChild(container);
-
-  var div = document.createElement("div");
-  div.setAttribute("class", "mb-3");
-  row.childNodes[0].appendChild(div);
-
-  var label = document.createElement("label");
-  label.setAttribute("for", "formFile");
-  label.setAttribute("class", "form-label");
-  label.innerHTML = "Domanda " + counter;
-  div.appendChild(label);
-
-  div.appendChild(getSpace());
-
-  var textarea = document.createElement("textarea");
-  textarea.setAttribute("rows", "1");
-  textarea.setAttribute("name", counter + " fileText");
-  textarea.setAttribute("cols", "70");
-  div.appendChild(textarea);
-
-  div.appendChild(getSpace());
-
-  var switchToggle = document.createElement("input");
-  switchToggle.setAttribute('class','form-check-input');
-  switchToggle.setAttribute('type', 'checkbox');
-  switchToggle.setAttribute('id', 'flexCheckDefault');
-  switchToggle.setAttribute('name', counter + ' required');
-  div.appendChild(switchToggle);
-
-  var requiredLabel = document.createElement("label");
-  requiredLabel.setAttribute('class', 'form-check-label');
-  requiredLabel.setAttribute('for', 'flexCheckDefault');
-  requiredLabel.innerHTML = '&nbsp; Required';
-  div.appendChild(requiredLabel);
-
-  var input = document.createElement("input");
-  input.setAttribute("class", "form-control");
-  input.setAttribute("type", "file");
-  input.setAttribute("id", "formFile");
-  input.setAttribute("name", counter + " file");
-  input.disabled = true;
-  div.appendChild(input);
-
-  var newButton = createButton.cloneNode(true);
-  newButton.setAttribute("id","createButton"+counter);
-  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
-  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
-  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
-  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("id","file_btn"+counter);
-  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("onclick","createTemplateOpenQuestion(this.id)");
-  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("onclick","createTemplateCheckboxQuestion(this.id)");
-  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("onclick","createTemplateRadioQuestion(this.id)");
-  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("onclick","createTemplateFileQuestion(this.id)");
-  row.childNodes[1].appendChild(newButton);
-
-  row.childNodes[1].appendChild(getSpace());
-
-  var deleteButton = document.createElement("a");
-  deleteButton.setAttribute("type","button");
-  deleteButton.setAttribute("class","btn btn-primary");
-  deleteButton.setAttribute("id","delete_btn"+counter);
-  deleteButton.setAttribute("onclick","deleteTemplateQuestion(this.id)");
-  deleteButton.innerHTML=" X ";
-  row.childNodes[1].appendChild(deleteButton);
-
-  var divider = document.createElement("hr");
-  divider.setAttribute("class","solid");
-  container.appendChild(divider);
+  containerDiv.appendChild(createFileInput());
 }
 
 function templateAfterFileQuestion(idA){
   counter++;
-  checkcounter++;
   n_question++;
-  
+
   var div = getDivId(idA);
-  var container = createDiv(div);
-  var row = container.childNodes[0];
+  var card = createDiv(div);
+
+  var textareaDiv = getTextareaDiv(card);
+  var requiredDiv = getRequiredCheckboxDiv(card);
+  var buttonsDiv = getButtonsDiv(card);
+  var containerDiv = getCardContainer(card);
+
+  textareaDiv.appendChild(createTextarea(counter + " fileText"));
+
+  requiredDiv.appendChild(createSwitchForRequired());
   
-  var div = document.createElement("div");
-  div.setAttribute("class", "mb-3");
-  row.childNodes[0].appendChild(div);
+  buttonsDiv.appendChild(createAddAndDeleteButtons());
 
-  var label = document.createElement("label");
-  label.setAttribute("for", "formFile");
-  label.setAttribute("class", "form-label");
-  label.innerHTML = "Domanda " + counter;
-  div.appendChild(label);
-
-  div.appendChild(getSpace());
-
-  var textarea = document.createElement("textarea");
-  textarea.setAttribute("rows", "1");
-  textarea.setAttribute("name", counter + " fileText");
-  textarea.setAttribute("cols", "70");
-  div.appendChild(textarea);
-
-  div.appendChild(getSpace());
-
-  var switchToggle = document.createElement("input");
-  switchToggle.setAttribute('class','form-check-input');
-  switchToggle.setAttribute('type', 'checkbox');
-  switchToggle.setAttribute('id', 'flexCheckDefault');
-  switchToggle.setAttribute('name', counter + ' required');
-  div.appendChild(switchToggle);
-
-  var requiredLabel = document.createElement("label");
-  requiredLabel.setAttribute('class', 'form-check-label');
-  requiredLabel.setAttribute('for', 'flexCheckDefault');
-  requiredLabel.innerHTML = '&nbsp; Required';
-  div.appendChild(requiredLabel);
-
-  var input = document.createElement("input");
-  input.setAttribute("class", "form-control");
-  input.setAttribute("type", "file");
-  input.setAttribute("id", "formFile");
-  input.setAttribute("name", counter + " file");
-  input.disabled = true;
-  div.appendChild(input);
-
-  row.childNodes[0].appendChild(getSpace());
-  row.childNodes[0].appendChild(getSpace());
-  row.childNodes[0].appendChild(getSpace());
-
-  row.childNodes[0].appendChild(getSpace());
-
-  var deleteCheck = document.createElement("button");
-  deleteCheck.setAttribute('type', 'button');
-  deleteCheck.setAttribute("class","btn btn-secondary");
-  deleteCheck.setAttribute("onclick","deleteCheck("+checkcounter+")");
-  deleteCheck.setAttribute("id", "deleteCheck"+checkcounter);
-  deleteCheck.innerHTML=" X ";
-  deleteCheck.style.visibility = "hidden";
-  row.childNodes[0].appendChild(deleteCheck);
-  
-  var newButton = createButton.cloneNode(true);
-  newButton.setAttribute("id","createButton"+counter);
-  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
-  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
-  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
-  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("id","file_btn"+counter);
-  newButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("onclick","createTemplateOpenQuestion(this.id)");
-  newButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("onclick","createTemplateCheckboxQuestion(this.id)");
-  newButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("onclick","createTemplateRadioQuestion(this.id)");
-  newButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("onclick","createTemplateFileQuestion(this.id)");
-  row.childNodes[1].appendChild(newButton);
-
-  row.childNodes[1].appendChild(getSpace());
-
-  var deleteButton = document.createElement("a");
-  deleteButton.setAttribute("type","button");
-  deleteButton.setAttribute("class","btn btn-primary");
-  deleteButton.setAttribute("id","delete_btn"+counter);
-  deleteButton.setAttribute("onclick","deleteTemplateQuestion(this.id)");
-  deleteButton.innerHTML=" X ";
-  row.childNodes[1].appendChild(deleteButton);
-  
-  var divider = document.createElement("hr");
-  divider.setAttribute("class","solid");
-  container.appendChild(divider);
+  containerDiv.appendChild(createFileInput());
 }
 
 // Function used for the creatio of the Save button used for saving the modification of a template
@@ -1839,7 +1388,7 @@ function createQuestionGroupButton(){
   var div = document.createElement("div");
   div.setAttribute("class", "btn-group");
   div.setAttribute("id", "createButton");
-  document.getElementById("saveForm").insertBefore(div,document.getElementById("parentDiv"));
+  document.getElementById("saveForm").insertBefore(div,document.getElementById("saveButton"));
 
   var button = document.createElement("button");
   button.setAttribute("type", "button");
