@@ -3,205 +3,146 @@
 {% block body %}
     <div id="rcorners">
         <form action="/saveTemplate/{{template.id}}" method="POST" id="saveForm">
-            <textarea class="form-control" rows="1" name="titleInput">{{ template.name }}</textarea>
-            <br>
-            <div id="parentDiv">
-                {% for r in question %}
-                    <div class="container" id="container{{loop.index}}">
-                        <div class="row">
-                            <div class="col-sm-8" id="centralDiv">
-                                <div class="col-2"></div>
-                                <div class="col">
-                                {% if r.type == 'open' %}
-                                    {% if r.required == true %}
-                                        <div class="row">
-                                            <div class="col-9">
-                                                <textarea class="form-control" rows = "1" name="{{loop.index}} open">{{r.text}}</textarea>
-                                            </div>
-                                            <div class="col">
-                                                <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required" checked>
-                                                <label class="form-check-label" for="flexCheckDefault"> Required</label>
-                                            </div>
-                                        </div>
-                                    {% else %}
-                                        <div class="row">
-                                            <div class="col-9">
-                                                <textarea class="form-control" rows = "1" name="{{loop.index}} open">{{r.text}}</textarea>
-                                            </div>                                            
-                                            <div class="col">
-                                                <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required">
-                                                <label class="form-check-label" for="flexCheckDefault"> Required</label>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                {% elif r.type == 'checkbox' %}
-                                    {% if r.required == true %}
-                                        <div class="row">
-                                            <div class="col-9">
-                                                <textarea class="form-control" rows = "1" name="{{loop.index}} checkbox">{{r.text}}</textarea>
-                                            </div>
-                                            <div class="col">
-                                                <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required" checked>
-                                                <label class="form-check-label" for="flexCheckDefault"> Required</label>
-                                            </div>
-                                        </div>                                     
-                                        <div class="row">
-                                            <div class="col-1"></div>
-                                            <div class="col">
-                                            <br>
-                                            {% set i = loop.index %}
-                                            {% for c in checkboxOption if c.id == r.id %}
-                                                <div class="input-group mb-3">
-                                                    <div class="input-group-text">
-                                                        <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input" disabled>
-                                                    </div>
-                                                    <textarea class="form-control" rows = "1" name="{{i}} checkboxtext {{c.number}}">{{c.text}}</textarea>
-                                                </div>
-                                            {% endfor %}
-                                            </div>
-                                            <div class="col-1"></div>
-                                        </div>
-                                    {% else %}
-                                        <div class="row">
-                                            <div class="col-9">
-                                                <textarea class="form-control" rows = "1" name="{{loop.index}} checkbox">{{r.text}}</textarea>
-                                            </div>
-                                            <div class="col">
-                                                <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required">
-                                                <label class="form-check-label" for="flexCheckDefault"> Required</label>
-                                            </div>
-                                        </div>                                     
-                                        <div class="row">
-                                            <div class="col-1"></div>
-                                            <div class="col">
-                                            <br>
-                                            {% set i = loop.index %}
-                                            {% for c in checkboxOption if c.id == r.id %}
-                                                <div class="input-group mb-3">
-                                                    <div class="input-group-text">
-                                                        <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input" disabled>
-                                                    </div>
-                                                    <textarea class="form-control" rows = "1" name="{{i}} checkboxtext {{c.number}}">{{c.text}}</textarea>
-                                                </div>
-                                            {% endfor %}
-                                            </div>
-                                            <div class="col-1"></div>
-                                        </div>
-                                    {% endif %}
-                                {% elif r.type == 'radio' %}
-                                    {% if r.required == true %}
-                                        <div class="row">
-                                            <div class="col-9">
-                                                <textarea class="form-control" rows = "1" name="{{loop.index}} radio">{{r.text}}</textarea>
-                                            </div>
-                                            <div class="col">
-                                                <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required" checked>
-                                                <label class="form-check-label" for="flexCheckDefault"> Required</label>
-                                            </div>
-                                        </div>                                        
-                                        <div class="row">
-                                            <div class="col-1"></div>
-                                            <div class="col">
-                                                <br>
-                                                {% set i = loop.index %}
-                                                {% for c in radioOption if c.id == r.id %}
-                                                    <div class="input-group mb-3">
-                                                        <div class="input-group-text">
-                                                            <input class="form-check-input mt-0" type="radio" value="" aria-label="Checkbox for following text input" disabled>
-                                                        </div>
-                                                        <textarea class="form-control" rows = "1" name="{{i}} radiobtntext {{c.number}}">{{c.text}}</textarea>
-                                                    </div>
-                                                {% endfor %}
-                                            </div>
-                                            <div class="col-1"></div>
-                                        </div>
-                                    {% else %}
-                                        <div class="row">
-                                            <div class="col-9">
-                                                <textarea class="form-control" rows = "1" name="{{loop.index}} radio">{{r.text}}</textarea>
-                                            </div>
-                                            <div class="col">
-                                                <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required">
-                                                <label class="form-check-label" for="flexCheckDefault"> Required</label>
-                                            </div>
-                                        </div>                                        
-                                        <div class="row">
-                                            <div class="col-1"></div>
-                                            <div class="col">
-                                                <br>
-                                                {% set i = loop.index %}
-                                                {% for c in radioOption if c.id == r.id %}
-                                                    <div class="input-group mb-3">
-                                                        <div class="input-group-text">
-                                                            <input class="form-check-input mt-0" type="radio" value="" aria-label="Checkbox for following text input" disabled>
-                                                        </div>
-                                                        <textarea class="form-control" rows = "1" name="{{i}} radiobtntext {{c.number}}">{{c.text}}</textarea>
-                                                    </div>
-                                                {% endfor %}
-                                            </div>
-                                            <div class="col-1"></div>
-                                        </div>
-                                    {% endif %}
-                                {% else %}
-                                    {% if r.required == true %}
-                                        <div class="row">
-                                            <div class="col-9">
-                                                <textarea class="form-control" rows = "1" name="{{loop.index}} fileText">{{r.text}}</textarea>
-                                            </div>
-                                            <div class="col">
-                                                <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required" checked>
-                                                <label class="form-check-label" for="flexCheckDefault"> Required</label>
-                                            </div>
-                                        </div>
-                                        <br>
-                                        <div class="row">
-                                            <div class="mb-3">
-                                                <input class="form-control" type="file" id="formFile" disabled>
-                                            </div>
-                                        </div>
-                                    {% else %}
-                                        <div class="row">
-                                            <div class="col-9">
-                                                <textarea class="form-control" rows = "1" name="{{loop.index}} fileText">{{r.text}}</textarea>
-                                            </div>                                            
-                                            <div class="col">
-                                                <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required">
-                                                <label class="form-check-label" for="flexCheckDefault"> Required</label>
-                                            </div>
-                                        </div>
-                                        <br>
-                                        <div class="row">
-                                            <div class="mb-3">
-                                                <input class="form-control" type="file" id="formFile" disabled>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                {% endif %}
+            <h2>Title</h2>
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="col">
+                    <textarea class="form-control" rows="1" name="titleInput">{{ template.name }}</textarea>
+                    <br>
+                    <br>
+                    <div id="parentDiv">
+                        {% for r in question %}
+                            <div class="card shadow rounded m-3" id="container{{loop.index}}">
+                                <div class="card-header"> Domanda </div>
+                                <div class="card-body">
+                                                            <div class="container">
+                                                                <div class="row">
+                                                                        {% if r.type == 'open' %}
+                                                                                    <div class="col-8">
+                                                                                        <textarea class="form-control" rows = "1" name="{{loop.index}} open">{{r.text}}</textarea>
+                                                                                    </div>
+                                                                                    <div class="col-auto">
+                                                                                        <div class="form-check form-switch">
+                                                                                            {% if r.required == true %}
+                                                                                            <input class="form-check-input" type="checkbox" name="{{loop.index}} required" checked>
+                                                                                            {% else %}
+                                                                                            <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required">
+                                                                                            {% endif %}
+                                                                                            <label class="form-check-label"> Required</label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                        {% elif r.type == 'checkbox' %}
+                                                                                    <div class="col-8">
+                                                                                        <textarea class="form-control" rows = "1" name="{{loop.index}} checkbox">{{r.text}}</textarea>
+                                                                                        <br>
+                                                                                        <div class="row" id="checkboxOptionContainer {{loop.index}}">
+                                                                                            <div class="col-1"></div>
+                                                                                            <div class="form-check col" id="containerCheckboxOptions {{loop.index}}">
+                                                                                                {% set i = loop.index %}
+                                                                                                {% for c in checkboxOption if c.id == r.id %}
+                                                                                                    <div class="row" id="checkboxRow {{i}}">
+                                                                                                        <div class="col-10 form-check">
+                                                                                                            <input class="form-check-input" type="checkbox" value="" id="check{{i}}" aria-label="Checkbox for following text input" disabled>
+                                                                                                            <textarea class="form-control" rows = "1"  id="chechtext{{i}}" name="{{i}} checkboxtext {{c.number}}">{{c.text}}</textarea>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                {% endfor %}
+                                                                                            </div>
+                                                                                            <div class="col-1"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-auto">
+                                                                                        <div class="form-check form-switch">
+                                                                                            {% if r.required == true %}
+                                                                                            <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required" checked>
+                                                                                            {% else %}
+                                                                                            <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required">
+                                                                                            {% endif %}
+                                                                                            <label class="form-check-label" for="flexCheckDefault"> Required</label>
+                                                                                        </div>
+                                                                                    </div>                               
+                                                                        {% elif r.type == 'radio' %}
+                                                                                    <div class="col-8">
+                                                                                        <textarea class="form-control" rows = "1" name="{{loop.index}} radio">{{r.text}}</textarea>
+                                                                                        <br>
+                                                                                        <div class="row" id="RadioOptionContainer {{loop.index}}">
+                                                                                            <div class="col-1"></div>
+                                                                                            <div class="form-check col" id="containerRadioOptions {{loop.index}}">                             
+                                                                                                {% set i = loop.index %}
+                                                                                                {% for c in radioOption if c.id == r.id %}
+                                                                                                <div class="row" id="radioRow {{i}}">
+                                                                                                    <div class="col-10 form-check">
+                                                                                                        <input class="form-check-input mt-0" type="radio" value="" aria-label="Checkbox for following text input" disabled>
+                                                                                                        <textarea class="form-control" rows = "1" name="{{i}} radiobtntext {{c.number}}">{{c.text}}</textarea>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                {% endfor %}
+                                                                                            </div>
+                                                                                            <div class="col-1"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-auto">
+                                                                                        <div class="form-check form-switch">
+                                                                                            {% if r.required == true %}
+                                                                                            <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required" checked>
+                                                                                            {% else %}
+                                                                                            <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required">
+                                                                                            {% endif %}
+                                                                                            <label class="form-check-label" for="flexCheckDefault"> Required</label>
+                                                                                        </div>
+                                                                                    </div>          
+                                                                        {% else %}
+                                                                                    <div class="col-8">
+                                                                                        <textarea class="form-control" rows = "1" name="{{loop.index}} fileText">{{r.text}}</textarea>
+                                                                                    </div>
+                                                                                    <div class="col-auto">
+                                                                                        <div class="form-check form-switch">
+                                                                                            {% if r.required == true %}
+                                                                                            <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required" checked>
+                                                                                            {% else %}
+                                                                                            <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required">
+                                                                                            {% endif %}
+                                                                                            <label class="form-check-label" for="flexCheckDefault"> Required</label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                        {% endif %}       
+                                                                    <div class="col-auto">
+                                                                        <div class="container p-1">
+                                                                            <div class="btn-group" id="createButton{{loop.index}}">
+                                                                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> + </button>
+                                                                                <ul class="dropdown-menu">
+                                                                                    <li><a class="dropdown-item" onclick="createTemplateOpenQuestion(this.id)" href="#" id="template_open#btn{{loop.index}}"> Open </a></li>
+                                                                                    <li><a class="dropdown-item" onclick="createTemplateCheckboxQuestion(this.id)" href="#" id="template_check#btn{{loop.index}}"> Checkbox </a></li>
+                                                                                    <li><a class="dropdown-item" onclick="createTemplateRadioQuestion(this.id)" href="#" id="template_radio#btn{{loop.index}}"> Radio button </a></li>
+                                                                                    <li><a class="dropdown-item" onclick="createTemplateFileQuestion(this.id)" href="#" id="template_file#btn{{loop.index}}">File</a></li>
+                                                                                </ul>
+                                                                            </div>
+                                                                            <span>&nbsp;&nbsp;</span>
+                                                                            <a type="button" class="btn btn-primary" id="template_delete_btn{{loop.index}}" onclick="deleteTemplateQuestion(this.id)"> X </a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>  
+                                                                {% if r.type == 'file' %}
+                                                                    <div class="row">
+                                                                        <div class="col-auto">
+                                                                            <input class="form-control" type="file" disabled>
+                                                                        </div>
+                                                                        <div class="col-auto"></div>
+                                                                    </div>
+                                                                {% endif %}           
+                                                            </div>
                                 </div>
-                                <div class="col-2"></div>
                             </div>
-                            <div class="col-sm-4" id="centralDiv">
-                                <div class="btn-group" id="createButton{{loop.index}}">
-                                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> + </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" onclick="createTemplateOpenQuestion(this.id)" href="#" id="template_open#btn{{loop.index}}"> Open </a></li>
-                                        <li><a class="dropdown-item" onclick="createTemplateCheckboxQuestion(this.id)" href="#" id="template_check#btn{{loop.index}}"> Checkbox </a></li>
-                                        <li><a class="dropdown-item" onclick="createTemplateRadioQuestion(this.id)" href="#" id="template_radio#btn{{loop.index}}"> Radio button </a></li>
-                                        <li><a class="dropdown-item" onclick="createTemplateFileQuestion(this.id)" href="#" id="template_file#btn{{loop.index}}">File</a></li>
-                                    </ul>
-                                </div>
-                                <span>&nbsp;&nbsp;</span>
-                                <a type="button" class="btn btn-primary" id="template_delete_btn{{loop.index}}" onclick="deleteTemplateQuestion(this.id)"> X </a>
-                            </div>
-                        </div>
-                    <hr class="solid">
+                            
+                        {% endfor %}
                     </div>
-                {% endfor %}
+                </div>
+                <div class="col-2"></div>
             </div>
             <button type="submit" class="btn btn-primary" id="saveButton"> Save </button>
         </form>
         <form action="/" method="POST" id="homeForm">
-            <button type="submit" class="btn btn-primary"> Go back </button>
+            <button type="submit" class="btn btn-secondary"> Home page </button>
         </form>
     </div>
     <meta id="n" data-name="{{number}}">
