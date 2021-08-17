@@ -70,6 +70,7 @@ def createTemplate():
                     session.commit()
                     newFileQuestion = FileQuestion(id = str(newQuestion.id), text = v)
                     session.add(newFileQuestion)
+                    id_openQuestion = newQuestion.id
                     j = j + 1
                 elif k == "required":
                     requiredQuestion = session.query(Question).filter(Question.id == id_openQuestion).first()
