@@ -26,7 +26,7 @@ def show_my_survey(id):
     #    question = getFormQuestions(id)
     #except Exception as e:
     #    return render_template("error.html", error = e, message = "Errore lettura domande form")
-
+    #print(selectedSurvey.anonymous)
     try:
         questionSet = getAllFormQuestion(id)
         

@@ -26,7 +26,7 @@ function createQButton(){
     
     var btn = document.createElement("button");
     btn.setAttribute("type", "button");
-    btn.setAttribute("class", "btn btn-primary dropdown-toggle");
+    btn.setAttribute("class", "btn btn-primary dropdown-toggle rounded-pill");
     btn.setAttribute("data-bs-toggle", "dropdown");
     btn.setAttribute("aria-expanded", "false");
     btn.setAttribute("id", "newQuestionButton");
@@ -311,6 +311,7 @@ function createTextarea(name){
   textarea.setAttribute("rows", "1");
   textarea.setAttribute("class", "form-control");
   textarea.setAttribute('name', name);
+  textarea.required = true;
   return textarea;
 }
 
@@ -348,7 +349,7 @@ function createAddAndDeleteButtons(){
 
   var deleteButton = document.createElement("a");
   deleteButton.setAttribute("type","button");
-  deleteButton.setAttribute("class","btn btn-primary");
+  deleteButton.setAttribute("class","btn btn-primary rounded-pill");
   deleteButton.setAttribute("id","delete_btn"+counter);
   deleteButton.setAttribute("onclick", "deleteQuestion(this.id)");
   deleteButton.innerHTML=" X ";
@@ -533,11 +534,12 @@ function createFirstCheckboxOption(){
   textarea.setAttribute("rows", "1");
   textarea.setAttribute('id', 'chechtext'+checkcounter);
   textarea.setAttribute("name",counter+" checkboxtext " + checkcounter);
+  textarea.required = true;
   checkboxDiv.appendChild(textarea);
   
   var addButton = document.createElement("button");
   addButton.setAttribute('type', 'button');
-  addButton.setAttribute("class","btn btn-secondary btn-sm");
+  addButton.setAttribute("class","btn btn-secondary btn-sm rounded-pill");
   addButton.setAttribute("onclick","addcheck("+checkcounter+")");
   addButton.setAttribute("id", "addCheck "+checkcounter);
   addButton.innerHTML=" + ";
@@ -545,7 +547,7 @@ function createFirstCheckboxOption(){
 
   var deleteCheck = document.createElement("button");
   deleteCheck.setAttribute('type', 'button');
-  deleteCheck.setAttribute("class","btn btn-secondary btn-sm");
+  deleteCheck.setAttribute("class","btn btn-secondary btn-sm rounded-pill");
   deleteCheck.setAttribute("onclick","deleteCheck("+checkcounter+")");
   deleteCheck.setAttribute("id", "deleteCheck "+checkcounter);
   deleteCheck.innerHTML=" X ";
@@ -598,6 +600,7 @@ function addcheck(n){
   textarea.setAttribute("rows", "1");
   textarea.setAttribute("id", "checktext" + checkcounter);
   textarea.setAttribute("name", questionID + " checkboxtext " + checkcounter);
+  textarea.required = true;
   checkboxDiv.appendChild(textarea);
 
   newAddButton.setAttribute("id","addCheck "+checkcounter);
@@ -718,11 +721,12 @@ function createFirstRadioOption(){
   textarea.setAttribute("rows", "1");
   textarea.setAttribute('id', 'radiotext'+radiocounter);
   textarea.setAttribute("name",counter+" radiobtntext "+radiocounter);
+  textarea.required = true;
   checkboxDiv.appendChild(textarea);
   
   var addButton = document.createElement("button");
   addButton.setAttribute('type', 'button');
-  addButton.setAttribute("class","btn btn-secondary btn-sm");
+  addButton.setAttribute("class","btn btn-secondary btn-sm rounded-pill");
   addButton.setAttribute("onclick","addRadio("+radiocounter+")");
   addButton.setAttribute("id", "addRadio "+radiocounter);
   addButton.innerHTML=" + ";
@@ -731,7 +735,7 @@ function createFirstRadioOption(){
 
   var deleteCheck = document.createElement("button");
   deleteCheck.setAttribute('type', 'button');
-  deleteCheck.setAttribute("class","btn btn-secondary btn-sm");
+  deleteCheck.setAttribute("class","btn btn-secondary btn-sm rounded-pill");
   deleteCheck.setAttribute("onclick","deleteRadio("+radiocounter+")");
   deleteCheck.setAttribute("id", "deleteRadio "+radiocounter);
   deleteCheck.innerHTML=" X ";
@@ -784,6 +788,7 @@ function addRadio(n){
   textarea.setAttribute("rows", "1");
   textarea.setAttribute("id", "radiotext" + radiocounter);
   textarea.setAttribute("name", questionID + " radiobtntext " + radiocounter);
+  textarea.required = true;
   radioDiv.appendChild(textarea);
 
   newAddButton.setAttribute("id","addRadio "+radiocounter);
@@ -923,7 +928,7 @@ function createSendButton(){
 
   var sendButton = document.createElement("button");
   sendButton.setAttribute("type", "submit");
-  sendButton.setAttribute("class", "btn btn-primary");
+  sendButton.setAttribute("class", "btn btn-primary rounded-pill");
   sendButton.setAttribute("id", "sendButton")
   sendButton.innerHTML = " Submit ";
 
@@ -1339,7 +1344,7 @@ function createSaveButton(){
 
   var saveButton = document.createElement("button");
   saveButton.setAttribute("type", "submit");
-  saveButton.setAttribute("class", "btn btn-primary");
+  saveButton.setAttribute("class", "btn btn-primary rounded-pill");
   saveButton.setAttribute("id", "saveButton")
   saveButton.innerHTML = " Save ";
 

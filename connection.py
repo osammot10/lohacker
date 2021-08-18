@@ -61,6 +61,7 @@ class Survey(Base):
     template = Column(Boolean)
     active = Column(Boolean)
     deleted = Column(Boolean)
+    anonymous = Column(Boolean)
 
     def toString(self):
         return "id: {0}, maker_id: {1}, name: {2}, date: {3}".format(self.id, self.maker, self.name, self.date)
@@ -337,7 +338,7 @@ def getAnswers(formID):
 
 def getMakers(formID):
     try:
-        return session.query(Answer.maker,func.count(Answer.maker).label('number')).filter(Answer.survey == formID).group_by(Answer.maker).all()
+        return session.query(Answer.maker,func.count(Answer.maker).label('number'), Answer.date, Utenti.email).join(Utenti).filter(Answer.survey == formID).group_by(Answer.maker, Answer.date, Utenti.email).all()
     except Exception as e:
         return render_template("error.html", error = e, message = "Errore durante il caricamento degli utenti che hanno risposto al form")
 
@@ -347,9 +348,9 @@ def getAllMyForm():
     except Exception as e:
         return render_template("error.html", error = e, message = "Errore durante il caricamento dei form")
 
-def formCreation(formTitle):
+def formCreation(formTitle, anonymousOption):
     try:
-        form = Survey(maker = current_user.get_id(), name = formTitle, date = date.today(), template = False, active = True, deleted = False)
+        form = Survey(maker = current_user.get_id(), name = formTitle, date = date.today(), template = False, active = True, deleted = False, anonymous = anonymousOption)
         session.add(form)
         session.commit()
     except Exception as e:
@@ -359,7 +360,7 @@ def formCreation(formTitle):
 
 def createNewTemplate(templateTitle):
     try:
-        form = Survey(maker = current_user.get_id(), name = templateTitle, date = date.today(), template = True, active = True, deleted = False)
+        form = Survey(maker = current_user.get_id(), name = templateTitle, date = date.today(), template = True, active = True, deleted = False, anonymous = False)
         session.add(form)
         session.commit()
         return form
@@ -375,7 +376,7 @@ def questionsInsertion(form, formRequest):
     
     try:
         for k,v in formRequest:
-            if k != "titleInput":
+            if k != "titleInput" and k != "anonymous":
                 k = k.split()[1]
                 if k == 'open':
                     newQuestion = Question(survey = str(form.id), type = "open", required = False)

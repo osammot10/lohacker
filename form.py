@@ -44,9 +44,13 @@ def create_survey():
     if request.method == 'POST':
         try:
             surveyTitle = request.form['titleInput']
+            if request.form.get('anonymous', False):
+                anonymous = True
+            else:
+                anonymous = False
         except Exception as e:
             return render_template("error.html", error = e, message="")
-        newForm = formCreation(surveyTitle)
+        newForm = formCreation(surveyTitle, anonymous)
         #try:
         #    newSurvey = Survey(maker = current_user.get_id(), name = surveyTitle, date = date.today(), template = False, active = True, deleted = False)
         #    session.add(newSurvey)

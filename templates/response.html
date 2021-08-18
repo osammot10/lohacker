@@ -2,94 +2,114 @@
 
 {% block body %}
     <div class="row">
-        <div class = "col"></div>
-        <div class="col-6">
+        <div class = "col-2"></div>
+        <div class="col-8">
             <form action="/getresponse/{{survey.id}}" method="POST" enctype="multipart/form-data">
-                <h1>{{ survey.name }}</h1>
+                <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col-8">
+                        <h1>{{ survey.name }}</h1>
+                    </div>
+                    <div class="col-2 vertical-center" style="display: flex; align-items: center;">
+                        {% if survey.anonymous == true %}
+                            <button type="button" class="btn btn-light left" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Questo form è anonimo"><img src="{{url_for('static', filename='anonymous.png')}}" width="15" height="15"></button>
+                        {% endif %}
+                    </div>
+                </div>
                 <br>
                 {% for u in question %}
-                    {% if u.type == "open" %}
-                        {% if u.required == true %}
-                            <label class="form-label required-field">{{ u.text }}</label>
-                            <br>
-                            <input class="form-control" type="text" name="{{u.id}} open" required>
-                        {% else %}
-                            <label class="form-label ">{{ u.text }}</label>
-                            <br>
-                            <input class="form-control" type="text" name="{{u.id}} open">
-                        {% endif %}
-                    {% elif u.type == "checkbox" %}
-                        {% if u.required == true %}
-                            <label class="form-label required-field">{{ u.text }}</label>
-                            <br>
-                            {% for c in checkbox if c.id == u.id %}
-                            <div class="input-group mb-3">
-                                <div class="input-group-text">
-                                    <input class="form-check-input mt-0 checkbox-{{u.id}}" type="checkbox" aria-label="Checkbox for following text input" name="{{u.id}} checkbox {{c.optionNumber}}" onclick="checkRequired('checkbox-{{u.id}}')" required>
+                    <div class="card shadow rounded m-3" id="container{{loop.index}}">
+                        <div class="card-header"> 
+                            {% if u.required == false %}
+                                <textarea class="form-control" style="text-align: center;" rows="1" readonly>{{u.text}}</textarea>
+                            {% else %}
+                            <div class="row">
+                                <div class="col">
+                                    <textarea class="form-control" style="text-align: center;" rows="1" readonly>{{u.text}}</textarea>
                                 </div>
-                                <input type="text" class="form-control" aria-label="Text input with checkbox" value=" {{ c.option }}" readonly>
+                                <div class="col-auto"><p class="required-field"> </p></div> 
+                            </div>                               
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <div class="container">
+                                <div class="row">
+                                    {% if u.type == 'open' %}
+                                        {% if u.required == true %}
+                                            <textarea class="form-control" rows = "1" name="{{u.id}} open" placeholder="Inserisci qui la tua risposta" required></textarea>
+                                        {% else %}
+                                            <textarea class="form-control" rows = "1" name="{{u.id}} open" placeholder="Inserisci qui la tua risposta"></textarea>
+                                        {% endif %}
+                                    {% elif u.type == "checkbox" %}
+                                        {% if u.required == true %}
+                                            {% for c in checkbox if c.id == u.id %}
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-text">
+                                                        <input class="form-check-input mt-0 checkbox-{{u.id}}" type="checkbox" aria-label="Checkbox for following text input" name="{{u.id}} checkbox {{c.optionNumber}}" onclick="checkRequired('checkbox-{{u.id}}')" required>
+                                                    </div>
+                                                    <input type="text" class="form-control" aria-label="Text input with checkbox" value=" {{ c.option }}" readonly>
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            {% for c in checkbox if c.id == u.id%}
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-text">
+                                                        <input class="form-check-input mt-0" type="checkbox" aria-label="Checkbox for following text input" name="{{u.id}} checkbox {{c.optionNumber}}">
+                                                    </div>
+                                                    <input type="text" class="form-control" aria-label="Text input with checkbox" value=" {{ c.option }}" readonly>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}                            
+                                    {% elif u.type == 'radio' %}
+                                        {% if u.required == true %}
+                                            {% for c in radio if c.id == u.id %}
+                                                <div class="input-group mb-3">
+                                                    <div class="input-group-text">
+                                                        <input class="form-check-input mt-0" type="radio" value="{{c.optionNumber}}" aria-label="Radio button for following text input" name="{{u.id}} radio" required>
+                                                    </div>
+                                                    <input type="text" class="form-control" aria-label="Text input with radio button" value="{{c.option}}" readonly>
+                                                </div>
+                                            {% endfor %}
+                                        {% else %}
+                                            {% for c in radio if c.id == u.id %}
+                                                <div class="input-group mb-3 mx-0">
+                                                    <div class="input-group-text">
+                                                        <input class="form-check-input mt-0" type="radio" value="{{c.optionNumber}}" aria-label="Radio button for following text input" name="{{u.id}} radio">
+                                                    </div>
+                                                    <input type="text" class="form-control" aria-label="Text input with radio button" value="{{c.option}}" readonly>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}       
+                                    {% else %}
+                                        {% if u.required == true %}
+                                            <div class="mb-3">
+                                                <input name="{{u.id}} file" value="{{u.id}}" hidden>
+                                                <input class="form-control" type="file" id="formFile" name="{{u.id}} file" required>
+                                            </div>
+                                        {% else %}
+                                            <div class="mb-3">
+                                                <input name="{{u.id}} file" value="{{u.id}}" hidden>
+                                                <input class="form-control" type="file" id="formFile" name="{{u.id}} file">
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}       
+                                </div>          
                             </div>
-                            {% endfor %}
-                        {% else %}
-                            <label class="form-label">{{ u.text }}</label>
-                            <br>
-                            {% for c in checkbox if c.id == u.id%}
-                                <div class="input-group mb-3">
-                                    <div class="input-group-text">
-                                        <input class="form-check-input mt-0" type="checkbox" aria-label="Checkbox for following text input" name="{{u.id}} checkbox {{c.optionNumber}}">
-                                    </div>
-                                    <input type="text" class="form-control" aria-label="Text input with checkbox" value=" {{ c.option }}" readonly>
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    {% elif u.type == "radio" %}
-                        {% if u.required == true %}
-                            <label class="form-label required-field">{{ u.text }}</label>
-                            <br>
-                            {% for c in radio if c.id == u.id %}
-                            <div class="input-group mb-3">
-                                <div class="input-group-text">
-                                <input class="form-check-input mt-0" type="radio" value="{{c.optionNumber}}" aria-label="Radio button for following text input" name="{{u.id}} radio" required>
-                                </div>
-                                <input type="text" class="form-control" aria-label="Text input with radio button" value="{{c.option}}" readonly>
-                            </div>
-                            {% endfor %}
-                        {% else %}
-                            <label class="form-label">{{ u.text }}</label>
-                            <br>
-                            {% for c in radio if c.id == u.id %}
-                            <div class="input-group mb-3 mx-0">
-                                <div class="input-group-text">
-                                    <input class="form-check-input mt-0" type="radio" value="{{c.optionNumber}}" aria-label="Radio button for following text input" name="{{u.id}} radio">
-                                </div>
-                                <input type="text" class="form-control" aria-label="Text input with radio button" value="{{c.option}}" readonly>
-                            </div>
-                            {% endfor %}
-                        {% endif %}
-                    {% else %}
-                        {% if u.required == true %}
-                            <div class="mb-3">
-                                <label for="formFile" class="form-label required-field">{{u.text}}</label>
-                                <input name="{{u.id}} file" value="{{u.id}}" hidden>
-                                <input class="form-control" type="file" id="formFile" name="{{u.id}} file" required>
-                            </div>
-                        {% else %}
-                            <div class="mb-3">
-                                <label for="formFile" class="form-label">{{u.text}}</label>
-                                <input name="{{u.id}} file" value="{{u.id}}" hidden>
-                                <input class="form-control" type="file" id="formFile" name="{{u.id}} file">
-                            </div>
-                        {% endif %}
-                    {% endif %}
-                    <br>
-                    <br>
+                        </div>
+                    </div>
                 {% endfor %}
-                <button type="submit" class="btn btn-primary"> Send </button>
+                <button type="submit" class="btn btn-primary rounded-pill"> Send </button>
             </form>
             <form action="/" method="POST">
-                <button type="submit" class="btn btn-secondary"> Home page </button>
+                <button type="submit" class="btn btn-secondary rounded-pill w-25"> Home page </button>
             </form>
         </div>
-        <div class="col"></div>
+        <div class="col-2"></div>
     </div>
+    <script>
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+              return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
 {% endblock %}

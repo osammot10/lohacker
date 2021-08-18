@@ -7,6 +7,7 @@ Radio button e checkbox devono avere almeno un'opzione
 Le opzioni di una domanda realizzata con radio button o checkbox devono essere distinte
 Tutti i dati di un'utente non possono essere nulli o vuoti
 L'attributo type della tabella Questions può assumere solo i valori open, checkbox, radio e file.
+Un template non può essere anonimo (Survey.anonymous = false)
 
 TRIGGER:
 Quando si inserisce una risposta, tutte le domande required devono avere una risposta

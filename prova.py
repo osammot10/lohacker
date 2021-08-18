@@ -17,7 +17,7 @@ Base.metadata.schema = 'form'
 # postgresql(nome del server, non cambiare)://username:password@hostname/db_name
 # username e password sono le credenziali con le quali si accede al db
 # hostname è l'hostname o l'ip di dove si trova il server
-engine = create_engine('postgresql://postgres:postgres@localhost/lohacker')
+engine = create_engine('postgresql://postgres:postgres@localhost/postgres')
 metadata = MetaData()
 
 # Da inserire in ogni route
@@ -138,12 +138,6 @@ class FileAnswer(Base):
     question = Column(Integer, ForeignKey(FileQuestion.id), primary_key = True)
     path = Column(String)
 
-
-questions = session.query(Question).filter(Question.survey == 88).order_by(Question.id).all()
-answers = session.query(Answer).filter(Answer.survey == 88).all()
-
-
-
-checkboxAnswer = session.query(CheckboxOption.text, CheckboxAnswer.number).filter(CheckboxAnswer.id == 18).filter(CheckboxAnswer.question == 126).filter(CheckboxOption.id == CheckboxAnswer.question).filter(CheckboxOption.number == CheckboxAnswer.number).all()
-for r in checkboxAnswer:
-    print(r.text, r.number)
+a = session.query(Answer.maker,func.count(Answer.maker).label('number'), Answer.date, Utenti.email).join(Utenti).filter(Answer.survey == 131).group_by(Answer.maker, Answer.date, Utenti.email).all()
+for r in a:
+    print(r.maker, r.date, r.email)

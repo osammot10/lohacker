@@ -12,7 +12,7 @@
 					<h3>{{ survey.name }}</h3>
 				</div>
 				<div class="col-1 vertical-center p-0">
-					<button type="button" class="btn btn-secondary btn-sm left" data-bs-toggle="modal" data-bs-target="#linkModal"><small>Condividi</small> <img src="{{url_for('static', filename='share.png')}}" width="10" height="10"></button>
+					<button type="button" class="btn btn-info btn-sm left" data-bs-toggle="modal" data-bs-target="#linkModal"><small>Condividi</small> <img src="{{url_for('static', filename='share.png')}}" width="10" height="10"></button>
 					<div class="modal fade" id="linkModal">
 						<div class="modal-dialog modal-dialog-centered">
 							<div class="modal-content">
@@ -60,7 +60,10 @@
 				</div>
 				<div class="col-2 vertical-center p-0">
 					<form action="{{ url_for('myform_bp.downloadCSV', formID=survey.id) }}" method="POST" enctype="multipart/form-data">
-					<button type="submit" class="btn btn-secondary btn-sm left"><small>Download CSV</small></button>
+					<button type="submit" class="btn btn-info btn-sm left"><small>Download CSV</small></button>
+					{% if survey.anonymous == true %}
+						<button type="button" class="btn btn-light left" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Questo form è anonimo"><img src="{{url_for('static', filename='anonymous.png')}}" width="15" height="15"></button>
+					{% endif %}
 				</form>
 				</div>
 			</div>
@@ -138,25 +141,44 @@
 						{% endfor %}  
 					</div>
 					<div class="tab-pane fade" id="individual" role="tabpanel" aria-labelledby="individual-tab">
-					<br>
-					<table id="answersTable" class="table table-striped">
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th>Number of answers</th>
-								<th>Answers</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for m in makers %}
+						<br>
+						<table id="answersTable" class="table table-striped">
+							{% if survey.anonymous == true %}
+								<thead>
+									<tr>
+										<th>#</th>
+										<th>Data risposta</th>
+										<th>Risposta</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for m in makers %}
+										<tr>
+											<td> <a> {{ loop.index }} </a></td>
+											<td>{{ m.date }}</td>
+											<td><button type="button" class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modal{{m.maker}}"> Visualizza </button></td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							{% else %}
+							<thead>
 								<tr>
-									<td> <a> {{ loop.index }} </a></td>
-									<td> <a> {{m.number}} </a></td>
-									<td><button type="button" class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modal{{m.maker}}">See the answers</button></td>
+									<th>Nome</th>
+									<th>Data risposta</th>
+									<th>Risposta</th>
 								</tr>
-							{% endfor %}
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								{% for m in makers %}
+									<tr>
+										<td> <a> {{ m.email }} </a></td>
+										<td>{{m.date}}</td>
+										<td><button type="button" class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modal{{m.maker}}"> Visualizza </button></td>
+									</tr>
+								{% endfor %}
+							</tbody>
+							{% endif %}
+						</table>
 					</div>
 				</div>
 				</div>
@@ -168,92 +190,96 @@
 	<br>
 	<div class="container">
 		<div class="row text-center">
-			<form action="/" method="POST">
-				<button type="submit" class="btn btn-secondary rounded-pill w-25"> Home page </button>
+			<form action="/myform" method="POST">
+				<button type="submit" class="btn btn-secondary rounded-pill"> Back </button>
 			</form>
 		</div>
 		<div class="row text-center">
-			<form action="/myform" method="POST">
-				<button type="submit" class="btn btn-secondary rounded-pill w-25"> Back </button>
+			<form action="/" method="POST">
+				<button type="submit" class="btn btn-secondary rounded-pill w-25"> Home page </button>
 			</form>
 		</div>
 	</div>
 
 {% for m in makers %}
 <div class="modal fade" id="modal{{m.maker}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2 class="modal-title w-100 text-center" id="exampleModalLabel">Risposte</h2>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body mx-auto">
-        {% for q in questions %}
-          <h4 class="text-center">{{ q.text }}</h4>
-          {% if q.type == 'open' %}
-          	{% for a in openAnswers if (a.question == q.id) and (a.maker == m.maker) %}
-				<textarea class="form-control w-100 text-center" rows="1" readonly>{{a.text}}</textarea>
-				<br>
-          	{% endfor %}
-          {% elif q.type == 'checkbox'%}
-            {% for c in checkboxs if (c.id == q.id)%}
-              {% set count = namespace(value=0) %}
-              {% for s in checkMakerAnswer if (s.question == q.id) and (m.maker == s.maker) %}
-                {% if s.number ==  c.optionNumber %}
-                  {% set count.value = 1 %}
-                {% endif %}
-              {% endfor %}
-              {% if count.value == 1 %}
-			  	<div class="input-group text-center">
-					<div class="input-group-text">
-						<input class="form-check-input" type="checkbox" value="" id="check_c.id_c.option" checked disabled>
-					</div>
-						<textarea class="form-control" rows="1" readonly>{{c.option}}</textarea>
-				</div>
-              {% else %}
-				<div class="input-group text-center">
-					<div class="input-group-text">
-						<input class="form-check-input" type="checkbox" value="" id="check_c.id_c.option" disabled>
-					</div>
-						<textarea class="form-control" rows="1" readonly>{{c.option}}</textarea>
-				</div>
-              {% endif %}
-              <br>
-            {% endfor %}
-          {% elif q.type == 'radio' %}
-            {% set count = namespace(value=-1) %}
-            {% for s in radioMakerAnswer if (s.question == q.id) and (m.maker == s.maker) %}
-              {% set count.value = s.number %}
-            {% endfor %}
-            {% for c in radios if (c.id == q.id)%}
-              {% if count.value != c.optionNumber %}
-				<div class="input-group text-center">
-					<div class="input-group-text">
-						<input class="form-check-input" type="radio" value="" id="check_c.id_c.option" disabled>
-					</div>
-						<textarea class="form-control" rows="1" readonly>{{c.option}}</textarea>
-				</div>
-              {% else %}
-				<div class="input-group text-center">
-					<div class="input-group-text">
-						<input class="form-check-input" type="radio" value="" id="check_c.id_c.option" checked disabled>
-					</div>
-						<textarea class="form-control" rows="1" readonly>{{c.option}}</textarea>
-				</div>
-              {% endif %}
-              <br>
-            {% endfor %}
-          {% else %}
-            {% for f in file if (f.question == q.id) and (f.maker == m.maker) %}
-				<div class="row text-center m-0">
-					<form action="{{ url_for('myform_bp.download', filename=f.path) }}" method="POST" enctype="multipart/form-data">
-						<button class="btn btn-primary rounded-pill w-100" type="submit"> Download </button>
-					</form>
-				</div>
-            {% endfor %}
-          {% endif %}
-        {% endfor %}
-      </div>
+	<div class="modal-dialog modal-dialog-scrollable modal-xl">
+    	<div class="modal-content">
+      		<div class="modal-header">
+				{% if survey.anonymous == true %}
+					<h2 class="modal-title w-100 text-center" id="exampleModalLabel"> Risposta </h2>
+				{% else %}
+					<h2 class="modal-title w-100 text-center" id="exampleModalLabel"> Risposta {{m.email}} </h2>
+				{% endif %}
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      		</div>
+		<div class="modal-body">
+			{% for q in questions %}
+				<h4 class="text-center">{{ q.text }}</h4>
+				{% if q.type == 'open' %}
+					{% for a in openAnswers if (a.question == q.id) and (a.maker == m.maker) %}
+						<textarea class="form-control w-100 text-center" rows="1" readonly>{{a.text}}</textarea>
+						<br>
+					{% endfor %}
+				{% elif q.type == 'checkbox'%}
+					{% for c in checkboxs if (c.id == q.id)%}
+						{% set count = namespace(value=0) %}
+						{% for s in checkMakerAnswer if (s.question == q.id) and (m.maker == s.maker) %}
+							{% if s.number ==  c.optionNumber %}
+							{% set count.value = 1 %}
+							{% endif %}
+						{% endfor %}
+						{% if count.value == 1 %}
+							<div class="input-group text-center">
+								<div class="input-group-text">
+									<input class="form-check-input" type="checkbox" value="" id="check_c.id_c.option" checked disabled>
+								</div>
+									<textarea class="form-control" rows="1" readonly>{{c.option}}</textarea>
+							</div>
+						{% else %}
+							<div class="input-group text-center">
+								<div class="input-group-text">
+									<input class="form-check-input" type="checkbox" value="" id="check_c.id_c.option" disabled>
+								</div>
+									<textarea class="form-control" rows="1" readonly>{{c.option}}</textarea>
+							</div>
+						{% endif %}
+						<br>
+					{% endfor %}
+				{% elif q.type == 'radio' %}
+					{% set count = namespace(value=-1) %}
+					{% for s in radioMakerAnswer if (s.question == q.id) and (m.maker == s.maker) %}
+						{% set count.value = s.number %}
+					{% endfor %}
+					{% for c in radios if (c.id == q.id)%}
+						{% if count.value != c.optionNumber %}
+							<div class="input-group text-center">
+								<div class="input-group-text">
+									<input class="form-check-input" type="radio" value="" id="check_c.id_c.option" disabled>
+								</div>
+									<textarea class="form-control" rows="1" readonly>{{c.option}}</textarea>
+							</div>
+						{% else %}
+							<div class="input-group text-center">
+								<div class="input-group-text">
+									<input class="form-check-input" type="radio" value="" id="check_c.id_c.option" checked disabled>
+								</div>
+									<textarea class="form-control" rows="1" readonly>{{c.option}}</textarea>
+							</div>
+						{% endif %}
+						<br>
+					{% endfor %}
+				{% else %}
+					{% for f in file if (f.question == q.id) and (f.maker == m.maker) %}
+						<div class="row text-center m-0">
+							<form action="{{ url_for('myform_bp.download', filename=f.path) }}" method="POST" enctype="multipart/form-data">
+								<button class="btn btn-primary rounded-pill w-25" type="submit"> Download </button>
+							</form>
+						</div>
+					{% endfor %}
+				{% endif %}
+			{% endfor %}
+		</div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
@@ -266,5 +292,11 @@
     $(document).ready(function() {
         $('#answersTable').DataTable();
     } );
+</script>
+<script>
+	var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+	var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  		return new bootstrap.Tooltip(tooltipTriggerEl)
+	})
 </script>
 {% endblock %}

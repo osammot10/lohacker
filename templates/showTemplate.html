@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-2"></div>
             <div class="col">
-                <textarea class="form-control" rows="1" name="titleInput">{{ template.name }}</textarea>
+                <textarea class="form-control" rows="1" name="titleInput" required>{{ template.name }}</textarea>
                 <br>
                 <br>
                 <div id="parentDiv">
@@ -18,7 +18,7 @@
                                     <div class="row">
                                             {% if r.type == 'open' %}
                                                 <div class="col-8" id="centralDiv">
-                                                    <textarea class="form-control" rows = "1" name="{{loop.index}} open">{{r.text}}</textarea>
+                                                    <textarea class="form-control" rows = "1" name="{{loop.index}} open" required>{{r.text}}</textarea>
                                                 </div>
                                                 <div class="col-auto p-1">
                                                     <div class="form-check form-switch">
@@ -32,7 +32,7 @@
                                                 </div>
                                             {% elif r.type == 'checkbox' %}
                                                 <div class="col-8" id="centralDiv">
-                                                    <textarea class="form-control" rows = "1" name="{{loop.index}} checkbox">{{r.text}}</textarea>
+                                                    <textarea class="form-control" rows = "1" name="{{loop.index}} checkbox" required>{{r.text}}</textarea>
                                                     <br>
                                                     <div class="row" id="checkboxOptionContainer {{loop.index}}">
                                                         <div class="col-1"></div>
@@ -42,14 +42,14 @@
                                                                 <div class="row" id="checkboxRow t{{loop.index}}">
                                                                     <div class="col-10 form-check">
                                                                         <input class="form-check-input" type="checkbox" id="check{{loop.index}}" name="{{i}} checkbox" disabled>
-                                                                        <textarea class="form-control" rows = "1"  id="chechtext{{loop.index}}" name="{{i}} checkboxtext {{c.optionNumber}}">{{c.option}}</textarea>
+                                                                        <textarea class="form-control" rows = "1"  id="chechtext{{loop.index}}" name="{{i}} checkboxtext {{c.optionNumber}}" required>{{c.option}}</textarea>
                                                                     </div>
                                                                     <div class="col-2">
                                                                         {% if loop.last == false %}
-                                                                            <button type="button" class="btn btn-secondary btn-sm" onclick="deleteCheck('t{{loop.index}}')" id="deleteCheck t{{loop.index}}" style="visibility: visible;">X</button>
+                                                                            <button type="button" class="btn btn-secondary btn-sm rounded-pill" onclick="deleteCheck('t{{loop.index}}')" id="deleteCheck t{{loop.index}}" style="visibility: visible;">X</button>
                                                                         {% else %}
-                                                                            <button type="button" class="btn btn-secondary btn-sm" onclick="addcheck('t{{loop.index}}')" id="addCheck t{{loop.index}}">+</button>
-                                                                            <button type="button" class="btn btn-secondary btn-sm" onclick="deleteCheck('t{{loop.index}}')" id="deleteCheck t{{loop.index}}" style="visibility: hidden;">X</button>
+                                                                            <button type="button" class="btn btn-secondary btn-sm rounded-pill" onclick="addcheck('t{{loop.index}}')" id="addCheck t{{loop.index}}">+</button>
+                                                                            <button type="button" class="btn btn-secondary btn-sm rounded-pill" onclick="deleteCheck('t{{loop.index}}')" id="deleteCheck t{{loop.index}}" style="visibility: hidden;">X</button>
                                                                         {% endif %}
                                                                     </div>
                                                                 </div>
@@ -70,7 +70,7 @@
                                                 </div>                               
                                             {% elif r.type == 'radio' %}
                                                 <div class="col-8" id="centralDiv">
-                                                    <textarea class="form-control" rows = "1" name="{{loop.index}} radio">{{r.text}}</textarea>
+                                                    <textarea class="form-control" rows = "1" name="{{loop.index}} radio" required>{{r.text}}</textarea>
                                                     <br>
                                                     <div class="row" id="RadioOptionContainer {{loop.index}}">
                                                         <div class="col-1"></div>
@@ -80,14 +80,14 @@
                                                             <div class="row" id="radioRow t{{loop.index}}">
                                                                 <div class="col-10 form-check">
                                                                     <input class="form-check-input" type="radio" id="radio{{loop.index}}" name="{{i}} radio" disabled>
-                                                                    <textarea class="form-control" rows = "1" id="radio{{loop.index}}" name="{{i}} radiobtntext {{c.optionNumber}}">{{c.option}}</textarea>
+                                                                    <textarea class="form-control" rows = "1" id="radio{{loop.index}}" name="{{i}} radiobtntext {{c.optionNumber}}" required>{{c.option}}</textarea>
                                                                 </div>
                                                                 <div class="col-2">
                                                                     {% if loop.last == false %}
-                                                                        <button type="button" class="btn btn-secondary btn-sm" onclick="deleteRadio('t{{loop.index}}')" id="deleteRadio t{{loop.index}}" style="visibility: visible;">X</button>
+                                                                        <button type="button" class="btn btn-secondary btn-sm rounded-pill" onclick="deleteRadio('t{{loop.index}}')" id="deleteRadio t{{loop.index}}" style="visibility: visible;">X</button>
                                                                     {% else %}
-                                                                    <button type="button" class="btn btn-secondary btn-sm" onclick="addRadio('t{{loop.index}}')" id="addRadio t{{loop.index}}">+</button>
-                                                                    <button type="button" class="btn btn-secondary btn-sm" onclick="deleteRadio('t{{loop.index}}')" id="deleteRadio t{{loop.index}}" style="visibility: hidden;">X</button>
+                                                                        <button type="button" class="btn btn-secondary btn-sm rounded-pill" onclick="addRadio('t{{loop.index}}')" id="addRadio t{{loop.index}}">+</button>
+                                                                        <button type="button" class="btn btn-secondary btn-sm rounded-pill" onclick="deleteRadio('t{{loop.index}}')" id="deleteRadio t{{loop.index}}" style="visibility: hidden;">X</button>
                                                                     {% endif %}
                                                                 </div>
                                                             </div>
@@ -108,7 +108,7 @@
                                                 </div>          
                                             {% else %}
                                                 <div class="col-8" id="centralDiv">
-                                                    <textarea class="form-control" rows = "1" name="{{loop.index}} fileText">{{r.text}}</textarea>
+                                                    <textarea class="form-control" rows = "1" name="{{loop.index}} fileText" required>{{r.text}}</textarea>
                                                     <br>
                                                     <div class="row">
                                                         <div class="col-auto">
@@ -131,7 +131,7 @@
                                         <div class="col-auto p-1">
                                             <div class="container p-1">
                                                 <div class="btn-group" id="createButton{{loop.index}}">
-                                                    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> + </button>
+                                                    <button type="button" class="btn btn-primary dropdown-toggle rounded-pill" data-bs-toggle="dropdown" aria-expanded="false"> + </button>
                                                     <ul class="dropdown-menu">
                                                         <li><a class="dropdown-item" onclick="createTemplateOpenQuestion(this.id)" href="#" id="template_open#btn{{loop.index}}"> Open </a></li>
                                                         <li><a class="dropdown-item" onclick="createTemplateCheckboxQuestion(this.id)" href="#" id="template_check#btn{{loop.index}}"> Checkbox </a></li>
@@ -153,10 +153,10 @@
             </div>
             <div class="col-2"></div>
         </div>
-        <button type="submit" class="btn btn-primary" id="saveButton"> Save </button>
+        <button type="submit" class="btn btn-primary rounded-pill" id="saveButton"> Save </button>
     </form>
     <form action="/" method="POST" id="homeForm">
-        <button type="submit" class="btn btn-secondary"> Home page </button>
+        <button type="submit" class="btn btn-secondary rounded-pill w-25"> Home page </button>
     </form>
     <meta id="n" data-name="{{number}}">
 {% endblock %}

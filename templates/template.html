@@ -10,7 +10,7 @@
           <br>
           <br>
           <div class="btn-group" id="createButton">
-              <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> Create new question <span class="caret"></span></button>
+              <button type="button" class="btn btn-primary dropdown-toggle rounded-pill" data-bs-toggle="dropdown" aria-expanded="false"> Create new question <span class="caret"></span></button>
               <ul class="dropdown-menu">
                   <li><a class="dropdown-item" id="open_btn" onclick="createOpenQuestion(this.id)" href="#">Open</a></li>
                   <li><a class="dropdown-item" id="check_btn" onclick="createCheckboxQuestion(this.id)" href="#">Checkbox</a></li>
@@ -25,7 +25,7 @@
     </div>
   </form>
   <form action="/" method="POST">
-    <button type="submit" class="btn btn-secondary"> Home page </button>
+    <button type="submit" class="btn btn-secondary rounded-pill w-25"> Home page </button>
   </form>
   <meta id="n" data-name="{{number}}">
 {% endblock %}
