@@ -16,7 +16,6 @@ def show_form_create_page():
             #radioOption = []
             #templateQuestions = []
             idTemplate = request.args['id']
-            print(len(getFormQuestions(idTemplate)))
             #n = len(getFormQuestions(idTemplate))
             #templateQuestions = getAllFormQuestion(idTemplate)
             #checkboxOption = getAllFormCheckboxOptions(idTemplate)

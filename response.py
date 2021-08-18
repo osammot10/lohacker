@@ -19,12 +19,12 @@ def show_survey(id):
                     if survey.active == True:
 
                     #checkboxOptionList = []
-                        questionSet = []
+                        #questionSet = []
                     #radioOptionList = []
 
-                        questionSet = getAllFormQuestion(id)
-                        for r in questionSet:
-                            print(r.text)
+                        #questionSet = getAllFormQuestion(id)
+                        #for r in questionSet:
+                          #  print(r.text)
 
                     #checkboxOptionList = getAllFormCheckboxOptions(id)
                     #radioOptionList = getAllFormRadioOptions(id)

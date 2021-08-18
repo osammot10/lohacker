@@ -34,8 +34,6 @@ def show_my_survey(id):
 
         checkbox = getAllFormCheckboxOptions(id)
         checkboxAnswer = getAllCheckboxAnswers(id)
-        for r in checkboxAnswer:
-            print(r.number, r.counter)
         singleAnswerCheck = getAllSingleCheckboxAnswer(id)
 
         radio = getAllFormRadioOptions(id)

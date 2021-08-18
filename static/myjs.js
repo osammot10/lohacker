@@ -560,7 +560,6 @@ function createFirstCheckboxOption(){
 function addcheck(n){
 	
   checkcounter++;
-  console.log(n);
 	var optionsContainer = document.getElementById('addCheck ' + n).parentElement.parentElement.parentElement;
 
   var questionID = optionsContainer.id.split(" ")[1];
