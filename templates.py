@@ -94,6 +94,15 @@ def saveTemplate(id):
             questionsInsertion(newTemplate, request.form.items())
         except Exception as e:
             return render_template("error.html", error = e, message = "Errore nella creazione delle domande")
+        
+        template = getTemplate(id)
+        if template is None:
+            return render_template("error.html", error = "", message = "Errore durante il caricamento del template")
+        else:
+            try:
+                deleteForm(template)
+            except Exception as e:
+                return render_template("error.html", error = e, message = "Errore nela modifica del template")
 
         res = session.query(func.form.validform(newTemplate.id)).first()[0]
         if res == False:

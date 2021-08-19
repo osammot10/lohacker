@@ -75,7 +75,9 @@ def send_response(id):
     except Exception as e:
         return render_template("error.html", error = e, message = "Error: form disabilitato o elimianto")
             
-    if(session.query(func.form.checkRequiredQuestion(id)).first()[0]):
+    test = session.query(func.form.checkRequiredQuestion(id)).first()[0]
+    print(test)
+    if(test):
         return render_template("confirmation.html")
     else:
         return render_template("error.html", error = "", message = "Errore: non tutte le domande obbligatorie sono state risposte")
