@@ -1,3 +1,4 @@
+from os import close
 from connection import *
 
 login_bp = Blueprint('login_bp',__name__)
@@ -21,6 +22,8 @@ def login():
             return render_template("error.html", error = e, message = "Errore: campo email mancante")
         if email != "":
             userPassword = getUserPassword(email)
+            if userPassword is None:
+                return render_template("error.html", error = "", message = "Errore: non è possibile caricare la password")
             if userPassword is not None:
                 userPassword = userPassword[0]
             else:
@@ -29,9 +32,12 @@ def login():
                 if userPassword is not None:
                     if request.form['pwd'] == userPassword:
                         user = get_user_by_email(request.form['email'])
+                        if user is None:
+                            render_template("error.html", error = " ", message = "Errore durante il caricamento dell'utente")
                         login_user(user)
                         return redirect(url_for('login_bp.private'))
                     else:
+                        print("Password errata")
                         return render_template("wrongpassword.html")
                 else:
                     return render_template("wrongemail.html")
@@ -45,8 +51,14 @@ def login():
 @login_bp.route('/private')
 @login_required
 def private():
-    #forms = session.query(Survey).filter(Survey.maker == current_user.get_id()).filter(Survey.template == True).filter(Survey.deleted == False).all()
-    return render_template("profile.html", templates = getAllMyTemplates())
+    print("entrato")
+    try:
+        myTemplates = getAllMyTemplates()
+        if myTemplates is None:
+            return render_template("error.html", error = "", message = "Errore durante il caricamento dei form")
+        return render_template("profile.html", templates = myTemplates)
+    except Exception as e:
+        print(e)
 
 @login_bp.route('/register', methods = ['GET', 'POST'])
 def show_register_page():
@@ -56,7 +68,10 @@ def show_register_page():
 def register():
     try:
         if request.form['email'] is not None and request.form['email'] != "" and request.form['password'] is not None and request.form['password'] != "" and request.form['first_name'] is not None and request.form['first_name'] != "" and request.form['surname'] is not None and request.form['surname'] != "":
-            createNewUser(request.form['email'], request.form['password'], request.form['first_name'], request.form['surname'])
+            try:
+                createNewUser(request.form['email'], request.form['password'], request.form['first_name'], request.form['surname'])
+            except Exception as e:
+                return render_template("error.html", error = e, message = "Errore durante la registrazione di un nuovo utente")
             return redirect(url_for('login_bp.show_login_page'))
         else:
             return render_template("wrongcredentials.html")

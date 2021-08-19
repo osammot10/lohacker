@@ -1,7 +1,6 @@
 from flask import *
 from flask_login import LoginManager, UserMixin, login_user, login_required, current_user, logout_user
 
-import sqlalchemy
 from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
@@ -31,7 +30,7 @@ login_manager.init_app(app)
 # Classe per il mapping con flask_login
 # Permette di tener traccia di un utente all'interno di una sessione 
 class User ( UserMixin ):   #TODO estendere User con l'attributo Role
-    def __init__ (self , id , email , password, first_name, surname ):
+    def __init__ (self , id , email , password, first_name, surname):
         self.id = id
         self.email = email
         self.password = password
@@ -155,18 +154,20 @@ class FileAnswer(Base):
 @login_manager.user_loader
 def load_user(user_id):
     try:
-        rs = session.query(Utenti).filter(Utenti.id == user_id)
-        user = rs.first()
+        user = session.query(Utenti).filter(Utenti.id == user_id).first()
         return User(user.id, user.email, user.password, user.first_name, user.surname)
-    except:
+    except Exception as e:
+        session.rollback()
+        print(e)
         print("Exception loading user using ID")
+        return None
 
 def get_user_by_email(email):
     try:
         user = session.query(Utenti).filter(Utenti.email == email).first()
         return User(user.id, user.email, user.password, user.first_name, user.surname)
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore durante il caricamento dell'utente")
+        return None 
 
 def get_key(val, dict):
     for key, value in dict.items():
@@ -177,128 +178,136 @@ def getFormByID(formID):
     try:
         return session.query(Survey).filter(Survey.id == formID).filter(Survey.template == False).filter(Survey.deleted == False).first()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento form")
+        return None
 
 def getFormQuestions(formID):
     try:
         return session.query(Question).filter(Question.survey == formID).order_by(Question.id).all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento domande")
+        return None
 
 # Open questions
 def getOpenQuestion(questionID):
     try:
         return session.query(Question.type, OpenQuestion.id, OpenQuestion.text, Question.required).join(OpenQuestion).filter(Question.id == questionID).all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento domande aperte")
+        return None
 
 def getAllOpenAnswers(formID):
     try:
         return session.query(OpenAnswer.id, OpenAnswer.question, OpenAnswer.text, Answer.maker, Answer.date).join(Answer).filter(Answer.survey == formID).all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento risposte domande aperte del form")
+        return None
 
 # Checkbox question
 def getCheckboxQuestion(questionID):
     try:
         return session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text, Question.required).join(CheckboxQuestion).filter(Question.id == questionID).all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento domanda checkbox")
+        return None
 
 def getAllCheckboxQuestions(formID):
     try:
         return session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text).join(CheckboxQuestion).filter(Question.survey == formID).filter(Question.type == "checkbox").all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento domande di tipo checkbox del form")
+        return None
 
 def getCheckboxOptions(questionID):
     try:
         return session.query(CheckboxQuestion.id, CheckboxQuestion.text, CheckboxOption.number.label('optionNumber'), CheckboxOption.text.label('option',)).join(CheckboxOption).filter(CheckboxQuestion.id == questionID).all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento opzioni checkbox")
+        return None
 
 def getCheckboxAnswers(questionID):
     try:
         return session.query(CheckboxOption.id, CheckboxOption.number, func.count(CheckboxAnswer.number).label('counter')).outerjoin(CheckboxAnswer, (CheckboxAnswer.question == CheckboxOption.id) & (CheckboxAnswer.number == CheckboxOption.number)).filter(CheckboxOption.id == questionID).group_by(CheckboxOption.id, CheckboxOption.number).all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento risposte domanda checkbox")
+        return None
 
 def getAllSingleCheckboxAnswer(formID):
     try:
         return session.query(Answer.maker,Answer.date,CheckboxAnswer.number,CheckboxAnswer.question).join(Answer).filter(Answer.survey == formID).all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento risposte domande checkbox")
+        return None
 
 # Radio question
 def getRadioQuestion(questionID):
     try:
         return session.query(Question.type, RadioQuestion.id, RadioQuestion.text, Question.required).join(RadioQuestion).filter(Question.id == questionID).all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento domanda radio button")
+        return None
 
 def getAllRadioQuestions(formID):
     try:
         return session.query(Question.type, RadioQuestion.id, RadioQuestion.text).join(RadioQuestion).filter(Question.survey == formID).filter(Question.type == "radio").all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento domande radio button")
+        return None
 
 def getRadioOptions(questionID):
     try:
         return session.query(RadioQuestion.id, RadioQuestion.text, RadioOption.number.label('optionNumber'), RadioOption.text.label('option')).join(RadioOption).filter(RadioQuestion.id == questionID).all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento opzioni domanda radio button")
+        return None
 
 def getRadioAnswers(questionID):
     try:
         return session.query(RadioOption.id, RadioOption.number, func.count(RadioAnswer.number).label('counter')).outerjoin(RadioAnswer, (RadioAnswer.question == RadioOption.id) & (RadioAnswer.number == RadioOption.number)).filter(RadioOption.id == questionID).group_by(RadioOption.id, RadioOption.number).all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento risposte a domanda radio button")
+        return None
 
 def getAllSingleRadioAnswer(formID):
     try:
         return session.query(Answer.maker,Answer.date,RadioAnswer.number,RadioAnswer.question).join(Answer).filter(Answer.survey == formID).all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento risposte domande radio button")
+        return None
 
 # File question
 def getFileQuestion(questionID):
     try:
         return session.query(Question.type, FileQuestion.id, FileQuestion.text, Question.required).join(FileQuestion).filter(Question.id == questionID).all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento domanda file")
+        return None
 
 def getAllFileAnswers(formID):
     try:
         return session.query(FileAnswer.id, FileAnswer.question, FileAnswer.path, Answer.maker).join(Answer).filter(Answer.survey == formID).all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento file risposta")
+        return None
 
 
 def getAllFormQuestion(formID):
     try:
         questionSet = []
-        for question in getFormQuestions(formID):
-            if question.type == "open":
-                questionSet += getOpenQuestion(question.id)
-            elif question.type == "checkbox":
-                questionSet += getCheckboxQuestion(question.id)
-            elif question.type == "radio":
-                questionSet += getRadioQuestion(question.id)
-            elif question.type == "file":
-                questionSet += getFileQuestion(question.id)
-        return questionSet
+        questionForm = getFormQuestions(formID)
+        if questionForm is None:
+            return render_template("error.html", error = "", message = "Errore durante il caricamento delle domande")
+        else:
+            for question in questionForm:
+                if question.type == "open":
+                    questionSet += getOpenQuestion(question.id)
+                elif question.type == "checkbox":
+                    questionSet += getCheckboxQuestion(question.id)
+                elif question.type == "radio":
+                    questionSet += getRadioQuestion(question.id)
+                elif question.type == "file":
+                    questionSet += getFileQuestion(question.id)
+            return questionSet
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore durante caricamento di tutte le domande del form")
+        return None
 
 
 def getAllFormCheckboxOptions(formID):
     try:
         checkboxOptions = []
-        for question in getAllCheckboxQuestions(formID):
-            checkboxOptions += getCheckboxOptions(question.id)
-        return checkboxOptions
+        checkboxQuestions = getAllCheckboxQuestions(formID)
+        if checkboxQuestions is None:
+            return render_template("error.html", error = "", message = "Errore caricamento durante caricamento di tutte le opzioni delle domande checkbox del form")
+        else:
+            for question in checkboxQuestions:
+                checkboxOptions += getCheckboxOptions(question.id)
+            return checkboxOptions
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento durante caricamento di tutte le opzioni delle domande checkbox del form")
+        return None
 
 def getAllCheckboxAnswers(formID):
     try:
@@ -307,56 +316,61 @@ def getAllCheckboxAnswers(formID):
             checkboxAnswer += getCheckboxAnswers(question.id)
         return checkboxAnswer
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore durante caricamento di tutte le risposte a domande checkbox del form")
-    
-
+        return None
 
 def getAllFormRadioOptions(formID):
     try:
         radioOptions = []
+        radioQuestions = getAllRadioQuestions(formID)
+        if radioQuestions is None:
+            return render_template("error.html", error = "", message = "Errore durante il caricamento delle domande di tipo radio")
         for question in getAllRadioQuestions(formID):
             radioOptions += getRadioOptions(question.id)
         return radioOptions
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento durante caricamento di tutte le opzioni delle domande radio button del form")
+        return None
 
 def getAllRadioAnswers(formID):
     try:
         radioAnswer = []
-        for question in getAllRadioQuestions(formID):
-            radioAnswer += getRadioAnswers(question.id)
-        return radioAnswer
+        radioQuestions = getAllRadioQuestions(formID)
+        if radioQuestions is None:
+            return render_template("error.html", error = "", message = "Errore durante il caricamento delle domande di tipo radio")
+        else:
+            for question in radioQuestions:
+                radioAnswer += getRadioAnswers(question.id)
+            return radioAnswer
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore durante caricamento di tutte le risposte a domande radio button del form")
-
+        return None
 
 def getAnswers(formID):
     try:
         return session.query(Answer).filter(Answer.survey == formID).all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore caricamento risposte al form")
+        return None
 
 def getMakers(formID):
     try:
         return session.query(Answer.maker,func.count(Answer.maker).label('number'), Answer.date, Utenti.email).join(Utenti).filter(Answer.survey == formID).group_by(Answer.maker, Answer.date, Utenti.email).all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore durante il caricamento degli utenti che hanno risposto al form")
+        return None
 
 def getAllMyForm():
     try:
         return session.query(Survey).filter(Survey.maker == current_user.get_id()).filter(Survey.template == False).filter(Survey.deleted == False).all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore durante il caricamento dei form")
+        return None
 
 def formCreation(formTitle, anonymousOption):
     try:
         form = Survey(maker = current_user.get_id(), name = formTitle, date = date.today(), template = False, active = True, deleted = False, anonymous = anonymousOption)
         session.add(form)
         session.commit()
+        return form
     except Exception as e:
         session.rollback()
-        return render_template("error.html", error = e, message = "Errore creazione form")
-    return form
+        print(e)
+        return None
 
 def createNewTemplate(templateTitle):
     try:
@@ -366,71 +380,67 @@ def createNewTemplate(templateTitle):
         return form
     except Exception as e:
         session.rollback()
-        return render_template("error.html", error = e, message = "Errore creazione form")
+        return None
 
 def questionsInsertion(form, formRequest):
     id_check = -1
     id_radio = -1
     idRequiredQuestion = 0
     i = 1
-    
-    try:
-        for k,v in formRequest:
-            if k != "titleInput" and k != "anonymous":
-                k = k.split()[1]
-                if k == 'open':
-                    newQuestion = Question(survey = str(form.id), type = "open", required = False)
-                    session.add(newQuestion)
-                    session.commit()
-                    newOpenQuestion = OpenQuestion(id = str(newQuestion.id), text = v)
-                    session.add(newOpenQuestion)
-                    idRequiredQuestion = newQuestion.id
-                elif k == 'checkbox':
-                    newQuestion = Question(survey = str(form.id), type = "checkbox", required = False)
-                    session.add(newQuestion)
-                    session.commit()
-                    newCheckboxQuestion = CheckboxQuestion(id = str(newQuestion.id), text= v)
-                    session.add(newCheckboxQuestion)
-                    id_check = newCheckboxQuestion.id
-                    idRequiredQuestion = newQuestion.id
-                    i = 1
-                elif k == 'checkboxtext':
-                    newCheckboxOption = CheckboxOption(id = str(id_check), number = i, text = v)
-                    session.add(newCheckboxOption)
-                    i = i + 1
-                elif k == 'radio' :
-                    newQuestion = Question(survey = str(form.id), type = "radio", required = False)
-                    session.add(newQuestion)
-                    session.commit()
-                    newRadioQuestion = RadioQuestion(id = str(newQuestion.id), text= v)
-                    session.add(newRadioQuestion)
-                    id_radio = newRadioQuestion.id
-                    idRequiredQuestion = newQuestion.id
-                    i = 1
-                elif k == 'radiobtntext' :
-                    newRadioOption = RadioOption(id = str(id_radio), number = i, text = v)
-                    session.add(newRadioOption)
-                    i = i + 1
-                elif k == 'fileText':
-                    newQuestion = Question(survey = str(form.id), type = "file", required = False)
-                    session.add(newQuestion)
-                    session.commit()
-                    newFileQuestion = FileQuestion(id = str(newQuestion.id), text = v)
-                    session.add(newFileQuestion)
-                    idRequiredQuestion = newFileQuestion.id
-                elif k == "required":
-                    requiredQuestion = session.query(Question).filter(Question.id == idRequiredQuestion).first()
-                    requiredQuestion.required = True
-                    session.commit()
+    for k,v in formRequest:
+        if k != "titleInput" and k != "anonymous":
+            k = k.split()[1]
+            if k == 'open':
+                newQuestion = Question(survey = str(form.id), type = "open", required = False)
+                session.add(newQuestion)
                 session.commit()
-    except Exception as e:
-        return render_template("error.html", error = e, message = "Errore nella creazione delle domande")
+                newOpenQuestion = OpenQuestion(id = str(newQuestion.id), text = v)
+                session.add(newOpenQuestion)
+                idRequiredQuestion = newQuestion.id
+            elif k == 'checkbox':
+                newQuestion = Question(survey = str(form.id), type = "checkbox", required = False)
+                session.add(newQuestion)
+                session.commit()
+                newCheckboxQuestion = CheckboxQuestion(id = str(newQuestion.id), text= v)
+                session.add(newCheckboxQuestion)
+                id_check = newCheckboxQuestion.id
+                idRequiredQuestion = newQuestion.id
+                i = 1
+            elif k == 'checkboxtext':
+                newCheckboxOption = CheckboxOption(id = str(id_check), number = i, text = v)
+                session.add(newCheckboxOption)
+                i = i + 1
+            elif k == 'radio' :
+                newQuestion = Question(survey = str(form.id), type = "radio", required = False)
+                session.add(newQuestion)
+                session.commit()
+                newRadioQuestion = RadioQuestion(id = str(newQuestion.id), text= v)
+                session.add(newRadioQuestion)
+                id_radio = newRadioQuestion.id
+                idRequiredQuestion = newQuestion.id
+                i = 1
+            elif k == 'radiobtntext' :
+                newRadioOption = RadioOption(id = str(id_radio), number = i, text = v)
+                session.add(newRadioOption)
+                i = i + 1
+            elif k == 'fileText':
+                newQuestion = Question(survey = str(form.id), type = "file", required = False)
+                session.add(newQuestion)
+                session.commit()
+                newFileQuestion = FileQuestion(id = str(newQuestion.id), text = v)
+                session.add(newFileQuestion)
+                idRequiredQuestion = newFileQuestion.id
+            elif k == "required":
+                requiredQuestion = session.query(Question).filter(Question.id == idRequiredQuestion).first()
+                requiredQuestion.required = True
+                session.commit()
+            session.commit()
 
 def getUserAnswer(formID):
     try:
         return session.query(Answer).filter(Answer.maker == str(current_user.get_id())).filter(Answer.survey == formID).all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore durante il caricamento delle risposte esistenti dell'utente al form")
+        return None
 
 def createNewAnswer(formID):
     try:
@@ -440,7 +450,7 @@ def createNewAnswer(formID):
         return newAnswer
     except Exception as e:
         session.rollback()
-        return render_template("error.html", error = e, message = "Errore creazione nuova risposta")
+        return None
 
 def createNewOpenAnswer(questionID, content, answerID):
     try:
@@ -449,7 +459,6 @@ def createNewOpenAnswer(questionID, content, answerID):
         session.commit()
     except Exception as e:
         session.rollback()
-        return render_template("error.html", error = e, message = "Errore inserimento risposta aperta")
 
 def createNewCheckboxAnswer(questionID, optionSelected, answerID):
     try:
@@ -458,7 +467,6 @@ def createNewCheckboxAnswer(questionID, optionSelected, answerID):
         session.commit()
     except Exception as e:
         session.rollback()
-        return render_template("error.html", error = e, message = "Errore inserimento risposta checkbox")
 
 def createNewRadioAnswer(questionID, optionSelected, answerID):
     try:
@@ -467,7 +475,6 @@ def createNewRadioAnswer(questionID, optionSelected, answerID):
         session.commit()
     except Exception as e:
         session.rollback()
-        return render_template("error.html", error = e, message = "Errore inserimento risposta radio button")
 
 def createNewFileAnswer(value, questionID, answerID):
     try:
@@ -493,53 +500,58 @@ def createNewFileAnswer(value, questionID, answerID):
                 return render_template("error.html", error = e, message = "Errore durante il salvataggio del file")
     except Exception as e:
         session.rollback()
-        return render_template("error.html", error = e, message = "Errore durante il salvataggio del file")
 
 
 def getTemplate(templateID):
     try:
         return session.query(Survey).filter(Survey.id == templateID).first()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore durante il caricamento del template")
+        None
 
 def disableForm(formID):
     form = getFormByID(formID)
-    try:
-        form.active = False
-        session.commit()
-    except Exception as e:
-        session.rollback()
-        return render_template("error.html", error = e, message = "Errore nella disattivazione del form")
+    if form is None:
+        return render_template("error.html", error = " ", message = "Errore caricamento form")
+    else:
+        try:
+            form.active = False
+            session.commit()
+        except Exception as e:
+            session.rollback()
 
 def activeForm(formID):
     form = getFormByID(formID)
-    try:
-        form.active = True
-        session.commit()
-    except Exception as e:
-        session.rollback()
-        return render_template("error.html", error = e, message = "Errore nell'attivazione del form")
+    if form is None:
+        return render_template("error.html", error = "", message = "Errore caricamento form")
+    else:
+        try:
+            form.active = True
+            session.commit()
+        except Exception as e:
+            session.rollback()
 
 def deleteForm(form):
-    try:
-        form.deleted = True
-        session.commit()
-    except Exception as e:
-        session.rollback()
-        return render_template("error.html", error = e, message = "Errore nella cancellazione del form")
+    if form is None:
+        return render_template("error.html", error = " ", message = "Errore caricamento form")
+    else:
+        try:
+            form.deleted = True
+            session.commit()
+        except Exception as e:
+            session.rollback()
 
 def getUserPassword(userEmail):
     try:
         return session.query(Utenti.password).filter(Utenti.email == userEmail).first()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore: non è possibile caricare la password")
+        session.rollback()
+        return None
 
 def getAllMyTemplates():
     try:
         return session.query(Survey).filter(Survey.maker == current_user.get_id()).filter(Survey.template == True).filter(Survey.deleted == False).all()
     except Exception as e:
-        return render_template("error.html", error = e, message = "Errore durante il caricamento dei form")
-
+        return None
 
 def createNewUser(email, password, firstName, surname):
     try:
