@@ -475,6 +475,7 @@ def createNewRadioAnswer(questionID, optionSelected, answerID):
         session.commit()
     except Exception as e:
         session.rollback()
+        print(e)
 
 def createNewFileAnswer(value, questionID, answerID):
     try:

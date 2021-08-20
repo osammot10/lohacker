@@ -258,7 +258,7 @@ function createTemplateOpenQuestion(idA){
       templateFirstOpen();
     }
     else{
-      var t = $('#number').data().name;
+      var t = $('#n').data().name;
       if(counter == 0)
         counter = t;
       if(n_question < 0)
@@ -276,7 +276,7 @@ createButton = createQButton();
     templateFirstCheckbox();
 }
 else{
-    var t = $('#number').data().name;
+    var t = $('#n').data().name;
     if(counter == 0)
     counter = t;
     if(n_question < 0)
@@ -323,7 +323,7 @@ else{
 
 function deleteTemplateQuestion(idBtn){  
 if(n_question < 0)
-    n_question = $('#number').data().name;
+    n_question = $('#n').data().name;
 var divToDelete = document.getElementById(idBtn).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
 
 divToDelete.remove();
@@ -336,7 +336,7 @@ if(n_question == 0){
 
 function deleteQuestion(idBtn){
     if(n_question < 0){
-        n_question = $('#number').data().name;
+        n_question = $('#n').data().name;
     }
     if(n_question){
         var divToDelete = document.getElementById(idBtn).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
@@ -344,8 +344,8 @@ function deleteQuestion(idBtn){
         n_question--;
     }
     if(!n_question){
-        document.getElementById("questionForm").insertBefore(b,document.getElementById("sendButton"));
-        document.getElementById("sendButton").remove();
+        document.getElementById("saveForm").insertBefore(b,document.getElementById("sendButton"));
+        document.getElementById("saveButton").remove();
     }
 }
 
@@ -810,6 +810,27 @@ requiredDiv.appendChild(createSwitchForRequired());
 buttonsDiv.appendChild(createAddAndDeleteButtons());
 
 containerDiv.appendChild(createFileInput());
+}
+
+function createFileInput(){
+    var row = document.createElement("div");
+    row.setAttribute("class", "row");
+  
+    var fileDiv = document.createElement("div");
+    fileDiv.setAttribute("class", "col-auto");
+    row.appendChild(fileDiv);
+  
+    var emptyDiv = document.createElement("div");
+    emptyDiv.setAttribute("class", "col-auto");
+    row.appendChild(emptyDiv);
+  
+    var inputFile = document.createElement("input");
+    inputFile.setAttribute("class", "form-control");
+    inputFile.setAttribute("type", "file");
+    inputFile.disabled = true;
+    fileDiv.appendChild(inputFile);
+  
+    return row;
 }
 
 // Function used for the creatio of the Save button used for saving the modification of a template
