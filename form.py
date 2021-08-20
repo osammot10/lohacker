@@ -46,13 +46,16 @@ def create_survey():
                 anonymous = False
         except Exception as e:
             return render_template("error.html", error = e, message="")
+
         newForm = formCreation(surveyTitle, anonymous)
         if newForm is None:
             return render_template("error.html", error = "", message = "Errore durante la creazione del form")
+
         try:
             questionsInsertion(newForm, request.form.items())
         except Exception as e:
             return render_template("error.html", error = e, message = "Errore nella creazione delle domande")
+            
         res = session.query(func.form.validform(newForm.id)).first()[0]
         if res == False:
             return render_template("error.html", e = "", message = "Errore creazione form: un form deve contenere almeno una domanda")

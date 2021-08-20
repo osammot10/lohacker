@@ -37,7 +37,6 @@ def login():
                         login_user(user)
                         return redirect(url_for('login_bp.private'))
                     else:
-                        print("Password errata")
                         return render_template("wrongpassword.html")
                 else:
                     return render_template("wrongemail.html")
@@ -51,7 +50,6 @@ def login():
 @login_bp.route('/private')
 @login_required
 def private():
-    print("entrato")
     try:
         myTemplates = getAllMyTemplates()
         if myTemplates is None:

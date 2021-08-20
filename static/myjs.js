@@ -357,6 +357,7 @@ function createAddAndDeleteButtons(){
 
   return containerDiv;
 }
+
 function createTemplateAddAndDeleteButtons(){
   var containerDiv = document.createElement("div");
   containerDiv.setAttribute("class", "container p-1");

@@ -140,7 +140,7 @@
                                                     </ul>
                                                 </div>
                                                 <span>&nbsp;&nbsp;</span>
-                                                <a type="button" class="btn btn-primary" id="template_delete_btn{{loop.index}}" onclick="deleteTemplateQuestion(this.id)"> X </a>
+                                                <a type="button" class="btn btn-primary rounded-pill" id="template_delete_btn{{loop.index}}" onclick="deleteTemplateQuestion(this.id)"> X </a>
                                             </div>
                                         </div>
                                     </div>          
@@ -159,4 +159,5 @@
         <button type="submit" class="btn btn-secondary rounded-pill w-25"> Home page </button>
     </form>
     <meta id="n" data-name="{{number}}">
+    <script src="{{url_for('static',filename='template.js')}}"></script>
 {% endblock %}

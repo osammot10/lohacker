@@ -14,7 +14,7 @@ app = Flask(__name__)
 Base = declarative_base()
 Base.metadata.schema = 'form'
 
-engine = create_engine('postgresql://postgres:postgres@localhost/postgres')
+engine = create_engine('postgresql://user:user@localhost/postgres')
 metadata = MetaData()
 
 Session = sessionmaker(bind=engine)
@@ -29,7 +29,7 @@ login_manager.init_app(app)
 
 # Classe per il mapping con flask_login
 # Permette di tener traccia di un utente all'interno di una sessione 
-class User ( UserMixin ):   #TODO estendere User con l'attributo Role
+class User ( UserMixin ):
     def __init__ (self , id , email , password, first_name, surname):
         self.id = id
         self.email = email
