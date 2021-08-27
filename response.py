@@ -5,6 +5,7 @@ response_bp = Blueprint('response_bp',__name__)
 
 @response_bp.route('/getform/<id>')
 @login_required
+# Show the question of a specific form
 def show_form(id):
     form = getFormByID(id)
     if form is None:
@@ -43,6 +44,7 @@ def show_form(id):
 
 @response_bp.route('/getresponse/<id>', methods=['GET', 'POST'])
 @login_required
+# Load all the answer to a form into the DB
 def send_response(id):
     try:
         newAnswer = createNewAnswer(id)
@@ -85,11 +87,13 @@ def send_response(id):
 
 @response_bp.route('/answer', methods=['GET', 'POST']) 
 @login_required     
+# Redirect the user to the answer page in which you insert the link or the id of a form
 def show_answer_page():
     return render_template("answer.html")
 
 @response_bp.route('/redirect', methods=['GET', 'POST'])
 @login_required
+# Redirect the user to the page to answer the questions on the form
 def redirect_to_answer_page():
     try:
         if request.form['link'] == "":

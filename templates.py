@@ -6,11 +6,13 @@ templates_bp = Blueprint('templates_bp',__name__)
 
 @templates_bp.route('/template', methods = ['GET', 'POST'])
 @login_required
+# Redirect the user to the page for the creation of templates
 def templateCreation():
     return render_template("template.html")
 
 @templates_bp.route('/template/create', methods = ['GET', 'POST'])
 @login_required
+# Create a new template
 def createTemplate():
     if request.method == 'POST':
         try:
@@ -33,6 +35,7 @@ def createTemplate():
 
 @templates_bp.route('/useTemplate', methods = ['GET', 'POST'])
 @login_required
+# Shows a template that already exist, and allows you to modify it
 def actionTemplate():
     try:
         buttonClicked = request.form['action']
@@ -80,6 +83,7 @@ def actionTemplate():
 
 @templates_bp.route('/saveTemplate/<id>', methods = ['GET', 'POST'])
 @login_required
+# Load a new template into the DB
 def saveTemplate(id):
     if request.method == 'POST':
         try:

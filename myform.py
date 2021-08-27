@@ -5,6 +5,7 @@ myform_bp = Blueprint('myform_bp',__name__)
 
 @myform_bp.route('/myform/<id>', methods = ['GET', 'POST'])
 @login_required
+# Get all the information on the DB of a specific form (Answer,Question...)
 def show_my_form(id):
 
     checkbox = []
@@ -22,7 +23,6 @@ def show_my_form(id):
     selectedForm = getFormByID(id)
     if selectedForm is None:
         return render_template("error.html", error = " ", message = "Errore caricamento form")
-
     try:
         questionSet = getAllFormQuestion(id)
         if questionSet is None:
@@ -68,6 +68,7 @@ def show_my_form(id):
 
 @myform_bp.route('/disable', methods = ['GET', 'POST'])
 @login_required
+# Disable, activate or delete a form
 def disable_form():
     try:
         button = request.form['action']
@@ -97,6 +98,7 @@ def disable_form():
 
 @myform_bp.route('/download/<path:filename>', methods = ['GET', 'POST'])
 @login_required
+# Download the file of insert in fileQuestion
 def download(filename):
     try:
         filename = app.config['UPLOAD_FOLDER']+"/"+filename
@@ -106,6 +108,7 @@ def download(filename):
 
 @myform_bp.route('/downloadCSV/<formID>', methods = ['GET', 'POST'])
 @login_required
+# Download the CSV of a specific form 
 def downloadCSV(formID):
     form = getFormByID(formID)
     if form is None:

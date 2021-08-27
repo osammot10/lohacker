@@ -50,6 +50,7 @@ class Utenti(Base):
     first_name = Column(String)
     surname = Column(String)
 
+# Class for the mapping of the Form table in the DB
 class Form(Base):
     __tablename__ = "Form"
 
@@ -65,6 +66,7 @@ class Form(Base):
     def toString(self):
         return "id: {0}, maker_id: {1}, name: {2}, date: {3}".format(self.id, self.maker, self.name, self.date)
 
+# Class for the mapping of the Question table in the DB
 class Question(Base):
     __tablename__ = "Question"
 
@@ -76,18 +78,21 @@ class Question(Base):
     def toString(self):
         return "id: {0}, text: {1}, type: {2}".format(self.id, self.text, self.type)
 
+# Class for the mapping of the OpenQuestion table in the DB
 class OpenQuestion(Base):
     __tablename__ = "OpenQuestion"
 
     id = Column(Integer, ForeignKey(Question.id), primary_key = True, autoincrement = True)
     text = Column(String)
 
+# Class for the mapping of the CheckBoxQuestion table in the DB
 class CheckboxQuestion(Base):
     __tablename__ = "CheckboxQuestion"
 
     id = Column(Integer,ForeignKey(Question.id), primary_key=True, autoincrement=True)
     text = Column(String)
 
+# Class for the mapping of the CheckboxOption table in the DB
 class CheckboxOption(Base):
     __tablename__ = "CheckboxOption"
 
@@ -95,12 +100,14 @@ class CheckboxOption(Base):
     number = Column(Integer, primary_key = True)
     text = Column(String)
 
+# Class for the mapping of the RadioQuestion table in the DB
 class RadioQuestion(Base):
     __tablename__ = "RadioQuestion"
 
     id = Column(Integer,ForeignKey(Question.id), primary_key=True, autoincrement=True)
     text = Column(String)
 
+# Class for the mapping of the RadioOption table in the DB
 class RadioOption(Base):
     __tablename__ = "RadioOption"
 
@@ -108,12 +115,14 @@ class RadioOption(Base):
     number = Column(Integer, primary_key = True)
     text = Column(String)
 
+# Class for the mapping of the FileQuestion table in the DB
 class FileQuestion(Base):
     __tablename__ = "FileQuestion"
 
     id = Column(Integer, ForeignKey(Question.id), primary_key = True, autoincrement = True)
     text = Column(String)
 
+# Class for the mapping of the Answer table in the DB
 class Answer(Base):
     __tablename__ = "Answer"
 
@@ -122,6 +131,7 @@ class Answer(Base):
     maker = Column(Integer, ForeignKey(Utenti.id), primary_key = True)
     date = Column(Date)
 
+# Class for the mapping of the OpenAnswer table in the DB
 class OpenAnswer(Base):
     __tablename__ = "OpenAnswer"
 
@@ -129,6 +139,7 @@ class OpenAnswer(Base):
     text = Column(String)
     id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
 
+# Class for the mapping of the CheckboxAnswer table in the DB
 class CheckboxAnswer(Base):
     __tablename__ = "CheckboxAnswer"
 
@@ -136,6 +147,7 @@ class CheckboxAnswer(Base):
     number = Column(Integer, ForeignKey(CheckboxOption.number), primary_key=True, autoincrement=True)
     id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
 
+# Class for the mapping of the RadioAnswer table in the DB
 class RadioAnswer(Base):
     __tablename__ = "RadioAnswer"
 
@@ -143,6 +155,7 @@ class RadioAnswer(Base):
     number = Column(Integer, ForeignKey(RadioOption.number), primary_key=True, autoincrement=True)
     id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
 
+# Class for the mapping of the FileAnswer table in the DB
 class FileAnswer(Base):
     __tablename__ = "FileAnswer"
 
@@ -150,7 +163,7 @@ class FileAnswer(Base):
     question = Column(Integer, ForeignKey(FileQuestion.id), primary_key = True)
     path = Column(String)
 
-
+# Loads the user in session using the id
 @login_manager.user_loader
 def load_user(user_id):
     try:
@@ -162,6 +175,7 @@ def load_user(user_id):
         print("Exception loading user using ID")
         return None
 
+# Use the user's email to find it into the DB
 def get_user_by_email(email):
     try:
         user = session.query(Utenti).filter(Utenti.email == email).first()
@@ -169,11 +183,13 @@ def get_user_by_email(email):
     except Exception as e:
         return None 
 
+
 def get_key(val, dict):
     for key, value in dict.items():
          if val == value:
              return key
 
+# Get the form using the id
 def getFormByID(formID):
     try:
         return session.query(Form).filter(Form.id == formID).filter(Form.template == False).filter(Form.deleted == False).first()
@@ -268,13 +284,14 @@ def getFileQuestion(questionID):
     except Exception as e:
         return None
 
+# Get all the answers of a form
 def getAllFileAnswers(formID):
     try:
         return session.query(FileAnswer.id, FileAnswer.question, FileAnswer.path, Answer.maker).join(Answer).filter(Answer.form == formID).all()
     except Exception as e:
         return None
 
-
+# Get all the questions of a form
 def getAllFormQuestion(formID):
     try:
         questionSet = []
@@ -295,7 +312,7 @@ def getAllFormQuestion(formID):
     except Exception as e:
         return None
 
-
+# Get all the checkboxOption of all the checkboxQuestion in the form
 def getAllFormCheckboxOptions(formID):
     try:
         checkboxOptions = []
@@ -309,6 +326,7 @@ def getAllFormCheckboxOptions(formID):
     except Exception as e:
         return None
 
+# Get all the checkboxAnswer of all the checkbox in the form
 def getAllCheckboxAnswers(formID):
     try:
         checkboxAnswer = []
@@ -318,6 +336,7 @@ def getAllCheckboxAnswers(formID):
     except Exception as e:
         return None
 
+# Get all the radioOption of all the radioQuestion in the form
 def getAllFormRadioOptions(formID):
     try:
         radioOptions = []
@@ -330,6 +349,7 @@ def getAllFormRadioOptions(formID):
     except Exception as e:
         return None
 
+# Get all the radioAnswer of all the radioQuestion in the form
 def getAllRadioAnswers(formID):
     try:
         radioAnswer = []
@@ -343,24 +363,28 @@ def getAllRadioAnswers(formID):
     except Exception as e:
         return None
 
+#Get all the answers of a specific  form
 def getAnswers(formID):
     try:
         return session.query(Answer).filter(Answer.form == formID).all()
     except Exception as e:
         return None
 
+# Get all the user that have replied to a specific  form
 def getMakers(formID):
     try:
         return session.query(Answer.maker,func.count(Answer.maker).label('number'), Answer.date, Utenti.email).join(Utenti).filter(Answer.form == formID).group_by(Answer.maker, Answer.date, Utenti.email).all()
     except Exception as e:
         return None
 
+# Get all the form of the current user
 def getAllMyForm():
     try:
         return session.query(Form).filter(Form.maker == current_user.get_id()).filter(Form.template == False).filter(Form.deleted == False).all()
     except Exception as e:
         return None
 
+# Add the new form into the DB
 def formCreation(formTitle, anonymousOption):
     try:
         form = Form(maker = current_user.get_id(), name = formTitle, date = date.today(), template = False, active = True, deleted = False, anonymous = anonymousOption)
@@ -372,6 +396,7 @@ def formCreation(formTitle, anonymousOption):
         print(e)
         return None
 
+# Add a new template into the DB
 def createNewTemplate(templateTitle):
     try:
         form = Form(maker = current_user.get_id(), name = templateTitle, date = date.today(), template = True, active = True, deleted = False, anonymous = False)
@@ -382,6 +407,7 @@ def createNewTemplate(templateTitle):
         session.rollback()
         return None
 
+# Receives the in input a form and populates it with questions
 def questionsInsertion(form, formRequest):
     id_check = -1
     id_radio = -1
@@ -436,12 +462,14 @@ def questionsInsertion(form, formRequest):
                 session.commit()
             session.commit()
 
+# Get a user answer from a specific  form
 def getUserAnswer(formID):
     try:
         return session.query(Answer).filter(Answer.maker == str(current_user.get_id())).filter(Answer.form == formID).all()
     except Exception as e:
         return None
 
+# Add the answer of a form into the DB
 def createNewAnswer(formID):
     try:
         newAnswer = Answer(form = formID, maker = current_user.get_id(), date = date.today())
@@ -452,6 +480,7 @@ def createNewAnswer(formID):
         session.rollback()
         return None
 
+# Add the open answer of a form into the DB
 def createNewOpenAnswer(questionID, content, answerID):
     try:
         newOpenAnswer = OpenAnswer(question = questionID, text = content, id = str(answerID))
@@ -460,6 +489,7 @@ def createNewOpenAnswer(questionID, content, answerID):
     except Exception as e:
         session.rollback()
 
+# Add the checkbox answer of a form into the DB
 def createNewCheckboxAnswer(questionID, optionSelected, answerID):
     try:
         newCheckboxAnswer = CheckboxAnswer(question = questionID, number = optionSelected, id = str(answerID))
@@ -468,6 +498,7 @@ def createNewCheckboxAnswer(questionID, optionSelected, answerID):
     except Exception as e:
         session.rollback()
 
+# Add the radio answer of a form into the DB
 def createNewRadioAnswer(questionID, optionSelected, answerID):
     try:
         newRadioAnswer = RadioAnswer(question = questionID, number = optionSelected, id = str(answerID))
@@ -477,6 +508,7 @@ def createNewRadioAnswer(questionID, optionSelected, answerID):
         session.rollback()
         print(e)
 
+# Add the file answer of a form into the DB
 def createNewFileAnswer(value, questionID, answerID):
     try:
         try:
@@ -502,13 +534,14 @@ def createNewFileAnswer(value, questionID, answerID):
     except Exception as e:
         session.rollback()
 
-
+# Get a specific  template from the DB
 def getTemplate(templateID):
     try:
         return session.query(Form).filter(Form.id == templateID).first()
     except Exception as e:
         None
 
+# Disables a form by changing its active field in the DB
 def disableForm(formID):
     form = getFormByID(formID)
     if form is None:
@@ -520,6 +553,7 @@ def disableForm(formID):
         except Exception as e:
             session.rollback()
 
+# Activates a form by changing its active field in the DB
 def activeForm(formID):
     form = getFormByID(formID)
     if form is None:
@@ -531,6 +565,7 @@ def activeForm(formID):
         except Exception as e:
             session.rollback()
 
+# Delete a specific  form in the DB, by changing its deleted field
 def deleteForm(form):
     if form is None:
         return render_template("error.html", error = " ", message = "Errore caricamento form")
@@ -541,6 +576,7 @@ def deleteForm(form):
         except Exception as e:
             session.rollback()
 
+# Get the user password using his email
 def getUserPassword(userEmail):
     try:
         return session.query(Utenti.password).filter(Utenti.email == userEmail).first()
@@ -548,12 +584,14 @@ def getUserPassword(userEmail):
         session.rollback()
         return None
 
+# Get all the template of the current user
 def getAllMyTemplates():
     try:
         return session.query(Form).filter(Form.maker == current_user.get_id()).filter(Form.template == True).filter(Form.deleted == False).all()
     except Exception as e:
         return None
 
+# Create a new user into the DB
 def createNewUser(email, password, firstName, surname):
     try:
         user = Utenti(email = email, password = password, first_name = firstName, surname = surname)

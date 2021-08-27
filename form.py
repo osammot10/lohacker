@@ -3,8 +3,10 @@ from werkzeug.utils import *
 
 form_bp = Blueprint('form_bp',__name__)
 
+ 
 @form_bp.route('/form', methods = ['GET', 'POST'])
 @login_required
+# Load the template to create a new form, if there are any errors they are reported
 def show_form_create_page():
     if request.form.get('formButton', False) == 'normal':
         return render_template("form.html", templates = True)
@@ -36,6 +38,7 @@ def show_form_create_page():
 
 @form_bp.route('/form/create', methods = ['GET', 'POST'])
 @login_required
+# Create a new form to be inserted in the DB
 def create_form():
     if request.method == 'POST':
         try:
@@ -65,6 +68,7 @@ def create_form():
 
 @form_bp.route('/formlink')
 @login_required
+# Get the form id and shows it
 def show_form_link():
     try:
         id = request.args['id']
@@ -75,6 +79,7 @@ def show_form_link():
 
 @form_bp.route('/myform', methods=['GET', 'POST'])
 @login_required
+# Load all the form into the DB and shows them
 def show_my_form():
     try:
         myForm = getAllMyForm()

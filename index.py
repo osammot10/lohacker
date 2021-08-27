@@ -14,6 +14,7 @@ app.register_blueprint(myform_bp)
 app.register_blueprint(templates_bp)
 
 @app.route('/', methods=['GET', 'POST'])
+# Redirects the user to the home page
 def home():
     if current_user.is_authenticated:
         return redirect(url_for('login_bp.private'))
