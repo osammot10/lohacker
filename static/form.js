@@ -1,3 +1,4 @@
+// Variable used to identify questions
 var counter = 0;
 var checkcounter = 0;
 var radiocounter = 0;
@@ -5,12 +6,14 @@ var n_question = -1;
 var createButton;
 var b;
 
-// Functions for removing and cloning the button for the creation of the first questions
+// Functions for removing the button for the creation of the first questions
 
 function removeBG(){
 	  var b = document.getElementById("createButton");
     b.remove();
 }
+
+// Functions for cloning the button for the creation of the first questions
 
 function cloneBG(){
 	  var b = document.getElementById("createButton");
@@ -78,7 +81,7 @@ function createQButton(){
     return div;
 }
 
-// Function for the creation of the div container where the new question will be located (it is used for the no-first question, but when anotherone is already existing)
+// Function for the creation of the div container where the new question will be located (it is used for the no-first question, but when another one is already existing)
 function createDiv(idDiv){
 	var parentDiv = document.getElementById("parentDiv");
 
@@ -113,6 +116,7 @@ function getSpace(){
     return space;
 }
 
+// Function for the creation of the card container where the new question or answer will be located 
 function createCard(){
     var card = document.createElement("div");
     card.setAttribute("class","card shadow rounded m-3");
@@ -151,7 +155,7 @@ function createCard(){
   
     return card;
   }
-  
+
 function getTextareaDiv(card){
 return card.childNodes[1].childNodes[0].childNodes[0].childNodes[0];
 }
@@ -168,6 +172,7 @@ function getCardContainer(card){
 return card.childNodes[1].childNodes[0];
 }
 
+// Function for the creation of the text area
 function createTextarea(name){
 var textarea = document.createElement("textarea");
 textarea.setAttribute("rows", "1");
@@ -176,7 +181,8 @@ textarea.setAttribute('name', name);
 textarea.required = true;
 return textarea;
 }
-
+ 
+// Function to set the checkboxes to required
 function createSwitchForRequired(){
 var div = document.createElement("div");
 div.setAttribute("class", "form-check form-switch");
@@ -195,6 +201,7 @@ div.appendChild(label);
 return div;
 }
 
+// Function for the creation of the buttons of every new questions
 function createAddAndDeleteButtons(){
 var containerDiv = document.createElement("div");
 containerDiv.setAttribute("class", "container p-1");
@@ -220,8 +227,7 @@ containerDiv.appendChild(deleteButton);
 return containerDiv;
 }
 
-// Functions called by the onclick trigger of the DOM elements for the creation of the questions of a new form
-
+// Functions called by the onclick trigger of the DOM elements for the creation of every questions of a new form
 function createOpenQuestion(idA){
     createButton = createQButton();
       if(idA == 'open_btn'){
@@ -294,6 +300,7 @@ else{
 }
 }
 
+// General Function for deleting a question
 function deleteQuestion(idBtn){
     if(n_question < 0){
         n_question = $('#n').data().name;
@@ -309,7 +316,8 @@ function deleteQuestion(idBtn){
     }
 }
 
-// Functions used for the creation of the questions of a form
+// Functions used for the creation of the questions of a form, the first.... function is used for the first question of the form 
+
 // Open questions
 function firstOpen(){
     counter++;
@@ -333,6 +341,7 @@ function firstOpen(){
     buttonsDiv.appendChild(createAddAndDeleteButtons());
 }
 
+// Create a open question after another type of question
 function openAfter(idA){
   counter++;
   n_question++;
@@ -350,7 +359,7 @@ function openAfter(idA){
   buttonsDiv.appendChild(createAddAndDeleteButtons());
 }
 
-// Checkbox questions
+// Create a CheckBox Question
 function firstCheckbox(){
 		counter++;
     checkcounter++;
@@ -389,6 +398,7 @@ function firstCheckbox(){
     buttonsDiv.appendChild(createAddAndDeleteButtons());
 }
 
+// Create a open checkbox after another type of question
 function checkboxAfter(idA){
 		counter++;
     checkcounter++;
@@ -424,6 +434,7 @@ function checkboxAfter(idA){
     buttonsDiv.appendChild(createAddAndDeleteButtons());
 }
 
+// Function used for add the first check of a checkBox Question
 function createFirstCheckboxOption(){
   var div = document.createElement("div");
   div.setAttribute("class", "form-check col");
@@ -477,6 +488,7 @@ function createFirstCheckboxOption(){
   return div;
 }
 
+// add a checkBox option after the first
 function addcheck(n){
 	
   checkcounter++;
@@ -531,11 +543,12 @@ function addcheck(n){
   buttonsDiv.appendChild(newDeleteButton);
 }
 
+// Delete a checkBox option
 function deleteCheck(n){
   document.getElementById("checkboxRow " + n).remove();
 }
 
-// Radio button questions
+// Create Radio questions
 function firstRadio(){
   counter++;
   radiocounter++;
@@ -574,6 +587,7 @@ function firstRadio(){
   buttonsDiv.appendChild(createAddAndDeleteButtons());
 }
 
+// Create a radio question after another type of question
 function radioAfter(idA){
   counter++;
   radiocounter++;
@@ -609,6 +623,7 @@ function radioAfter(idA){
   buttonsDiv.appendChild(createAddAndDeleteButtons());
 }
 
+// Function used for add the first radioOption of a radio Question
 function createFirstRadioOption(){
   var div = document.createElement("div");
   div.setAttribute("class", "form-check col");
@@ -664,6 +679,7 @@ function createFirstRadioOption(){
   return div;
 }
 
+// Add a radio option after the first
 function addRadio(n){
 	
   radiocounter++;
@@ -719,6 +735,7 @@ function addRadio(n){
   buttonsDiv.appendChild(newDeleteButton);
 }
 
+// Delete a radio option
 function deleteRadio(n){
   document.getElementById("radioRow " + n).remove();
 }
@@ -748,6 +765,7 @@ function firstFileQuestion(){
   buttonsDiv.appendChild(createAddAndDeleteButtons());
 }
 
+// Create a file question after another type of question
 function afterFileQuestion(idA){
   counter++;
   n_question++;
@@ -770,6 +788,7 @@ function afterFileQuestion(idA){
 
 }
 
+// Create a div for the upload of a file
 function createFileInput(){
   var row = document.createElement("div");
   row.setAttribute("class", "row");
@@ -792,7 +811,6 @@ function createFileInput(){
 }
 
 // Function for the creation of the send button
-
 function createSendButton(){
   var questionForm = document.getElementById("questionForm");
 

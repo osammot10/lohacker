@@ -1,4 +1,4 @@
-// Function used for copy and paste the content of the previos element, of the element with the id 'id' passed as parameter, into the block notes of the user
+// Function used for copy and paste the content of the previous element, of the element with the id 'id' passed as parameter, into the block notes of the user
 function copy(id){
     if(id == "idInput"){
       var copyText = document.getElementById("idInputText");
