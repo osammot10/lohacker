@@ -1345,6 +1345,7 @@ function createSaveButton(){
   var saveButton = document.createElement("button");
   saveButton.setAttribute("type", "submit");
   saveButton.setAttribute("class", "btn btn-primary rounded-pill");
+
   saveButton.setAttribute("id", "saveButton")
   saveButton.innerHTML = " Save ";
 

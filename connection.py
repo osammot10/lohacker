@@ -50,8 +50,8 @@ class Utenti(Base):
     first_name = Column(String)
     surname = Column(String)
 
-class Survey(Base):
-    __tablename__ = "Survey"
+class Form(Base):
+    __tablename__ = "Form"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     maker = Column(Integer, ForeignKey(Utenti.id), primary_key=True)
@@ -69,7 +69,7 @@ class Question(Base):
     __tablename__ = "Question"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    survey = Column(Integer, ForeignKey(Survey.id), primary_key=True)
+    form = Column(Integer, ForeignKey(Form.id), primary_key=True)
     type = Column(String)
     required = Column(Boolean)
 
@@ -118,7 +118,7 @@ class Answer(Base):
     __tablename__ = "Answer"
 
     id = Column(Integer, primary_key = True, autoincrement = True)
-    survey = Column(Integer, ForeignKey(Survey.id), primary_key = True)
+    form = Column(Integer, ForeignKey(Form.id), primary_key = True)
     maker = Column(Integer, ForeignKey(Utenti.id), primary_key = True)
     date = Column(Date)
 
@@ -140,7 +140,7 @@ class RadioAnswer(Base):
     __tablename__ = "RadioAnswer"
 
     question = Column(Integer, ForeignKey(RadioOption.id), primary_key=True, autoincrement=True)
-    number = Column(Integer, ForeignKey(RadioOption.number), autoincrement=True)
+    number = Column(Integer, ForeignKey(RadioOption.number), primary_key=True, autoincrement=True)
     id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
 
 class FileAnswer(Base):
@@ -176,13 +176,13 @@ def get_key(val, dict):
 
 def getFormByID(formID):
     try:
-        return session.query(Survey).filter(Survey.id == formID).filter(Survey.template == False).filter(Survey.deleted == False).first()
+        return session.query(Form).filter(Form.id == formID).filter(Form.template == False).filter(Form.deleted == False).first()
     except Exception as e:
         return None
 
 def getFormQuestions(formID):
     try:
-        return session.query(Question).filter(Question.survey == formID).order_by(Question.id).all()
+        return session.query(Question).filter(Question.form == formID).order_by(Question.id).all()
     except Exception as e:
         return None
 
@@ -195,7 +195,7 @@ def getOpenQuestion(questionID):
 
 def getAllOpenAnswers(formID):
     try:
-        return session.query(OpenAnswer.id, OpenAnswer.question, OpenAnswer.text, Answer.maker, Answer.date).join(Answer).filter(Answer.survey == formID).all()
+        return session.query(OpenAnswer.id, OpenAnswer.question, OpenAnswer.text, Answer.maker, Answer.date).join(Answer).filter(Answer.form == formID).all()
     except Exception as e:
         return None
 
@@ -208,7 +208,7 @@ def getCheckboxQuestion(questionID):
 
 def getAllCheckboxQuestions(formID):
     try:
-        return session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text).join(CheckboxQuestion).filter(Question.survey == formID).filter(Question.type == "checkbox").all()
+        return session.query(Question.type, CheckboxQuestion.id, CheckboxQuestion.text).join(CheckboxQuestion).filter(Question.form == formID).filter(Question.type == "checkbox").all()
     except Exception as e:
         return None
 
@@ -226,7 +226,7 @@ def getCheckboxAnswers(questionID):
 
 def getAllSingleCheckboxAnswer(formID):
     try:
-        return session.query(Answer.maker,Answer.date,CheckboxAnswer.number,CheckboxAnswer.question).join(Answer).filter(Answer.survey == formID).all()
+        return session.query(Answer.maker,Answer.date,CheckboxAnswer.number,CheckboxAnswer.question).join(Answer).filter(Answer.form == formID).all()
     except Exception as e:
         return None
 
@@ -239,7 +239,7 @@ def getRadioQuestion(questionID):
 
 def getAllRadioQuestions(formID):
     try:
-        return session.query(Question.type, RadioQuestion.id, RadioQuestion.text).join(RadioQuestion).filter(Question.survey == formID).filter(Question.type == "radio").all()
+        return session.query(Question.type, RadioQuestion.id, RadioQuestion.text).join(RadioQuestion).filter(Question.form == formID).filter(Question.type == "radio").all()
     except Exception as e:
         return None
 
@@ -257,7 +257,7 @@ def getRadioAnswers(questionID):
 
 def getAllSingleRadioAnswer(formID):
     try:
-        return session.query(Answer.maker,Answer.date,RadioAnswer.number,RadioAnswer.question).join(Answer).filter(Answer.survey == formID).all()
+        return session.query(Answer.maker,Answer.date,RadioAnswer.number,RadioAnswer.question).join(Answer).filter(Answer.form == formID).all()
     except Exception as e:
         return None
 
@@ -270,7 +270,7 @@ def getFileQuestion(questionID):
 
 def getAllFileAnswers(formID):
     try:
-        return session.query(FileAnswer.id, FileAnswer.question, FileAnswer.path, Answer.maker).join(Answer).filter(Answer.survey == formID).all()
+        return session.query(FileAnswer.id, FileAnswer.question, FileAnswer.path, Answer.maker).join(Answer).filter(Answer.form == formID).all()
     except Exception as e:
         return None
 
@@ -345,25 +345,25 @@ def getAllRadioAnswers(formID):
 
 def getAnswers(formID):
     try:
-        return session.query(Answer).filter(Answer.survey == formID).all()
+        return session.query(Answer).filter(Answer.form == formID).all()
     except Exception as e:
         return None
 
 def getMakers(formID):
     try:
-        return session.query(Answer.maker,func.count(Answer.maker).label('number'), Answer.date, Utenti.email).join(Utenti).filter(Answer.survey == formID).group_by(Answer.maker, Answer.date, Utenti.email).all()
+        return session.query(Answer.maker,func.count(Answer.maker).label('number'), Answer.date, Utenti.email).join(Utenti).filter(Answer.form == formID).group_by(Answer.maker, Answer.date, Utenti.email).all()
     except Exception as e:
         return None
 
 def getAllMyForm():
     try:
-        return session.query(Survey).filter(Survey.maker == current_user.get_id()).filter(Survey.template == False).filter(Survey.deleted == False).all()
+        return session.query(Form).filter(Form.maker == current_user.get_id()).filter(Form.template == False).filter(Form.deleted == False).all()
     except Exception as e:
         return None
 
 def formCreation(formTitle, anonymousOption):
     try:
-        form = Survey(maker = current_user.get_id(), name = formTitle, date = date.today(), template = False, active = True, deleted = False, anonymous = anonymousOption)
+        form = Form(maker = current_user.get_id(), name = formTitle, date = date.today(), template = False, active = True, deleted = False, anonymous = anonymousOption)
         session.add(form)
         session.commit()
         return form
@@ -374,7 +374,7 @@ def formCreation(formTitle, anonymousOption):
 
 def createNewTemplate(templateTitle):
     try:
-        form = Survey(maker = current_user.get_id(), name = templateTitle, date = date.today(), template = True, active = True, deleted = False, anonymous = False)
+        form = Form(maker = current_user.get_id(), name = templateTitle, date = date.today(), template = True, active = True, deleted = False, anonymous = False)
         session.add(form)
         session.commit()
         return form
@@ -391,14 +391,14 @@ def questionsInsertion(form, formRequest):
         if k != "titleInput" and k != "anonymous":
             k = k.split()[1]
             if k == 'open':
-                newQuestion = Question(survey = str(form.id), type = "open", required = False)
+                newQuestion = Question(form = str(form.id), type = "open", required = False)
                 session.add(newQuestion)
                 session.commit()
                 newOpenQuestion = OpenQuestion(id = str(newQuestion.id), text = v)
                 session.add(newOpenQuestion)
                 idRequiredQuestion = newQuestion.id
             elif k == 'checkbox':
-                newQuestion = Question(survey = str(form.id), type = "checkbox", required = False)
+                newQuestion = Question(form = str(form.id), type = "checkbox", required = False)
                 session.add(newQuestion)
                 session.commit()
                 newCheckboxQuestion = CheckboxQuestion(id = str(newQuestion.id), text= v)
@@ -411,7 +411,7 @@ def questionsInsertion(form, formRequest):
                 session.add(newCheckboxOption)
                 i = i + 1
             elif k == 'radio' :
-                newQuestion = Question(survey = str(form.id), type = "radio", required = False)
+                newQuestion = Question(form = str(form.id), type = "radio", required = False)
                 session.add(newQuestion)
                 session.commit()
                 newRadioQuestion = RadioQuestion(id = str(newQuestion.id), text= v)
@@ -424,7 +424,7 @@ def questionsInsertion(form, formRequest):
                 session.add(newRadioOption)
                 i = i + 1
             elif k == 'fileText':
-                newQuestion = Question(survey = str(form.id), type = "file", required = False)
+                newQuestion = Question(form = str(form.id), type = "file", required = False)
                 session.add(newQuestion)
                 session.commit()
                 newFileQuestion = FileQuestion(id = str(newQuestion.id), text = v)
@@ -438,13 +438,13 @@ def questionsInsertion(form, formRequest):
 
 def getUserAnswer(formID):
     try:
-        return session.query(Answer).filter(Answer.maker == str(current_user.get_id())).filter(Answer.survey == formID).all()
+        return session.query(Answer).filter(Answer.maker == str(current_user.get_id())).filter(Answer.form == formID).all()
     except Exception as e:
         return None
 
 def createNewAnswer(formID):
     try:
-        newAnswer = Answer(survey = formID, maker = current_user.get_id(), date = date.today())
+        newAnswer = Answer(form = formID, maker = current_user.get_id(), date = date.today())
         session.add(newAnswer)
         session.commit()
         return newAnswer
@@ -505,7 +505,7 @@ def createNewFileAnswer(value, questionID, answerID):
 
 def getTemplate(templateID):
     try:
-        return session.query(Survey).filter(Survey.id == templateID).first()
+        return session.query(Form).filter(Form.id == templateID).first()
     except Exception as e:
         None
 
@@ -550,7 +550,7 @@ def getUserPassword(userEmail):
 
 def getAllMyTemplates():
     try:
-        return session.query(Survey).filter(Survey.maker == current_user.get_id()).filter(Survey.template == True).filter(Survey.deleted == False).all()
+        return session.query(Form).filter(Form.maker == current_user.get_id()).filter(Form.template == True).filter(Form.deleted == False).all()
     except Exception as e:
         return None
 

@@ -36,10 +36,10 @@ def show_form_create_page():
 
 @form_bp.route('/form/create', methods = ['GET', 'POST'])
 @login_required
-def create_survey():
+def create_form():
     if request.method == 'POST':
         try:
-            surveyTitle = request.form['titleInput']
+            formTitle = request.form['titleInput']
             if request.form.get('anonymous', False):
                 anonymous = True
             else:
@@ -47,7 +47,7 @@ def create_survey():
         except Exception as e:
             return render_template("error.html", error = e, message="")
 
-        newForm = formCreation(surveyTitle, anonymous)
+        newForm = formCreation(formTitle, anonymous)
         if newForm is None:
             return render_template("error.html", error = "", message = "Errore durante la creazione del form")
 
@@ -60,18 +60,18 @@ def create_survey():
         if res == False:
             return render_template("error.html", e = "", message = "Errore creazione form: un form deve contenere almeno una domanda")
         else:
-            return redirect(url_for('form_bp.show_survey_link', id = str(newForm.id)))
+            return redirect(url_for('form_bp.show_form_link', id = str(newForm.id)))
 
 
-@form_bp.route('/surveylink')
+@form_bp.route('/formlink')
 @login_required
-def show_survey_link():
+def show_form_link():
     try:
         id = request.args['id']
     except Exception as e:
         return render_template("error.html", error = e, message = "Errore ottenimento ID form")
-    url = "localhost:5000/getsurvey/"+id
-    return render_template("link.html", link = url, idSurvey=id)
+    url = "localhost:5000/getform/"+id
+    return render_template("link.html", link = url, idForm=id)
 
 @form_bp.route('/myform', methods=['GET', 'POST'])
 @login_required
@@ -81,6 +81,6 @@ def show_my_form():
         if myForm is None:
             return render_template("error.html", error = "", message = "Errore durante il caricamento dei form")
         else:
-            return render_template("myform.html", surveys = myForm)
+            return render_template("myform.html", forms = myForm)
     except Exception as e:
         return render_template("error.html", error = e, message = "Errore lettura form")        

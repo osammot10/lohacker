@@ -39,8 +39,8 @@ class Utenti(Base):
     first_name = Column(String)
     surname = Column(String)
 
-class Survey(Base):
-    __tablename__ = "Survey"
+class Form(Base):
+    __tablename__ = "Form"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     maker = Column(Integer, ForeignKey(Utenti.id), primary_key=True)
@@ -57,7 +57,7 @@ class Question(Base):
     __tablename__ = "Question"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    survey = Column(Integer, ForeignKey(Survey.id), primary_key=True)
+    form = Column(Integer, ForeignKey(Form.id), primary_key=True)
     type = Column(String)
     required = Column(Boolean)
 
@@ -106,7 +106,7 @@ class Answer(Base):
     __tablename__ = "Answer"
 
     id = Column(Integer, primary_key = True, autoincrement = True)
-    survey = Column(Integer, ForeignKey(Survey.id), primary_key = True)
+    form = Column(Integer, ForeignKey(Form.id), primary_key = True)
     maker = Column(Integer, ForeignKey(Utenti.id), primary_key = True)
     date = Column(Date)
 
@@ -138,6 +138,6 @@ class FileAnswer(Base):
     question = Column(Integer, ForeignKey(FileQuestion.id), primary_key = True)
     path = Column(String)
 
-a = session.query(Answer.maker,func.count(Answer.maker).label('number'), Answer.date, Utenti.email).join(Utenti).filter(Answer.survey == 131).group_by(Answer.maker, Answer.date, Utenti.email).all()
+a = session.query(Answer.maker,func.count(Answer.maker).label('number'), Answer.date, Utenti.email).join(Utenti).filter(Answer.form == 131).group_by(Answer.maker, Answer.date, Utenti.email).all()
 for r in a:
     print(r.maker, r.date, r.email)

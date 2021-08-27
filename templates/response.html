@@ -4,14 +4,14 @@
     <div class="row">
         <div class = "col-2"></div>
         <div class="col-8">
-            <form action="/getresponse/{{survey.id}}" method="POST" enctype="multipart/form-data">
+            <form action="/getresponse/{{form.id}}" method="POST" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-2"></div>
                     <div class="col-8">
-                        <h1>{{ survey.name }}</h1>
+                        <h1>{{ form.name }}</h1>
                     </div>
                     <div class="col-2 vertical-center" style="display: flex; align-items: center;">
-                        {% if survey.anonymous == true %}
+                        {% if form.anonymous == true %}
                             <button type="button" class="btn btn-light left" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Questo form è anonimo"><img src="{{url_for('static', filename='anonymous.png')}}" width="15" height="15"></button>
                         {% endif %}
                     </div>

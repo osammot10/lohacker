@@ -891,6 +891,7 @@ aCheckboxQuestion.setAttribute("href", "#");
 aCheckboxQuestion.innerHTML = "Checkbox";
 liCheckboxQuestion.appendChild(aCheckboxQuestion);
 
+
 var liRadioQuestion = document.createElement("li");
 ul.appendChild(liRadioQuestion);
 

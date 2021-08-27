@@ -3,20 +3,20 @@ from datetime import date
 
 response_bp = Blueprint('response_bp',__name__)
 
-@response_bp.route('/getsurvey/<id>')
+@response_bp.route('/getform/<id>')
 @login_required
-def show_survey(id):
-    survey = getFormByID(id)
-    if survey is None:
+def show_form(id):
+    form = getFormByID(id)
+    if form is None:
         return render_template("error.html", error = "", message = "Errore caricamento form")
     existingAnswer = getUserAnswer(id)
     if existingAnswer is None:
         return render_template("error.html", error = "", message = "Errore durante il caricamento delle risposte esistenti dell'utente al form")
     if not existingAnswer:
         try:
-            if survey is not None:
+            if form is not None:
                 try:
-                    if survey.active == True:
+                    if form.active == True:
 
                         questionSet = getAllFormQuestion(id)
                         if questionSet is None:
@@ -28,7 +28,7 @@ def show_survey(id):
                         radioOptionList = getAllFormRadioOptions(id)
                         if radioOptionList is None:
                             return render_template("error.html", error = "", message = "Errore caricamento durante caricamento di tutte le opzioni delle domande radio button del form")
-                        return render_template("response.html", survey = survey, question = questionSet, checkbox = checkboxOptionList, radio = radioOptionList)
+                        return render_template("response.html", form = form, question = questionSet, checkbox = checkboxOptionList, radio = radioOptionList)
                 except Exception as e:
                         return render_template("error.html", error = e, message = "Errore, il form non è attivo")
                 else:
@@ -76,6 +76,7 @@ def send_response(id):
         return render_template("error.html", error = e, message = "Error: form disabilitato o elimianto")
             
     test = session.query(func.form.checkRequiredQuestion(id)).first()[0]
+    print(test)
     if(test):
         return render_template("confirmation.html")
     else:
@@ -92,9 +93,9 @@ def show_answer_page():
 def redirect_to_answer_page():
     try:
         if request.form['link'] == "":
-            return redirect(url_for('response_bp.show_survey', id = request.form['id']))
+            return redirect(url_for('response_bp.show_form', id = request.form['id']))
         else:
             idS = request.form['link'].split("/")[2]
-            return redirect(url_for('response_bp.show_survey', id = idS))
+            return redirect(url_for('response_bp.show_form', id = idS))
     except Exception as e:
         return render_template("error.html", error = e, message = "Errore, non è possibile ottenere il link o l'id")

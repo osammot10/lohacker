@@ -9,7 +9,7 @@
 				<div class="row">
 				<div class="col-3"></div>
 				<div class="col">
-					<h3>{{ survey.name }}</h3>
+					<h3>{{ form.name }}</h3>
 				</div>
 				<div class="col-1 vertical-center p-0">
 					<button type="button" class="btn btn-info btn-sm left" data-bs-toggle="modal" data-bs-target="#linkModal"><small>Condividi</small> <img src="{{url_for('static', filename='share.png')}}" width="10" height="10"></button>
@@ -17,7 +17,7 @@
 						<div class="modal-dialog modal-dialog-centered">
 							<div class="modal-content">
 							<div class="modal-header">
-								<h5 class="modal-title"> {{survey.name}} </h5>
+								<h5 class="modal-title"> {{form.name}} </h5>
 								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 							</div>
 							<div class="modal-body">
@@ -59,9 +59,9 @@
 						</div>
 				</div>
 				<div class="col-2 vertical-center p-0">
-					<form action="{{ url_for('myform_bp.downloadCSV', formID=survey.id) }}" method="POST" enctype="multipart/form-data">
+					<form action="{{ url_for('myform_bp.downloadCSV', formID=form.id) }}" method="POST" enctype="multipart/form-data">
 					<button type="submit" class="btn btn-info btn-sm left"><small>Download CSV</small></button>
-					{% if survey.anonymous == true %}
+					{% if form.anonymous == true %}
 						<button type="button" class="btn btn-light left" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Questo form è anonimo"><img src="{{url_for('static', filename='anonymous.png')}}" width="15" height="15"></button>
 					{% endif %}
 				</form>
@@ -143,7 +143,7 @@
 					<div class="tab-pane fade" id="individual" role="tabpanel" aria-labelledby="individual-tab">
 						<br>
 						<table id="answersTable" class="table table-striped">
-							{% if survey.anonymous == true %}
+							{% if form.anonymous == true %}
 								<thead>
 									<tr>
 										<th>#</th>
@@ -206,7 +206,7 @@
 	<div class="modal-dialog modal-dialog-scrollable modal-xl">
     	<div class="modal-content">
       		<div class="modal-header">
-				{% if survey.anonymous == true %}
+				{% if form.anonymous == true %}
 					<h2 class="modal-title w-100 text-center" id="exampleModalLabel"> Risposta </h2>
 				{% else %}
 					<h2 class="modal-title w-100 text-center" id="exampleModalLabel"> Risposta {{m.email}} </h2>

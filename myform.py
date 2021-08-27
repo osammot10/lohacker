@@ -5,7 +5,7 @@ myform_bp = Blueprint('myform_bp',__name__)
 
 @myform_bp.route('/myform/<id>', methods = ['GET', 'POST'])
 @login_required
-def show_my_survey(id):
+def show_my_form(id):
 
     checkbox = []
     radio = []
@@ -19,8 +19,8 @@ def show_my_survey(id):
     singleAnswerRadio = []
     singleAnswerCheck = []
     
-    selectedSurvey = getFormByID(id)
-    if selectedSurvey is None:
+    selectedForm = getFormByID(id)
+    if selectedForm is None:
         return render_template("error.html", error = " ", message = "Errore caricamento form")
 
     try:
@@ -63,12 +63,12 @@ def show_my_survey(id):
     if maker is None:
         return render_template("error.html", error = "", message = "Errore durante il caricamento degli utenti che hanno risposto al form")
         
-    url = "localhost:5000/getsurvey/"+id
-    return render_template("mysurvey.html", survey = selectedSurvey, questions = questionSet, checkboxs = checkbox, openAnswers = openAnswer, checkboxoption = checkboxAnswer, radios = radio, radiooption = radioAnswer,answers=answer,makers=maker,checkMakerAnswer=singleAnswerCheck,radioMakerAnswer=singleAnswerRadio, file = fileAnswer, link = url, idForm = id)
+    url = "localhost:5000/getform/"+id
+    return render_template("mysurvey.html", form = selectedForm, questions = questionSet, checkboxs = checkbox, openAnswers = openAnswer, checkboxoption = checkboxAnswer, radios = radio, radiooption = radioAnswer,answers=answer,makers=maker,checkMakerAnswer=singleAnswerCheck,radioMakerAnswer=singleAnswerRadio, file = fileAnswer, link = url, idForm = id)
 
 @myform_bp.route('/disable', methods = ['GET', 'POST'])
 @login_required
-def disable_survey():
+def disable_form():
     try:
         button = request.form['action']
     except Exception as e:
