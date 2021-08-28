@@ -25,7 +25,7 @@ def login():
         if email != "":
             userPassword = getUserPassword(email)
             if userPassword is None:
-                return render_template("error.html", error = "", message = "Errore: non è possibile caricare la password")
+                return render_template("error.html", error = "", message = "Errore: la mail è errata!")
             if userPassword is not None:
                 userPassword = userPassword[0]
             else:

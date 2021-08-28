@@ -96,7 +96,7 @@ def show_answer_page():
 # Redirect the user to the page to answer the questions on the form
 def redirect_to_answer_page():
     try:
-        if request.form['link'] == "":
+        if request.form.get('link', True):
             return redirect(url_for('response_bp.show_form', id = request.form['id']))
         else:
             idS = request.form['link'].split("/")[2]
