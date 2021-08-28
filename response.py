@@ -96,16 +96,8 @@ def show_answer_page():
 # Redirect the user to the page to answer the questions on the form
 def redirect_to_answer_page():
     try:
-<<<<<<< HEAD
         if request.form.get('link', True):
             return redirect(url_for('response_bp.show_form', id = request.form['id']))
-=======
-        if request.form['link'] == "":
-            if(request.form['id']==""):
-                return render_template("error.html", message = "Errore, non è possibile ottenere il link o l'id")
-            else:
-                return redirect(url_for('response_bp.show_form', id = request.form['id']))
->>>>>>> 333e207dc61c11b3a923d377eb5a8d423e1ebd43
         else:
             idS = request.form['link'].split("/")[2]
             return redirect(url_for('response_bp.show_form', id = idS))
