@@ -97,7 +97,10 @@ def show_answer_page():
 def redirect_to_answer_page():
     try:
         if request.form['link'] == "":
-            return redirect(url_for('response_bp.show_form', id = request.form['id']))
+            if(request.form['id']==""):
+                return render_template("error.html", message = "Errore, non è possibile ottenere il link o l'id")
+            else:
+                return redirect(url_for('response_bp.show_form', id = request.form['id']))
         else:
             idS = request.form['link'].split("/")[2]
             return redirect(url_for('response_bp.show_form', id = idS))
