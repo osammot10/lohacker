@@ -166,7 +166,11 @@ def downloadCSV(formID):
                         else:
                             answerSet.append(radioAnswer.text)
                     elif question.type == "file":
-                        answerSet.append(" / ")
+                        fileAnswer = session.query(FileAnswer.path).filter(FileAnswer.id == answer.id).filter(FileAnswer.question == question.id).first()
+                        if fileAnswer:
+                            answerSet.append(fileAnswer.path)
+                        else:
+                            answerSet.append("Nessuna risposta trovata")
                 writer.writerow(answerSet)
             file.close()
 
