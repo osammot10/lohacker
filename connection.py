@@ -45,7 +45,7 @@ class Utenti(Base):
     __tablename__ = 'User'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    email = Column(String)
+    email = Column(String, unique=True)
     password = Column(String)
     first_name = Column(String)
     surname = Column(String)
@@ -161,7 +161,7 @@ class FileAnswer(Base):
 
     id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
     question = Column(Integer, ForeignKey(FileQuestion.id), primary_key = True)
-    path = Column(String)
+    path = Column(String, unique=True)
 
 # Loads the user in session using the id
 @login_manager.user_loader
