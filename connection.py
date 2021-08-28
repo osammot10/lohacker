@@ -161,7 +161,7 @@ class FileAnswer(Base):
 
     id = Column(Integer, ForeignKey(Answer.id), primary_key = True, autoincrement = True)
     question = Column(Integer, ForeignKey(FileQuestion.id), primary_key = True)
-    path = Column(String, unique=True)
+    path = Column(String)
 
 # Loads the user in session using the id
 @login_manager.user_loader
