@@ -1,5 +1,4 @@
 from connection import *
-from datetime import date
 
 response_bp = Blueprint('response_bp',__name__)
 

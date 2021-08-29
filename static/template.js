@@ -1,4 +1,4 @@
-// Variable used to identify questions
+// Variable used to identify questions, checkbox and radio options and buttons
 var counter = 0;
 var checkcounter = 0;
 var radiocounter = 0;
@@ -81,25 +81,25 @@ function createQButton(){
 
 // Function for the creation of the div container where the new question will be located (it is used for the no-first question, but when another one is already existing)
 function createDiv(idDiv){
-	var parentDiv = document.getElementById("parentDiv");
+    var parentDiv = document.getElementById("parentDiv");
 
-  var card = createCard()
-  
-  var actualDiv = document.getElementById(idDiv);
-  var nextDiv = actualDiv.nextSibling;
-  if(nextDiv != null && nextDiv.nodeName == '#text'){
-    nextDiv = nextDiv.nextSibling;
-  }
-  
-  parentDiv.insertBefore(card,nextDiv);
-  
-  return card;
+    var card = createCard()
+
+    var actualDiv = document.getElementById(idDiv);
+    var nextDiv = actualDiv.nextSibling;
+    if(nextDiv != null && nextDiv.nodeName == '#text'){
+        nextDiv = nextDiv.nextSibling;
+    }
+
+    parentDiv.insertBefore(card,nextDiv);
+
+    return card;
 }
 
 // Function used for adding a new line (<br> HTML tag) into a div
 function addLine(div){
 	var br = document.createElement("br");
-  div.appendChild(br);
+    div.appendChild(br);
 }
 
 // Function used for retrieving the id of the external div that contains the button pressed (used for creating a new question) with divA id. createDiv() wil create the div for a new question located after the div retrived by its
@@ -152,77 +152,81 @@ function createCard(){
     row.appendChild(dxDiv);
   
     return card;
-  }
-  
+}
+
+// Function used for getting the div that will contain the textarea of a card
 function getTextareaDiv(card){
-return card.childNodes[1].childNodes[0].childNodes[0].childNodes[0];
+    return card.childNodes[1].childNodes[0].childNodes[0].childNodes[0];
 }
 
+// Function used for getting the div that will contain the checkbox switch of a card
 function getRequiredCheckboxDiv(card){
-return card.childNodes[1].childNodes[0].childNodes[0].childNodes[1];
+    return card.childNodes[1].childNodes[0].childNodes[0].childNodes[1];
 }
 
+// Function used for getting the div that will containt the buttons of a card
 function getButtonsDiv(card){
-return card.childNodes[1].childNodes[0].childNodes[0].childNodes[2];
+    return card.childNodes[1].childNodes[0].childNodes[0].childNodes[2];
 }
 
+// Function used for getting the container div of a card
 function getCardContainer(card){
-return card.childNodes[1].childNodes[0];
+    return card.childNodes[1].childNodes[0];
 }
 
 // Function for the creation of the textArea of every question
 function createTextarea(name){
-var textarea = document.createElement("textarea");
-textarea.setAttribute("rows", "1");
-textarea.setAttribute("class", "form-control");
-textarea.setAttribute('name', name);
-textarea.required = true;
-return textarea;
+    var textarea = document.createElement("textarea");
+    textarea.setAttribute("rows", "1");
+    textarea.setAttribute("class", "form-control");
+    textarea.setAttribute('name', name);
+    textarea.required = true;
+    return textarea;
 }
 
 // Function that creates a checkBox to identify if a question is required or not
 function createSwitchForRequired(){
-var div = document.createElement("div");
-div.setAttribute("class", "form-check form-switch");
+    var div = document.createElement("div");
+    div.setAttribute("class", "form-check form-switch");
 
-var checkboxSwitch = document.createElement("input");
-checkboxSwitch.setAttribute('class','form-check-input');
-checkboxSwitch.setAttribute('type', 'checkbox');
-checkboxSwitch.setAttribute('name', counter + " required");
-div.appendChild(checkboxSwitch);
+    var checkboxSwitch = document.createElement("input");
+    checkboxSwitch.setAttribute('class','form-check-input');
+    checkboxSwitch.setAttribute('type', 'checkbox');
+    checkboxSwitch.setAttribute('name', counter + " required");
+    div.appendChild(checkboxSwitch);
 
-var label = document.createElement("label");
-label.setAttribute('class', 'form-check-label');
-label.innerHTML = 'Richiesta';
-div.appendChild(label);
+    var label = document.createElement("label");
+    label.setAttribute('class', 'form-check-label');
+    label.innerHTML = 'Richiesta';
+    div.appendChild(label);
 
-return div;
+    return div;
 }
 
 // Function that creates the button(add,delete) for every question
 function createAddAndDeleteButtons(){
-var containerDiv = document.createElement("div");
-containerDiv.setAttribute("class", "container p-1");
+    var containerDiv = document.createElement("div");
+    containerDiv.setAttribute("class", "container p-1");
 
-var addButton = createButton.cloneNode(true);
-addButton.setAttribute("id","createButton"+counter);
-addButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
-addButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
-addButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
-addButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("id","file_btn"+counter);
-containerDiv.appendChild(addButton);
+    var addButton = createButton.cloneNode(true);
+    addButton.setAttribute("id","createButton"+counter);
+    addButton.childNodes[1].childNodes[0].childNodes[0].setAttribute("id","open_btn"+counter);
+    addButton.childNodes[1].childNodes[1].childNodes[0].setAttribute("id","check_btn"+counter);
+    addButton.childNodes[1].childNodes[2].childNodes[0].setAttribute("id","radio_btn"+counter);
+    addButton.childNodes[1].childNodes[3].childNodes[0].setAttribute("id","file_btn"+counter);
+    containerDiv.appendChild(addButton);
 
-containerDiv.appendChild(getSpace());
+    containerDiv.appendChild(getSpace());
 
-var deleteButton = document.createElement("a");
-deleteButton.setAttribute("type","button");
-deleteButton.setAttribute("class","btn btn-primary rounded-pill");
-deleteButton.setAttribute("id","delete_btn"+counter);
-deleteButton.setAttribute("onclick", "deleteQuestion(this.id)");
-deleteButton.innerHTML=" X ";
-containerDiv.appendChild(deleteButton);
+    var deleteButton = document.createElement("a");
+    deleteButton.setAttribute("type","button");
+    deleteButton.setAttribute("class","btn btn-primary rounded-pill");
+    deleteButton.setAttribute("id","delete_btn"+counter);
+    deleteButton.setAttribute("onclick", "deleteQuestion(this.id)");
+    deleteButton.innerHTML=" X ";
+    containerDiv.appendChild(deleteButton);
 
-return containerDiv;
+    return containerDiv;
 }
 
 // Function that creates the button(add,delete) for every question in a template
@@ -255,15 +259,14 @@ function createTemplateAddAndDeleteButtons(){
     return containerDiv;
 }
 
-//TODO:Ricordati di chiedere a tommi
 // Create the openQuestion for the template
 function createTemplateOpenQuestion(idA){
     createButton = createQButton();
-      if(idA == 'open_btn'){
+    if(idA == 'open_btn'){
+        createSaveButton();
         b = cloneBG();
-      createSaveButton();
-      removeBG();
-      templateFirstOpen();
+        removeBG();
+        templateFirstOpen();
     }
     else{
       var t = $('#n').data().name;
@@ -277,77 +280,78 @@ function createTemplateOpenQuestion(idA){
 
 // Create the checkboxQuestion for the template
 function createTemplateCheckboxQuestion(idA){
-createButton = createQButton();
+    createButton = createQButton();
     if(idA == 'check_btn'){
     b = cloneBG();
     createSaveButton();
     removeBG();
     templateFirstCheckbox();
-}
-else{
-    var t = $('#n').data().name;
-    if(counter == 0)
-    counter = t;
-    if(n_question < 0)
-    n_question = t;
-    templateCheckboxAfter(idA);
-}
+    }
+    else{
+        var t = $('#n').data().name;
+        if(counter == 0)
+        counter = t;
+        if(n_question < 0)
+        n_question = t;
+        templateCheckboxAfter(idA);
+    }
 }
 
 // Create the radioQuestion for the template
 function createTemplateRadioQuestion(idA){
-createButton = createQButton();
+    createButton = createQButton();
     if(idA == 'radio_btn'){
     b = cloneBG();
     createSaveButton();
     removeBG();
     templateFirstRadio();
-}
-else{
-    var t = $('#n').data().name;
-    if(counter == 0)
-    counter = t;
-    if(n_question < 0)
-    n_question = t;
-    templateRadioAfter(idA);
-}
+    }
+    else{
+        var t = $('#n').data().name;
+        if(counter == 0)
+        counter = t;
+        if(n_question < 0)
+        n_question = t;
+        templateRadioAfter(idA);
+    }
 }
 
 // Create the fileQuestion for the template
 function createTemplateFileQuestion(idA){
-createButton = createQButton();
+    createButton = createQButton();
     if(idA == 'file_btn'){
-    b = cloneBG();
-    createSaveButton();
-    removeBG();
-    templateFirstFileQuestion();
-}
-else{
-    var t = $('#n').data().name;
-    if(counter == 0)
-    counter = t;
-    if(n_question < 0)
-    n_question = t;
-    templateAfterFileQuestion(idA);
-}
+        b = cloneBG();
+        createSaveButton();
+        removeBG();
+        templateFirstFileQuestion();
+    }
+    else{
+        var t = $('#n').data().name;
+        if(counter == 0)
+        counter = t;
+        if(n_question < 0)
+        n_question = t;
+        templateAfterFileQuestion(idA);
+    }
 }
 
 // Functions for deleting the question inside a template
 
 function deleteTemplateQuestion(idBtn){  
-if(n_question < 0)
-    n_question = $('#n').data().name;
-var divToDelete = document.getElementById(idBtn).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+    if(n_question < 0)
+        n_question = $('#n').data().name;
+    var divToDelete = document.getElementById(idBtn).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
 
-divToDelete.remove();
-n_question--;
-if(n_question == 0){
-    createQuestionGroupButton();
-    document.getElementById("saveButton").remove();
-}
+    divToDelete.remove();
+    n_question--;
+    if(n_question == 0){
+        createQuestionGroupButton();
+        document.getElementById("saveButton").remove();
+    }
 }
 
 function deleteQuestion(idBtn){
+    console.log(n_question)
     if(n_question < 0){
         n_question = $('#n').data().name;
     }
@@ -357,7 +361,8 @@ function deleteQuestion(idBtn){
         n_question--;
     }
     if(!n_question){
-        document.getElementById("saveForm").insertBefore(b,document.getElementById("sendButton"));
+        //document.getElementById("saveForm").insertBefore(b,document.getElementById("saveButton"));
+        createQuestionGroupButton();
         document.getElementById("saveButton").remove();
     }
 }
@@ -366,7 +371,7 @@ function deleteQuestion(idBtn){
 
 // Open questions
 function templateFirstOpen(){
-counter++;
+    counter++;
 
     if(n_question < 0)
     n_question = 0;
@@ -389,26 +394,25 @@ counter++;
 
 // Create a open question after another type of question
 function templateOpenAfter(idA){
+    counter++;
+    n_question++;
+    var div = getDivId(idA);
+    var card = createDiv(div);
 
-counter++;
-n_question++;
-var div = getDivId(idA);
-var card = createDiv(div);
+    var textareaDiv = getTextareaDiv(card);
+    var requiredDiv = getRequiredCheckboxDiv(card);
+    var buttonsDiv = getButtonsDiv(card);
 
-var textareaDiv = getTextareaDiv(card);
-var requiredDiv = getRequiredCheckboxDiv(card);
-var buttonsDiv = getButtonsDiv(card);
+    textareaDiv.appendChild(createTextarea(counter + " open"));
 
-textareaDiv.appendChild(createTextarea(counter + " open"));
+    requiredDiv.appendChild(createSwitchForRequired());
 
-requiredDiv.appendChild(createSwitchForRequired());
-
-buttonsDiv.appendChild(createAddAndDeleteButtons());
+    buttonsDiv.appendChild(createAddAndDeleteButtons());
 }
 
 // Checkbox questions
 function templateFirstCheckbox(){
-counter++;
+    counter++;
     checkcounter++;
     if(n_question < 0)
     n_question = 0;
@@ -447,7 +451,7 @@ counter++;
 
 // Create a open checkbox after another type of question
 function templateCheckboxAfter(idA){
-counter++;
+    counter++;
     checkcounter++;
     n_question++;
     
@@ -483,356 +487,355 @@ counter++;
 
 // Function used for add the first check of a checkBox Question
 function createFirstCheckboxOption(){
-var div = document.createElement("div");
-div.setAttribute("class", "form-check col");
+    var div = document.createElement("div");
+    div.setAttribute("class", "form-check col");
 
-var row = document.createElement("div");
-row.setAttribute("class", "row");
-row.setAttribute("id", "checkboxRow " + checkcounter);
-div.appendChild(row);
+    var row = document.createElement("div");
+    row.setAttribute("class", "row");
+    row.setAttribute("id", "checkboxRow " + checkcounter);
+    div.appendChild(row);
 
-var checkboxDiv = document.createElement("div");
-checkboxDiv.setAttribute("class", "col-10 form-check");
-row.appendChild(checkboxDiv);
+    var checkboxDiv = document.createElement("div");
+    checkboxDiv.setAttribute("class", "col-10 form-check");
+    row.appendChild(checkboxDiv);
 
-var addButtonDiv = document.createElement("div");
-addButtonDiv.setAttribute("class", "col-2");
-row.appendChild(addButtonDiv);
+    var addButtonDiv = document.createElement("div");
+    addButtonDiv.setAttribute("class", "col-2");
+    row.appendChild(addButtonDiv);
 
-var checkbox = document.createElement("input");
-checkbox.setAttribute("class", "form-check-input");
-checkbox.setAttribute("type", "checkbox");
-checkbox.setAttribute("id", "check"+checkcounter);
-checkbox.setAttribute("name",counter+" checkbox");
-checkbox.disabled = true;
-checkboxDiv.appendChild(checkbox);
+    var checkbox = document.createElement("input");
+    checkbox.setAttribute("class", "form-check-input");
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.setAttribute("id", "check"+checkcounter);
+    checkbox.setAttribute("name",counter+" checkbox");
+    checkbox.disabled = true;
+    checkboxDiv.appendChild(checkbox);
 
-var textarea = document.createElement("textarea");
-textarea.setAttribute("class", "form-control");
-textarea.setAttribute("rows", "1");
-textarea.setAttribute('id', 'chechtext'+checkcounter);
-textarea.setAttribute("name",counter+" checkboxtext " + checkcounter);
-textarea.required = true;
-checkboxDiv.appendChild(textarea);
+    var textarea = document.createElement("textarea");
+    textarea.setAttribute("class", "form-control");
+    textarea.setAttribute("rows", "1");
+    textarea.setAttribute('id', 'chechtext'+checkcounter);
+    textarea.setAttribute("name",counter+" checkboxtext " + checkcounter);
+    textarea.required = true;
+    checkboxDiv.appendChild(textarea);
 
-var addButton = document.createElement("button");
-addButton.setAttribute('type', 'button');
-addButton.setAttribute("class","btn btn-secondary btn-sm rounded-pill");
-addButton.setAttribute("onclick","addcheck("+checkcounter+")");
-addButton.setAttribute("id", "addCheck "+checkcounter);
-addButton.innerHTML=" + ";
-addButtonDiv.appendChild(addButton);
+    var addButton = document.createElement("button");
+    addButton.setAttribute('type', 'button');
+    addButton.setAttribute("class","btn btn-secondary btn-sm rounded-pill");
+    addButton.setAttribute("onclick","addcheck("+checkcounter+")");
+    addButton.setAttribute("id", "addCheck "+checkcounter);
+    addButton.innerHTML=" + ";
+    addButtonDiv.appendChild(addButton);
 
-var deleteCheck = document.createElement("button");
-deleteCheck.setAttribute('type', 'button');
-deleteCheck.setAttribute("class","btn btn-secondary btn-sm rounded-pill");
-deleteCheck.setAttribute("onclick","deleteCheck("+checkcounter+")");
-deleteCheck.setAttribute("id", "deleteCheck "+checkcounter);
-deleteCheck.innerHTML=" X ";
-deleteCheck.style.visibility = "hidden";
-addButtonDiv.appendChild(deleteCheck);
+    var deleteCheck = document.createElement("button");
+    deleteCheck.setAttribute('type', 'button');
+    deleteCheck.setAttribute("class","btn btn-secondary btn-sm rounded-pill");
+    deleteCheck.setAttribute("onclick","deleteCheck("+checkcounter+")");
+    deleteCheck.setAttribute("id", "deleteCheck "+checkcounter);
+    deleteCheck.innerHTML=" X ";
+    deleteCheck.style.visibility = "hidden";
+    addButtonDiv.appendChild(deleteCheck);
 
-return div;
+    return div;
 }
 
 // Function used for add the first check of a checkBox Question
 function addcheck(n){
     
-checkcounter++;
+    checkcounter++;
     var optionsContainer = document.getElementById('addCheck ' + n).parentElement.parentElement.parentElement;
 
-var questionID = optionsContainer.id.split(" ")[1];
+    var questionID = optionsContainer.id.split(" ")[1];
 
-var addButton = document.getElementById("addCheck " + n);
-var deleteButton = document.getElementById("deleteCheck " + n);
+    var addButton = document.getElementById("addCheck " + n);
+    var deleteButton = document.getElementById("deleteCheck " + n);
 
-var newAddButton = addButton.cloneNode(true);
-var newDeleteButton = deleteButton.cloneNode(true);
+    var newAddButton = addButton.cloneNode(true);
+    var newDeleteButton = deleteButton.cloneNode(true);
 
-addButton.remove();
-deleteButton.style.visibility = "visible";
+    addButton.remove();
+    deleteButton.style.visibility = "visible";
 
-var row = document.createElement("div");
-row.setAttribute("class", "row");
-row.setAttribute("id", "checkboxRow " + checkcounter);
-optionsContainer.appendChild(row);
+    var row = document.createElement("div");
+    row.setAttribute("class", "row");
+    row.setAttribute("id", "checkboxRow " + checkcounter);
+    optionsContainer.appendChild(row);
 
-var checkboxDiv = document.createElement("div");
-checkboxDiv.setAttribute("class", "col-10 form-check");
-row.appendChild(checkboxDiv);
+    var checkboxDiv = document.createElement("div");
+    checkboxDiv.setAttribute("class", "col-10 form-check");
+    row.appendChild(checkboxDiv);
 
-var buttonsDiv = document.createElement("div");
-buttonsDiv.setAttribute("class", "col-2");
-row.appendChild(buttonsDiv);
+    var buttonsDiv = document.createElement("div");
+    buttonsDiv.setAttribute("class", "col-2");
+    row.appendChild(buttonsDiv);
 
-var checkbox = document.createElement("input");
-checkbox.setAttribute("class", "form-check-input");
-checkbox.setAttribute("type", "checkbox");
-checkbox.setAttribute("id", "check" + checkcounter);
-checkbox.setAttribute("name", questionID + " checkbox");
-checkbox.disabled = true;
-checkboxDiv.appendChild(checkbox);
+    var checkbox = document.createElement("input");
+    checkbox.setAttribute("class", "form-check-input");
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.setAttribute("id", "check" + checkcounter);
+    checkbox.setAttribute("name", questionID + " checkbox");
+    checkbox.disabled = true;
+    checkboxDiv.appendChild(checkbox);
 
-var textarea = document.createElement("textarea");
-textarea.setAttribute("class", "form-control");
-textarea.setAttribute("rows", "1");
-textarea.setAttribute("id", "checktext" + checkcounter);
-textarea.setAttribute("name", questionID + " checkboxtext " + checkcounter);
-textarea.required = true;
-checkboxDiv.appendChild(textarea);
+    var textarea = document.createElement("textarea");
+    textarea.setAttribute("class", "form-control");
+    textarea.setAttribute("rows", "1");
+    textarea.setAttribute("id", "checktext" + checkcounter);
+    textarea.setAttribute("name", questionID + " checkboxtext " + checkcounter);
+    textarea.required = true;
+    checkboxDiv.appendChild(textarea);
 
-newAddButton.setAttribute("id","addCheck "+checkcounter);
-newAddButton.setAttribute("onclick","addcheck("+checkcounter+")");
-newDeleteButton.setAttribute("id","deleteCheck "+checkcounter);
-newDeleteButton.setAttribute("onclick","deleteCheck("+checkcounter+")");
+    newAddButton.setAttribute("id","addCheck "+checkcounter);
+    newAddButton.setAttribute("onclick","addcheck("+checkcounter+")");
+    newDeleteButton.setAttribute("id","deleteCheck "+checkcounter);
+    newDeleteButton.setAttribute("onclick","deleteCheck("+checkcounter+")");
 
-buttonsDiv.appendChild(newAddButton);
-buttonsDiv.appendChild(newDeleteButton);
+    buttonsDiv.appendChild(newAddButton);
+    buttonsDiv.appendChild(newDeleteButton);
 }
 
 // Delete a checkBox option
 function deleteCheck(n){
-document.getElementById("checkboxRow " + n).remove();
+    document.getElementById("checkboxRow " + n).remove();
 }
 
 // Radio button questions
 function templateFirstRadio(){
 
-counter++;
-radiocounter++;
-if(n_question < 0)
-    n_question = 0;
-n_question++;
+    counter++;
+    radiocounter++;
+    if(n_question < 0)
+        n_question = 0;
+    n_question++;
 
-var parentDiv = document.getElementById("parentDiv");
+    var parentDiv = document.getElementById("parentDiv");
 
-var card = createCard();
-parentDiv.appendChild(card);
-var textareaDiv = getTextareaDiv(card);
-var requiredDiv = getRequiredCheckboxDiv(card);
-var buttonsDiv = getButtonsDiv(card);
+    var card = createCard();
+    parentDiv.appendChild(card);
+    var textareaDiv = getTextareaDiv(card);
+    var requiredDiv = getRequiredCheckboxDiv(card);
+    var buttonsDiv = getButtonsDiv(card);
 
-textareaDiv.appendChild(createTextarea(counter + " radio"));
+    textareaDiv.appendChild(createTextarea(counter + " radio"));
 
-addLine(textareaDiv);
+    addLine(textareaDiv);
 
-var row = document.createElement("div");
-row.setAttribute("class", "row");
-textareaDiv.appendChild(row);
+    var row = document.createElement("div");
+    row.setAttribute("class", "row");
+    textareaDiv.appendChild(row);
 
-var emptyLeftDiv = document.createElement("div");
-emptyLeftDiv.setAttribute("class", "col-1");
-row.appendChild(emptyLeftDiv);
+    var emptyLeftDiv = document.createElement("div");
+    emptyLeftDiv.setAttribute("class", "col-1");
+    row.appendChild(emptyLeftDiv);
 
-row.appendChild(createFirstRadioOption());
+    row.appendChild(createFirstRadioOption());
 
-var emptyRightDiv = document.createElement("div");
-emptyRightDiv.setAttribute("class", "col-1");
-row.appendChild(emptyRightDiv);
+    var emptyRightDiv = document.createElement("div");
+    emptyRightDiv.setAttribute("class", "col-1");
+    row.appendChild(emptyRightDiv);
 
-requiredDiv.appendChild(createSwitchForRequired());
+    requiredDiv.appendChild(createSwitchForRequired());
 
-buttonsDiv.appendChild(createAddAndDeleteButtons());
+    buttonsDiv.appendChild(createAddAndDeleteButtons());
 }
 
 // Create a radio question after another type of question
 function templateRadioAfter(idA){
-counter++;
-radiocounter++;
-n_question++;
+    counter++;
+    radiocounter++;
+    n_question++;
 
-var div = getDivId(idA);
-var card = createDiv(div);
+    var div = getDivId(idA);
+    var card = createDiv(div);
 
-var textareaDiv = getTextareaDiv(card);
-var requiredDiv = getRequiredCheckboxDiv(card);
-var buttonsDiv = getButtonsDiv(card);
+    var textareaDiv = getTextareaDiv(card);
+    var requiredDiv = getRequiredCheckboxDiv(card);
+    var buttonsDiv = getButtonsDiv(card);
 
-textareaDiv.appendChild(createTextarea(counter + " radio"));
+    textareaDiv.appendChild(createTextarea(counter + " radio"));
 
-addLine(textareaDiv);
+    addLine(textareaDiv);
 
-var row = document.createElement("div");
-row.setAttribute("class", "row");
-textareaDiv.appendChild(row);
+    var row = document.createElement("div");
+    row.setAttribute("class", "row");
+    textareaDiv.appendChild(row);
 
-var emptyLeftDiv = document.createElement("div");
-emptyLeftDiv.setAttribute("class", "col-1");
-row.appendChild(emptyLeftDiv);
+    var emptyLeftDiv = document.createElement("div");
+    emptyLeftDiv.setAttribute("class", "col-1");
+    row.appendChild(emptyLeftDiv);
 
-row.appendChild(createFirstRadioOption());
+    row.appendChild(createFirstRadioOption());
 
-var emptyRightDiv = document.createElement("div");
-emptyRightDiv.setAttribute("class", "col-1");
-row.appendChild(emptyRightDiv);
+    var emptyRightDiv = document.createElement("div");
+    emptyRightDiv.setAttribute("class", "col-1");
+    row.appendChild(emptyRightDiv);
 
-requiredDiv.appendChild(createSwitchForRequired());
+    requiredDiv.appendChild(createSwitchForRequired());
 
-buttonsDiv.appendChild(createAddAndDeleteButtons());
+    buttonsDiv.appendChild(createAddAndDeleteButtons());
 }
 
 // Function used for add the first radioOption of a radio Question
 function createFirstRadioOption(){
-var div = document.createElement("div");
-div.setAttribute("class", "form-check col");
-div.setAttribute("id", "containerRadioOptions " + counter);
+    var div = document.createElement("div");
+    div.setAttribute("class", "form-check col");
+    div.setAttribute("id", "containerRadioOptions " + counter);
 
-var row = document.createElement("div");
-row.setAttribute("class", "row");
-row.setAttribute("id", "radioRow " + radiocounter);
-div.appendChild(row);
+    var row = document.createElement("div");
+    row.setAttribute("class", "row");
+    row.setAttribute("id", "radioRow " + radiocounter);
+    div.appendChild(row);
 
-var checkboxDiv = document.createElement("div");
-checkboxDiv.setAttribute("class", "col-10 form-check");
-row.appendChild(checkboxDiv);
+    var checkboxDiv = document.createElement("div");
+    checkboxDiv.setAttribute("class", "col-10 form-check");
+    row.appendChild(checkboxDiv);
 
-var addButtonDiv = document.createElement("div");
-addButtonDiv.setAttribute("class", "col-2");
-row.appendChild(addButtonDiv);
+    var addButtonDiv = document.createElement("div");
+    addButtonDiv.setAttribute("class", "col-2");
+    row.appendChild(addButtonDiv);
 
-var checkbox = document.createElement("input");
-checkbox.setAttribute("class", "form-check-input");
-checkbox.setAttribute("type", "radio");
-checkbox.setAttribute("id", "radio"+radiocounter);
-checkbox.setAttribute("name",counter+" radio "+radiocounter);
-checkbox.disabled = true;
-checkboxDiv.appendChild(checkbox);
+    var checkbox = document.createElement("input");
+    checkbox.setAttribute("class", "form-check-input");
+    checkbox.setAttribute("type", "radio");
+    checkbox.setAttribute("id", "radio"+radiocounter);
+    checkbox.setAttribute("name",counter+" radio "+radiocounter);
+    checkbox.disabled = true;
+    checkboxDiv.appendChild(checkbox);
 
-var textarea = document.createElement("textarea");
-textarea.setAttribute("class", "form-control");
-textarea.setAttribute("rows", "1");
-textarea.setAttribute('id', 'radiotext'+radiocounter);
-textarea.setAttribute("name",counter+" radiobtntext "+radiocounter);
-textarea.required = true;
-checkboxDiv.appendChild(textarea);
+    var textarea = document.createElement("textarea");
+    textarea.setAttribute("class", "form-control");
+    textarea.setAttribute("rows", "1");
+    textarea.setAttribute('id', 'radiotext'+radiocounter);
+    textarea.setAttribute("name",counter+" radiobtntext "+radiocounter);
+    textarea.required = true;
+    checkboxDiv.appendChild(textarea);
 
-var addButton = document.createElement("button");
-addButton.setAttribute('type', 'button');
-addButton.setAttribute("class","btn btn-secondary btn-sm rounded-pill");
-addButton.setAttribute("onclick","addRadio("+radiocounter+")");
-addButton.setAttribute("id", "addRadio "+radiocounter);
-addButton.innerHTML=" + ";
-addButtonDiv.appendChild(addButton);
+    var addButton = document.createElement("button");
+    addButton.setAttribute('type', 'button');
+    addButton.setAttribute("class","btn btn-secondary btn-sm rounded-pill");
+    addButton.setAttribute("onclick","addRadio("+radiocounter+")");
+    addButton.setAttribute("id", "addRadio "+radiocounter);
+    addButton.innerHTML=" + ";
+    addButtonDiv.appendChild(addButton);
 
+    var deleteCheck = document.createElement("button");
+    deleteCheck.setAttribute('type', 'button');
+    deleteCheck.setAttribute("class","btn btn-secondary btn-sm rounded-pill");
+    deleteCheck.setAttribute("onclick","deleteRadio("+radiocounter+")");
+    deleteCheck.setAttribute("id", "deleteRadio "+radiocounter);
+    deleteCheck.innerHTML=" X ";
+    deleteCheck.style.visibility = "hidden";
+    addButtonDiv.appendChild(deleteCheck);
 
-var deleteCheck = document.createElement("button");
-deleteCheck.setAttribute('type', 'button');
-deleteCheck.setAttribute("class","btn btn-secondary btn-sm rounded-pill");
-deleteCheck.setAttribute("onclick","deleteRadio("+radiocounter+")");
-deleteCheck.setAttribute("id", "deleteRadio "+radiocounter);
-deleteCheck.innerHTML=" X ";
-deleteCheck.style.visibility = "hidden";
-addButtonDiv.appendChild(deleteCheck);
-
-return div;
+    return div;
 }
 
 // Add a radio option after the first
 function addRadio(n){
 
-radiocounter++;
+    radiocounter++;
 
     var optionsContainer = document.getElementById('addRadio '+n).parentElement.parentElement.parentElement;
 
-var questionID = optionsContainer.id.split(" ")[1];
+    var questionID = optionsContainer.id.split(" ")[1];
 
-var addButton = document.getElementById("addRadio " + n);
-var deleteButton = document.getElementById("deleteRadio " + n);
+    var addButton = document.getElementById("addRadio " + n);
+    var deleteButton = document.getElementById("deleteRadio " + n);
 
-var newAddButton = addButton.cloneNode(true);
-var newDeleteButton = deleteButton.cloneNode(true);
+    var newAddButton = addButton.cloneNode(true);
+    var newDeleteButton = deleteButton.cloneNode(true);
 
-addButton.remove();
-deleteButton.style.visibility = "visible";
+    addButton.remove();
+    deleteButton.style.visibility = "visible";
 
-var row = document.createElement("div");
-row.setAttribute("class", "row");
-row.setAttribute("id", "radioRow " + radiocounter);
-optionsContainer.appendChild(row);
+    var row = document.createElement("div");
+    row.setAttribute("class", "row");
+    row.setAttribute("id", "radioRow " + radiocounter);
+    optionsContainer.appendChild(row);
 
-var radioDiv = document.createElement("div");
-radioDiv.setAttribute("class", "col-10 form-check");
-row.appendChild(radioDiv);
+    var radioDiv = document.createElement("div");
+    radioDiv.setAttribute("class", "col-10 form-check");
+    row.appendChild(radioDiv);
 
-var buttonsDiv = document.createElement("div");
-buttonsDiv.setAttribute("class", "col-2");
-row.appendChild(buttonsDiv);
+    var buttonsDiv = document.createElement("div");
+    buttonsDiv.setAttribute("class", "col-2");
+    row.appendChild(buttonsDiv);
 
-var radio = document.createElement("input");
-radio.setAttribute("class", "form-check-input");
-radio.setAttribute("type", "radio");
-radio.setAttribute("id", "radio" + radiocounter);
-radio.setAttribute("name", questionID + " radio " + radiocounter);
-radio.disabled = true;
-radioDiv.appendChild(radio);
+    var radio = document.createElement("input");
+    radio.setAttribute("class", "form-check-input");
+    radio.setAttribute("type", "radio");
+    radio.setAttribute("id", "radio" + radiocounter);
+    radio.setAttribute("name", questionID + " radio " + radiocounter);
+    radio.disabled = true;
+    radioDiv.appendChild(radio);
 
-var textarea = document.createElement("textarea");
-textarea.setAttribute("class", "form-control");
-textarea.setAttribute("rows", "1");
-textarea.setAttribute("id", "radiotext" + radiocounter);
-textarea.setAttribute("name", questionID + " radiobtntext " + radiocounter);
-textarea.required = true;
-radioDiv.appendChild(textarea);
+    var textarea = document.createElement("textarea");
+    textarea.setAttribute("class", "form-control");
+    textarea.setAttribute("rows", "1");
+    textarea.setAttribute("id", "radiotext" + radiocounter);
+    textarea.setAttribute("name", questionID + " radiobtntext " + radiocounter);
+    textarea.required = true;
+    radioDiv.appendChild(textarea);
 
-newAddButton.setAttribute("id","addRadio "+radiocounter);
-newAddButton.setAttribute("onclick","addRadio("+radiocounter+")");
-newDeleteButton.setAttribute("id","deleteRadio "+radiocounter);
-newDeleteButton.setAttribute("onclick","deleteRadio("+radiocounter+")");
+    newAddButton.setAttribute("id","addRadio "+radiocounter);
+    newAddButton.setAttribute("onclick","addRadio("+radiocounter+")");
+    newDeleteButton.setAttribute("id","deleteRadio "+radiocounter);
+    newDeleteButton.setAttribute("onclick","deleteRadio("+radiocounter+")");
 
-buttonsDiv.appendChild(newAddButton);
-buttonsDiv.appendChild(newDeleteButton);
+    buttonsDiv.appendChild(newAddButton);
+    buttonsDiv.appendChild(newDeleteButton);
 }
 
 // Delete a radio option
 function deleteRadio(n){
-document.getElementById("radioRow " + n).remove();
+    document.getElementById("radioRow " + n).remove();
 }
 
 // File upload questions
 function templateFirstFileQuestion(){
-counter++;
-if(n_question < 0)
-    n_question = 0;
-n_question++;
+    counter++;
+    if(n_question < 0)
+        n_question = 0;
+    n_question++;
 
-var parentDiv = document.getElementById("parentDiv");
+    var parentDiv = document.getElementById("parentDiv");
 
-var card = createCard();
-parentDiv.appendChild(card);
-var textareaDiv = getTextareaDiv(card);
-var requiredDiv = getRequiredCheckboxDiv(card);
-var buttonsDiv = getButtonsDiv(card);
-var containerDiv = getCardContainer(card);
+    var card = createCard();
+    parentDiv.appendChild(card);
+    var textareaDiv = getTextareaDiv(card);
+    var requiredDiv = getRequiredCheckboxDiv(card);
+    var buttonsDiv = getButtonsDiv(card);
+    var containerDiv = getCardContainer(card);
 
-textareaDiv.appendChild(createTextarea(counter+" fileText"));
+    textareaDiv.appendChild(createTextarea(counter+" fileText"));
 
-requiredDiv.appendChild(createSwitchForRequired());
+    requiredDiv.appendChild(createSwitchForRequired());
 
-buttonsDiv.appendChild(createAddAndDeleteButtons());
+    buttonsDiv.appendChild(createAddAndDeleteButtons());
 
-containerDiv.appendChild(createFileInput());
+    containerDiv.appendChild(createFileInput());
 }
 
 // Create a file question after another type of question
 function templateAfterFileQuestion(idA){
-counter++;
-n_question++;
+    counter++;
+    n_question++;
 
-var div = getDivId(idA);
-var card = createDiv(div);
+    var div = getDivId(idA);
+    var card = createDiv(div);
 
-var textareaDiv = getTextareaDiv(card);
-var requiredDiv = getRequiredCheckboxDiv(card);
-var buttonsDiv = getButtonsDiv(card);
-var containerDiv = getCardContainer(card);
+    var textareaDiv = getTextareaDiv(card);
+    var requiredDiv = getRequiredCheckboxDiv(card);
+    var buttonsDiv = getButtonsDiv(card);
+    var containerDiv = getCardContainer(card);
 
-textareaDiv.appendChild(createTextarea(counter + " fileText"));
+    textareaDiv.appendChild(createTextarea(counter + " fileText"));
 
-requiredDiv.appendChild(createSwitchForRequired());
+    requiredDiv.appendChild(createSwitchForRequired());
 
-buttonsDiv.appendChild(createAddAndDeleteButtons());
+    buttonsDiv.appendChild(createAddAndDeleteButtons());
 
-containerDiv.appendChild(createFileInput());
+    containerDiv.appendChild(createFileInput());
 }
 
 // Create a div for the upload of a file
@@ -859,82 +862,81 @@ function createFileInput(){
 
 // Function used for the creation of the Save button used for saving the modification of a template
 function createSaveButton(){
-var form = document.getElementById("saveForm");
+    var form = document.getElementById("saveForm");
 
-var saveButton = document.createElement("button");
-saveButton.setAttribute("type", "submit");
-saveButton.setAttribute("class", "btn btn-primary rounded-pill");
-saveButton.setAttribute("id", "saveButton")
-saveButton.innerHTML = " Salva ";
+    var saveButton = document.createElement("button");
+    saveButton.setAttribute("type", "submit");
+    saveButton.setAttribute("class", "btn btn-primary rounded-pill");
+    saveButton.setAttribute("id", "saveButton")
+    saveButton.innerHTML = " Salva ";
 
-form.appendChild(saveButton);
+    form.appendChild(saveButton);
 }
 
 // Function used for the creation of a new first question, used when in a template all the questions have been deleted
 function createQuestionGroupButton(){
-var div = document.createElement("div");
-div.setAttribute("class", "btn-group");
-div.setAttribute("id", "createButton");
-document.getElementById("saveForm").insertBefore(div,document.getElementById("saveButton"));
+    var div = document.createElement("div");
+    div.setAttribute("class", "btn-group");
+    div.setAttribute("id", "createButton");
+    document.getElementById("saveForm").insertBefore(div,document.getElementById("saveButton"));
 
-var button = document.createElement("button");
-button.setAttribute("type", "button");
-button.setAttribute("class", "btn btn-primary dropdown-toggle rounded-pill");
-button.setAttribute("data-bs-toggle", "dropdown");
-button.setAttribute("aria-expanded", "false");
-button.innerHTML = " Crea una nuova domanda ";
-div.appendChild(button);
+    var button = document.createElement("button");
+    button.setAttribute("type", "button");
+    button.setAttribute("class", "btn btn-primary dropdown-toggle rounded-pill");
+    button.setAttribute("data-bs-toggle", "dropdown");
+    button.setAttribute("aria-expanded", "false");
+    button.innerHTML = " Crea una nuova domanda ";
+    div.appendChild(button);
 
-var span = document.createElement("span");
-span.setAttribute("class", "caret");
-button.appendChild(span);
+    var span = document.createElement("span");
+    span.setAttribute("class", "caret");
+    button.appendChild(span);
 
-var ul = document.createElement("ul");
-ul.setAttribute("class", "dropdown-menu");
-div.appendChild(ul);
+    var ul = document.createElement("ul");
+    ul.setAttribute("class", "dropdown-menu");
+    div.appendChild(ul);
 
-var liOpenQuestion = document.createElement("li");
-ul.appendChild(liOpenQuestion);
+    var liOpenQuestion = document.createElement("li");
+    ul.appendChild(liOpenQuestion);
 
-var aOpenQuestion = document.createElement("a");
-aOpenQuestion.setAttribute("class", "dropdown-item");
-aOpenQuestion.setAttribute("id", "open_btn");
-aOpenQuestion.setAttribute("onclick", "createTemplateOpenQuestion(this.id)");
-aOpenQuestion.setAttribute("href", "#");
-aOpenQuestion.innerHTML = "Aperta";
-liOpenQuestion.appendChild(aOpenQuestion);
+    var aOpenQuestion = document.createElement("a");
+    aOpenQuestion.setAttribute("class", "dropdown-item");
+    aOpenQuestion.setAttribute("id", "open_btn");
+    aOpenQuestion.setAttribute("onclick", "createTemplateOpenQuestion(this.id)");
+    aOpenQuestion.setAttribute("href", "#");
+    aOpenQuestion.innerHTML = "Aperta";
+    liOpenQuestion.appendChild(aOpenQuestion);
 
-var liCheckboxQuestion = document.createElement("li");
-ul.appendChild(liCheckboxQuestion);
+    var liCheckboxQuestion = document.createElement("li");
+    ul.appendChild(liCheckboxQuestion);
 
-var aCheckboxQuestion = document.createElement("a");
-aCheckboxQuestion.setAttribute("class", "dropdown-item");
-aCheckboxQuestion.setAttribute("id", "check_btn");
-aCheckboxQuestion.setAttribute("onclick", "createTemplateCheckboxQuestion(this.id)");
-aCheckboxQuestion.setAttribute("href", "#");
-aCheckboxQuestion.innerHTML = "Checkbox";
-liCheckboxQuestion.appendChild(aCheckboxQuestion);
+    var aCheckboxQuestion = document.createElement("a");
+    aCheckboxQuestion.setAttribute("class", "dropdown-item");
+    aCheckboxQuestion.setAttribute("id", "check_btn");
+    aCheckboxQuestion.setAttribute("onclick", "createTemplateCheckboxQuestion(this.id)");
+    aCheckboxQuestion.setAttribute("href", "#");
+    aCheckboxQuestion.innerHTML = "Checkbox";
+    liCheckboxQuestion.appendChild(aCheckboxQuestion);
 
+    var liRadioQuestion = document.createElement("li");
+    ul.appendChild(liRadioQuestion);
 
-var liRadioQuestion = document.createElement("li");
-ul.appendChild(liRadioQuestion);
+    var aRadioQuestion = document.createElement("a");
+    aRadioQuestion.setAttribute("class", "dropdown-item");
+    aRadioQuestion.setAttribute("id", "radio_btn");
+    aRadioQuestion.setAttribute("onclick", "createTemplateRadioQuestion(this.id)");
+    aRadioQuestion.setAttribute("href", "#");
+    aRadioQuestion.innerHTML = "Radio";
+    liRadioQuestion.appendChild(aRadioQuestion);
 
-var aRadioQuestion = document.createElement("a");
-aRadioQuestion.setAttribute("class", "dropdown-item");
-aRadioQuestion.setAttribute("id", "radio_btn");
-aRadioQuestion.setAttribute("onclick", "createTemplateRadioQuestion(this.id)");
-aRadioQuestion.setAttribute("href", "#");
-aRadioQuestion.innerHTML = "Radio";
-liRadioQuestion.appendChild(aRadioQuestion);
+    var liFileQuestion = document.createElement("li");
+    ul.appendChild(liFileQuestion);
 
-var liFileQuestion = document.createElement("li");
-ul.appendChild(liFileQuestion);
-
-var aFileQuestion = document.createElement("a");
-aFileQuestion.setAttribute("class", "dropdown-item");
-aFileQuestion.setAttribute("id", "file_btn");
-aFileQuestion.setAttribute("onclick", "createTemplateFileQuestion(this.id)");
-aFileQuestion.setAttribute("href", "#");
-aFileQuestion.innerHTML = "File";
-liFileQuestion.appendChild(aFileQuestion);
+    var aFileQuestion = document.createElement("a");
+    aFileQuestion.setAttribute("class", "dropdown-item");
+    aFileQuestion.setAttribute("id", "file_btn");
+    aFileQuestion.setAttribute("onclick", "createTemplateFileQuestion(this.id)");
+    aFileQuestion.setAttribute("href", "#");
+    aFileQuestion.innerHTML = "File";
+    liFileQuestion.appendChild(aFileQuestion);
 }

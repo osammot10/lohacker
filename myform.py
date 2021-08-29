@@ -144,36 +144,36 @@ def downloadCSV(formID):
         if allAnswers is None:
             return render_template("error.html", error = "", message = "Errore caricamento risposte al form")
 
-        for answer in allAnswers:
-            answerSet = []
-            answerSet.append("Risposte")
-            questionForm = getFormQuestions(formID)
-            if questionForm is None:
-                return render_template("error.html", error = "", message = "Errore durante il caricamento delle domande")
-            else:
-                for question in questionForm:
-                    if question.type == "open":
-                        openAnswer = session.query(OpenAnswer.text).filter(OpenAnswer.id == answer.id).filter(OpenAnswer.question == question.id).first()
-                        answerSet.append(openAnswer.text)
-                    elif question.type == "checkbox":
-                        checkboxAnswer = session.query(CheckboxOption.text, CheckboxAnswer.number).filter(CheckboxAnswer.id == answer.id).filter(CheckboxAnswer.question == question.id).filter(CheckboxOption.id == CheckboxAnswer.question).filter(CheckboxOption.number == CheckboxAnswer.number).all()
-                        option = " | "
-                        for r in checkboxAnswer:
-                            option = option + r.text + " | "
-                        answerSet.append(option)
-                    elif question.type == "radio":
-                        radioAnswer = session.query(RadioOption.text, RadioAnswer.number).filter(RadioAnswer.id == answer.id).filter(RadioAnswer.question == question.id).filter(RadioOption.id == RadioAnswer.question).filter(RadioOption.number == RadioAnswer.number).first()
-                        if not radioAnswer:
-                            answerSet.append("|")
-                        else:
-                            answerSet.append(radioAnswer.text)
-                    elif question.type == "file":
-                        fileAnswer = session.query(FileAnswer.path).filter(FileAnswer.id == answer.id).filter(FileAnswer.question == question.id).first()
-                        if fileAnswer:
-                            answerSet.append(fileAnswer.path)
-                        else:
-                            answerSet.append("Nessuna risposta trovata")
-                writer.writerow(answerSet)
-            file.close()
-
-            return send_file(filename, as_attachment = True)
+        if allAnswers:
+            for answer in allAnswers:
+                answerSet = []
+                answerSet.append("Risposte")
+                questionForm = getFormQuestions(formID)
+                if questionForm is None:
+                    return render_template("error.html", error = "", message = "Errore durante il caricamento delle domande")
+                else:
+                    for question in questionForm:
+                        if question.type == "open":
+                            openAnswer = session.query(OpenAnswer.text).filter(OpenAnswer.id == answer.id).filter(OpenAnswer.question == question.id).first()
+                            answerSet.append(openAnswer.text)
+                        elif question.type == "checkbox":
+                            checkboxAnswer = session.query(CheckboxOption.text, CheckboxAnswer.number).filter(CheckboxAnswer.id == answer.id).filter(CheckboxAnswer.question == question.id).filter(CheckboxOption.id == CheckboxAnswer.question).filter(CheckboxOption.number == CheckboxAnswer.number).all()
+                            option = " | "
+                            for r in checkboxAnswer:
+                                option = option + r.text + " | "
+                            answerSet.append(option)
+                        elif question.type == "radio":
+                            radioAnswer = session.query(RadioOption.text, RadioAnswer.number).filter(RadioAnswer.id == answer.id).filter(RadioAnswer.question == question.id).filter(RadioOption.id == RadioAnswer.question).filter(RadioOption.number == RadioAnswer.number).first()
+                            if not radioAnswer:
+                                answerSet.append("|")
+                            else:
+                                answerSet.append(radioAnswer.text)
+                        elif question.type == "file":
+                            fileAnswer = session.query(FileAnswer.path).filter(FileAnswer.id == answer.id).filter(FileAnswer.question == question.id).first()
+                            if fileAnswer:
+                                answerSet.append(fileAnswer.path)
+                            else:
+                                answerSet.append("Nessuna risposta trovata")
+                    writer.writerow(answerSet)
+        file.close()
+        return send_file(filename, as_attachment = True)

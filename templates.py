@@ -1,6 +1,4 @@
 from connection import *
-from datetime import date
-import requests
 
 templates_bp = Blueprint('templates_bp',__name__)
 

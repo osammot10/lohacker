@@ -1,4 +1,3 @@
-from os import close
 from connection import *
 
 login_bp = Blueprint('login_bp',__name__)
