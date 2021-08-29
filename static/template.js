@@ -193,7 +193,7 @@ div.appendChild(checkboxSwitch);
 
 var label = document.createElement("label");
 label.setAttribute('class', 'form-check-label');
-label.innerHTML = 'Required';
+label.innerHTML = 'Richiesta';
 div.appendChild(label);
 
 return div;
@@ -865,7 +865,7 @@ var saveButton = document.createElement("button");
 saveButton.setAttribute("type", "submit");
 saveButton.setAttribute("class", "btn btn-primary rounded-pill");
 saveButton.setAttribute("id", "saveButton")
-saveButton.innerHTML = " Save ";
+saveButton.innerHTML = " Salva ";
 
 form.appendChild(saveButton);
 }
@@ -882,7 +882,7 @@ button.setAttribute("type", "button");
 button.setAttribute("class", "btn btn-primary dropdown-toggle rounded-pill");
 button.setAttribute("data-bs-toggle", "dropdown");
 button.setAttribute("aria-expanded", "false");
-button.innerHTML = " Create new question ";
+button.innerHTML = " Crea una nuova domanda ";
 div.appendChild(button);
 
 var span = document.createElement("span");

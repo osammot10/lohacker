@@ -195,7 +195,7 @@ div.appendChild(checkboxSwitch);
 
 var label = document.createElement("label");
 label.setAttribute('class', 'form-check-label');
-label.innerHTML = 'Required';
+label.innerHTML = 'Richiesta';
 div.appendChild(label);
 
 return div;
@@ -818,7 +818,7 @@ function createSendButton(){
   sendButton.setAttribute("type", "submit");
   sendButton.setAttribute("class", "btn btn-primary rounded-pill");
   sendButton.setAttribute("id", "sendButton")
-  sendButton.innerHTML = " Submit ";
+  sendButton.innerHTML = " Crea ";
 
   questionForm.appendChild(sendButton);
 }
