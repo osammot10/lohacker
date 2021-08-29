@@ -195,10 +195,10 @@ function createSwitchForRequired(){
     checkboxSwitch.setAttribute('name', counter + " required");
     div.appendChild(checkboxSwitch);
 
-var label = document.createElement("label");
-label.setAttribute('class', 'form-check-label');
-label.innerHTML = 'Obbligatoria';
-div.appendChild(label);
+    var label = document.createElement("label");
+    label.setAttribute('class', 'form-check-label');
+    label.innerHTML = 'Obbligatoria';
+    div.appendChild(label);
 
     return div;
 }
