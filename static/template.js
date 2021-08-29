@@ -193,7 +193,7 @@ div.appendChild(checkboxSwitch);
 
 var label = document.createElement("label");
 label.setAttribute('class', 'form-check-label');
-label.innerHTML = 'Obblicatoria';
+label.innerHTML = 'Obbligatoria';
 div.appendChild(label);
 
 return div;
