@@ -51,11 +51,11 @@
                         <table id="template" class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Date of creation</th>
-                                    <th>Import</th>
-                                    <th>Visualize</th>
-                                    <th>Delete</th>
+                                    <th>Nome</th>
+                                    <th>Data di creazione</th>
+                                    <th>Importa</th>
+                                    <th>Visualizza</th>
+                                    <th>Cancella</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -63,9 +63,9 @@
                                     <tr>
                                         <td><p>{{t.name}}</p></td>
                                         <td> {{t.date}} </td>
-                                        <td><button type="submit" class="btn btn-primary btn-sm" name="action" value="import {{t.id}}"> Import </button></td>
-                                        <td><button type="submit" class="btn btn-primary btn-sm" name="action" value="visualize {{t.id}}"> Visualize </button></td>
-                                        <td><button type="submit" class="btn btn-primary btn-sm" name = "action" value = "delete {{t.id}}"> Delete </button></td>
+                                        <td><button type="submit" class="btn btn-primary btn-sm" name="action" value="import {{t.id}}"> Importa </button></td>
+                                        <td><button type="submit" class="btn btn-primary btn-sm" name="action" value="visualize {{t.id}}"> Visualizza </button></td>
+                                        <td><button type="submit" class="btn btn-primary btn-sm" name = "action" value = "delete {{t.id}}"> Cancella </button></td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -76,7 +76,7 @@
                 {% endif %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Chiudi</button>
                 </div>
             </div>
         </div>
