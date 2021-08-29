@@ -115,6 +115,7 @@ def downloadCSV(formID):
         return render_template("error.html", error = "", message = "Errore caricamento form")
 
     csvQuestion = []
+    csvQuestion.append("Domande")
     answerSet = []
     questionForm = getFormQuestions(formID)
     if questionForm is None:
@@ -145,6 +146,7 @@ def downloadCSV(formID):
 
         for answer in allAnswers:
             answerSet = []
+            answerSet.append("Risposte")
             questionForm = getFormQuestions(formID)
             if questionForm is None:
                 return render_template("error.html", error = "", message = "Errore durante il caricamento delle domande")

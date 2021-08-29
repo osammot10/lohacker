@@ -81,7 +81,13 @@ def send_response(id):
     if(test):
         return render_template("confirmation.html")
     else:
-        return render_template("error.html", error = "", message = "Errore: non tutte le domande obbligatorie sono state risposte")
+        try:
+            session.query(Answer).filter(Answer.id == newAnswer.id).delete()
+            session.commit()
+            return render_template("error.html", error = "", message = "Errore: non tutte le domande obbligatorie sono state risposte")
+        except Exception as e:
+            session.rollback()
+            return render_template("error.html", error = e, message = "Errore: non è stato possibile eliminare la risposta")
 
 
 @response_bp.route('/answer', methods=['GET', 'POST']) 
