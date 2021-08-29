@@ -8,13 +8,13 @@ var b;
 
 // Functions for removing the button for the creation of the first questions
 function removeBG(){
-	  var b = document.getElementById("createButton");
+	var b = document.getElementById("createButton");
     b.remove();
 }
 
 // Functions for cloning the button for the creation of the first questions
 function cloneBG(){
-	  var b = document.getElementById("createButton");
+	var b = document.getElementById("createButton");
     var cln = b.cloneNode(true);
     return cln;
 }
@@ -361,7 +361,6 @@ function deleteQuestion(idBtn){
         n_question--;
     }
     if(!n_question){
-        //document.getElementById("saveForm").insertBefore(b,document.getElementById("saveButton"));
         createQuestionGroupButton();
         document.getElementById("saveButton").remove();
     }
@@ -407,7 +406,7 @@ function templateOpenAfter(idA){
 
     requiredDiv.appendChild(createSwitchForRequired());
 
-    buttonsDiv.appendChild(createAddAndDeleteButtons());
+    buttonsDiv.appendChild(createTemplateAddAndDeleteButtons()); 
 }
 
 // Checkbox questions
@@ -482,7 +481,7 @@ function templateCheckboxAfter(idA){
 
     requiredDiv.appendChild(createSwitchForRequired());
 
-    buttonsDiv.appendChild(createAddAndDeleteButtons());
+    buttonsDiv.appendChild(createTemplateAddAndDeleteButtons());
 }
 
 // Function used for add the first check of a checkBox Question
@@ -636,7 +635,7 @@ function templateFirstRadio(){
 
     requiredDiv.appendChild(createSwitchForRequired());
 
-    buttonsDiv.appendChild(createAddAndDeleteButtons());
+    buttonsDiv.appendChild(createTemplateAddAndDeleteButtons());
 }
 
 // Create a radio question after another type of question
@@ -672,7 +671,7 @@ function templateRadioAfter(idA){
 
     requiredDiv.appendChild(createSwitchForRequired());
 
-    buttonsDiv.appendChild(createAddAndDeleteButtons());
+    buttonsDiv.appendChild(createTemplateAddAndDeleteButtons());
 }
 
 // Function used for add the first radioOption of a radio Question
@@ -811,7 +810,7 @@ function templateFirstFileQuestion(){
 
     requiredDiv.appendChild(createSwitchForRequired());
 
-    buttonsDiv.appendChild(createAddAndDeleteButtons());
+    buttonsDiv.appendChild(createTemplateAddAndDeleteButtons());
 
     containerDiv.appendChild(createFileInput());
 }
@@ -833,7 +832,7 @@ function templateAfterFileQuestion(idA){
 
     requiredDiv.appendChild(createSwitchForRequired());
 
-    buttonsDiv.appendChild(createAddAndDeleteButtons());
+    buttonsDiv.appendChild(createTemplateAddAndDeleteButtons());
 
     containerDiv.appendChild(createFileInput());
 }
