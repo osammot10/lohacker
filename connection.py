@@ -27,8 +27,8 @@ app.config['CSV_FOLDER'] = os.path.abspath(os.path.dirname(__file__)) + '/csv'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-# Classe per il mapping con flask_login
-# Permette di tener traccia di un utente all'interno di una sessione 
+# Class for mapping with flask_login
+# It allows you to track a user within a session
 class User ( UserMixin ):
     def __init__ (self , id , email , password, first_name, surname):
         self.id = id
@@ -40,7 +40,7 @@ class User ( UserMixin ):
     def get_email(self):
         return self.email
 
-# Classe per il mapping con la tabella "User" del db 
+# Class for the mapping of the User table in the DB
 class Utenti(Base):
     __tablename__ = 'User'
 
