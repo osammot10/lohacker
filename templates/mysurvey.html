@@ -154,6 +154,7 @@
 								<tbody>
 									{% for m in makers %}
 										<tr>
+											<td>{{ loop.index }}</td>
 											<td>{{ m.date }}</td>
 											<td><button type="button" class="btn btn-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#modal{{m.maker}}"> Visualizza </button></td>
 										</tr>
