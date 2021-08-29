@@ -13,7 +13,7 @@
 					<div class="col-2">
 						<div class="form-check form-switch">
 							<input class="form-check-input" type="checkbox" id="flexCheckDefault" name="anonymous" value="True">
-							<label class="form-check-label"> Anonymous</label>
+							<label class="form-check-label"> Anonimo</label>
 						</div>
 					</div>
 				</div>
@@ -24,7 +24,7 @@
 					<div class="btn-group" id="createButton">
 					<button type="button" class="btn btn-primary dropdown-toggle rounded-pill" data-bs-toggle="dropdown" aria-expanded="false" id="newQuestionButton"> Create new question <span class="caret"></span></button>
 					<ul class="dropdown-menu">
-						<li><a class="dropdown-item" id="open_btn" onclick="createOpenQuestion(this.id)" href="#">Open</a></li>
+						<li><a class="dropdown-item" id="open_btn" onclick="createOpenQuestion(this.id)" href="#">Aperta</a></li>
 						<li><a class="dropdown-item" id="check_btn" onclick="createCheckboxQuestion(this.id)" href="#">Checkbox</a></li>
 						<li><a class="dropdown-item" id="radio_btn" onclick="createRadioQuestion(this.id)" href="#">Radio button</a></li>
 						<li><a class="dropdown-item" id="file_btn" onclick="createFileQuestion(this.id)" href="#">File</a></li>
@@ -98,7 +98,7 @@
 												{% else %}
 												<input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required">
 												{% endif %}
-												<label class="form-check-label"> Required</label>
+												<label class="form-check-label"> Richiesta</label>
 											</div>
 										</div>
 										<div class="col-auto p-1">
@@ -106,7 +106,7 @@
 												<div class="btn-group" id="createButton{{loop.index}}">
 													<button type="button" class="btn btn-primary dropdown-toggle rounded-pill" data-bs-toggle="dropdown" aria-expanded="false"> + </button>
 													<ul class="dropdown-menu">
-														<li><a class="dropdown-item" id="open_btn{{loop.index}}" onclick="createOpenQuestion(this.id)" href="#">Open</a></li>
+														<li><a class="dropdown-item" id="open_btn{{loop.index}}" onclick="createOpenQuestion(this.id)" href="#">Aperta</a></li>
 														<li><a class="dropdown-item" id="check_btn{{loop.index}}" onclick="createCheckboxQuestion(this.id)" href="#">Checkbox</a></li>
 														<li><a class="dropdown-item" id="radio_btn{{loop.index}}" onclick="createRadioQuestion(this.id)" href="#">Radio button</a></li>
 														<li><a class="dropdown-item" id="file_btn{{loop.index}}" onclick="createFileQuestion(this.id)" href="#">File</a></li>
@@ -120,7 +120,7 @@
 						</div>         
 					{% endfor %}
 					</div>
-					<button type="submit" class="btn btn-primary rounded-pill" id="sendButton"> Send </button>
+					<button type="submit" class="btn btn-primary rounded-pill" id="sendButton"> Invia </button>
 				{% endif %}
 			</div>
 			<div class="col-2"></div>

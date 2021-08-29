@@ -27,7 +27,7 @@
                                                         {% else %}
                                                         <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required">
                                                         {% endif %}
-                                                        <label class="form-check-label"> Required</label>
+                                                        <label class="form-check-label"> Richiesta</label>
                                                     </div>
                                                 </div>
                                             {% elif r.type == 'checkbox' %}
@@ -103,7 +103,7 @@
                                                         {% else %}
                                                         <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required">
                                                         {% endif %}
-                                                        <label class="form-check-label" for="flexCheckDefault"> Required</label>
+                                                        <label class="form-check-label" for="flexCheckDefault"> Richiesta</label>
                                                     </div>
                                                 </div>          
                                             {% else %}
@@ -124,7 +124,7 @@
                                                         {% else %}
                                                         <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="{{loop.index}} required">
                                                         {% endif %}
-                                                        <label class="form-check-label" for="flexCheckDefault"> Required</label>
+                                                        <label class="form-check-label" for="flexCheckDefault"> Richiesta</label>
                                                     </div>
                                                 </div>
                                             {% endif %}       
@@ -133,7 +133,7 @@
                                                 <div class="btn-group" id="createButton{{loop.index}}">
                                                     <button type="button" class="btn btn-primary dropdown-toggle rounded-pill" data-bs-toggle="dropdown" aria-expanded="false"> + </button>
                                                     <ul class="dropdown-menu">
-                                                        <li><a class="dropdown-item" onclick="createTemplateOpenQuestion(this.id)" href="#" id="template_open#btn{{loop.index}}"> Open </a></li>
+                                                        <li><a class="dropdown-item" onclick="createTemplateOpenQuestion(this.id)" href="#" id="template_open#btn{{loop.index}}"> Aperta </a></li>
                                                         <li><a class="dropdown-item" onclick="createTemplateCheckboxQuestion(this.id)" href="#" id="template_check#btn{{loop.index}}"> Checkbox </a></li>
                                                         <li><a class="dropdown-item" onclick="createTemplateRadioQuestion(this.id)" href="#" id="template_radio#btn{{loop.index}}"> Radio button </a></li>
                                                         <li><a class="dropdown-item" onclick="createTemplateFileQuestion(this.id)" href="#" id="template_file#btn{{loop.index}}">File</a></li>
@@ -153,7 +153,7 @@
             </div>
             <div class="col-2"></div>
         </div>
-        <button type="submit" class="btn btn-primary rounded-pill" id="saveButton"> Save </button>
+        <button type="submit" class="btn btn-primary rounded-pill" id="saveButton"> Salva </button>
     </form>
     <form action="/" method="POST" id="homeForm">
         <button type="submit" class="btn btn-secondary rounded-pill w-25"> Home page </button>

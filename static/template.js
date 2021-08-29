@@ -45,7 +45,7 @@ function createQButton(){
     a1.setAttribute("class", "dropdown-item");
     a1.setAttribute("onclick", "createOpenQuestion(this.id)");
     a1.setAttribute("href", "#");
-    a1.innerHTML=" Open ";
+    a1.innerHTML=" Aperta ";
     li1.appendChild(a1);
     ul.appendChild(li1);
 
@@ -901,7 +901,7 @@ aOpenQuestion.setAttribute("class", "dropdown-item");
 aOpenQuestion.setAttribute("id", "open_btn");
 aOpenQuestion.setAttribute("onclick", "createTemplateOpenQuestion(this.id)");
 aOpenQuestion.setAttribute("href", "#");
-aOpenQuestion.innerHTML = "Open";
+aOpenQuestion.innerHTML = "Aperta";
 liOpenQuestion.appendChild(aOpenQuestion);
 
 var liCheckboxQuestion = document.createElement("li");

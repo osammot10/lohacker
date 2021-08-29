@@ -14,10 +14,10 @@
                         <table id="form" class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Date of creation</th>
-                                    <th>Disable</th>
-                                    <th>Delete</th>
+                                    <th>Nome</th>
+                                    <th>Data di creazione</th>
+                                    <th>Disabilitazione/Attivazione</th>
+                                    <th>Cancella</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -27,12 +27,12 @@
                                         <td> {{s.date}} </td>
                                         <td>
                                             {% if s.active == true %}
-                                                <button type="submit" class="btn btn-success btn-sm" name="action" value="active {{ s.id }}"> Active </button>
+                                                <button type="submit" class="btn btn-success btn-sm" name="action" value="active {{ s.id }}"> Attivo </button>
                                             {% else %}
-                                                <button type="submit" class="btn btn-danger btn-sm" name="action" value="disabled {{ s.id }}"> Disabled </button>
+                                                <button type="submit" class="btn btn-danger btn-sm" name="action" value="disabled {{ s.id }}"> Disattivato </button>
                                             {% endif %}
                                         </td>
-                                        <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{s.id}}"> Delete </button></td>
+                                        <td><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{s.id}}"> Cancella </button></td>
                                         <div class="modal fade" id="deleteModal{{s.id}}">
                                             <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">

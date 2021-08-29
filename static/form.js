@@ -47,7 +47,7 @@ function createQButton(){
     a1.setAttribute("class", "dropdown-item");
     a1.setAttribute("onclick", "createOpenQuestion(this.id)");
     a1.setAttribute("href", "#");
-    a1.innerHTML=" Open ";
+    a1.innerHTML=" Aperta ";
     li1.appendChild(a1);
     ul.appendChild(li1);
 
